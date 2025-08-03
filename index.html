@@ -53,18 +53,16 @@
       }
     </style>
   </head>
-
   <body class="bg-white text-brand-dark font-body">
+
     <!-- Hero Section -->
     <section class="relative w-full bg-white py-20 px-4 overflow-hidden">
-      <!-- Banner Image -->
-      <img
-        src="https://raw.githubusercontent.com/esiahkapingaa/portfolio-site/main/images/banner.png"
+      <!-- Banner Image: overlayed inside the section, not full screen -->
+      <img src="https://raw.githubusercontent.com/esiahkapingaa/portfolio-site/main/images/banner.png" 
         alt="Esiah Kapinga Banner"
-        class="absolute right-0 top-0 h-full w-3/4 object-cover rounded-l-3xl shadow-xl"
-      />
+        class="absolute right-0 top-0 h-full w-3/4 object-cover rounded-l-3xl shadow-xl" />
 
-      <!-- Text Content -->
+      <!-- Text Content: sits on top of the image -->
       <div class="relative z-10 max-w-4xl mx-auto text-left text-white">
         <h1 class="text-4xl md:text-5xl font-display font-bold mb-4">Esiah Kapinga</h1>
         <h2 class="text-3xl font-display font-bold mb-4 animate-pulse">Bioinformatics & Health Data Analyst</h2>
@@ -85,10 +83,29 @@
       <div class="max-w-5xl mx-auto" data-aos="fade-up">
         <h3 class="text-2xl font-display font-bold mb-8 text-center">Featured Projects</h3>
 
-        <!-- Project Cards -->
-        <!-- Repeat for each project -->
-        <!-- (already well-formatted, keeping unchanged for brevity) -->
-        <!-- ... -->
+        <!-- Project 1 -->
+        <div class="bg-white rounded shadow p-6 mb-6">
+          <h4 class="text-xl font-semibold mb-2">1. Phylogenetic Analysis of Tinospora spp.</h4>
+          <p>Used MEGA X to perform phylogenetic tree analysis based on DNA sequences collected from GenBank. Showcased genetic relationships and divergence using sequence alignment and comparative genomics.</p>
+          <p class="text-sm mt-2 italic">Tools: MEGAX, NCBI, BLAST, UniProtKB</p>
+          <a href="tinospora-project.html" target="_blank" class="inline-block mt-4 px-4 py-2 text-white bg-gradient-to-r from-brand-yellow to-brand-accent rounded hover:opacity-90">View Details</a>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="bg-white rounded shadow p-6 mb-6">
+          <h4 class="text-xl font-semibold mb-2">2. WHO COVID-19 Global Data Visualization (Python)</h4>
+          <p>Fetched WHO COVID-19 case data via their API and built an interactive world map showing infection rates and recovery trends using Python libraries like Plotly and Folium.</p>
+          <p class="text-sm mt-2 italic">Tools: Python, Plotly, Folium</p>
+          <a href="covid19-visualization.html" target="_blank" class="inline-block px-4 py-2 text-white bg-gradient-to-r from-brand-yellow to-brand-accent rounded hover:opacity-90 transition">View Details</a>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="bg-white rounded shadow p-6 mb-6">
+          <h4 class="text-xl font-semibold mb-2">3. UNICEF Child Mortality Analysis (R)</h4>
+          <p>Analyzed child mortality rates from UNICEF datasets using R. Cleaned and wrangled the data with dplyr and visualized regional trends with ggplot2. Produced actionable insights for public health policy.</p>
+          <p class="text-sm mt-2 italic">Tools: R, dplyr, ggplot2</p>
+          <a href="unicef-mortality.html" target="_blank" class="inline-block mt-4 px-4 py-2 text-white bg-gradient-to-r from-brand-yellow to-brand-accent rounded hover:opacity-90">View Details</a>
+        </div>
       </div>
     </section>
 
@@ -97,9 +114,61 @@
       <div class="max-w-6xl mx-auto" data-aos="fade-up">
         <h3 class="text-3xl font-display font-bold text-center mb-12">Technical Skills</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <!-- Skill Cards -->
-          <!-- (already well-formatted, keeping unchanged for brevity) -->
-          <!-- ... -->
+
+          <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
+            <div class="mb-2 animate-pulse">
+              <!-- Python SVG -->
+              <svg class="w-16 h-16 mx-auto" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" rx="24" fill="#306998"/>
+                <path d="M65 28h-8c-14 0-20 6-20 20v8h28v4H37c-8 0-14 6-14 14v12c0 10 6 16 16 16h8v-12h-8c-4 0-4-4-4-8v-4h28v24h-4c-8 0-12 4-12 12v12h20c14 0 20-6 20-20v-8H68v-4h28c8 0 14-6 14-14V68c0-10-6-16-16-16h-8v12h8c4 0 4 4 4 8v4H68V28h4c8 0 12-4 12-12V4H64c-14 0-20 6-20 20v8h12V28z" fill="#FFD43B"/>
+                <circle cx="48" cy="40" r="5" fill="#FFF"/>
+                <circle cx="80" cy="88" r="5" fill="#FFF"/>
+              </svg>
+            </div>
+            <p class="font-semibold">Python</p>
+          </div>
+
+          <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
+            <div class="mb-2 animate-pulse">
+              <!-- R SVG -->
+              <svg class="w-16 h-16 mx-auto" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="48" fill="#276DC3"/>
+                <path d="M50 30c-11 0-20 5-20 12s9 12 20 12c2 0 4 0 6-.5-2 1-5 3-6 5l10 11h12l-11-12c4-2 8-6 8-11 0-7-9-12-20-12zM42 45c-2 0-4-1-4-3s2-3 4-3c3 0 5 1 5 3s-2 3-5 3z" fill="white"/>
+              </svg>
+            </div>
+            <p class="font-semibold">R (ggplot2, dplyr)</p>
+          </div>
+
+          <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
+            <div class="text-4xl mb-2 animate-pulse">📈</div>
+            <p class="font-semibold">Power BI</p>
+          </div>
+
+          <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
+            <div class="text-4xl mb-2 animate-pulse">🌐</div>
+            <p class="font-semibold">HTML & CSS</p>
+          </div>
+
+          <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
+            <div class="text-4xl mb-2 animate-pulse">📊</div>
+            <p class="font-semibold">Tableau</p>
+          </div>
+
+          <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
+            <div class="text-4xl mb-2 animate-pulse">🧬</div>
+            <p class="font-semibold">BioRender, PyMOL</p>
+          </div>
+
+          <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
+            <div class="text-4xl mb-2 animate-pulse">🎥</div>
+            <p class="font-semibold">CapCut, Canva</p>
+          </div>
+
+          <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
+            <div class="text-4xl mb-2 animate-pulse">🤖</div>
+            <p class="font-semibold">AI Tools</p>
+          </div>
+
         </div>
       </div>
     </section>
@@ -114,54 +183,47 @@
         <input type="text" placeholder="Your Name" class="w-full border p-3 rounded" required />
         <input type="email" placeholder="Your Email" class="w-full border p-3 rounded" required />
         <textarea placeholder="Your Message" class="w-full border p-3 rounded" rows="4" required></textarea>
-        <button class="bg-brand-dark text-white px-4 py-3 rounded hover:bg-brand-accent" type="submit">
-          Send Message
-        </button>
+        <button class="bg-brand-dark text-white px-4 py-3 rounded hover:bg-brand-accent" type="submit">Send Message</button>
       </form>
     </section>
 
     <!-- Footer -->
-    <footer
-      class="relative text-center py-12 text-white text-sm mt-12"
-      style="background: radial-gradient(circle, #FFA500 0%, #F5A623 30%, #000000 100%);"
-    >
+    <footer class="relative text-center py-12 text-white text-sm mt-12" style="background: radial-gradient(circle, #FFA500 0%, #F5A623 30%, #000000 100%);">
       <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
         <div class="flex items-center gap-2">
           <svg class="w-6 h-6 animate-spin-slow text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
           </svg>
-          <img src="images/signature.png" alt="Esiah Signature Logo" class="relative z-10 w-full h-full object-contain" />
+          <img src="images/signature.png" alt="Esiah Signature Logo" class="relative z-10 w-full h-full object-contain">
+          <div class="flex items-center gap-2 mt-4 md:mt-0">
+            <svg class="w-5 h-5 text-yellow-400 animate-fadeInOut" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 8V5h2v3H9zm0 2h2v5H9v-5z" clip-rule="evenodd" />
+            </svg>
+            <span id="current-time" class="text-sm font-mono"></span>
+          </div>
+          <p class="text-xl font-bold mt-4">CONNECT — It only takes a minute</p>
         </div>
 
-        <div class="flex items-center gap-2 mt-4 md:mt-0">
-          <svg class="w-5 h-5 text-yellow-400 animate-fadeInOut" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 8V5h2v3H9zm0 2h2v5H9v-5z" clip-rule="evenodd" />
-          </svg>
-          <span id="current-time" class="text-sm font-mono"></span>
-        </div>
-
-        <p class="text-xl font-bold mt-4">CONNECT — It only takes a minute</p>
-      </div>
-
-      <div class="space-y-2 mt-4">
-        <p>&copy; 2025 Esiah Kapinga — Built with Tailwind CSS</p>
-        <p>
-          Lusaka, Zambia | P: +260770688389 |
-          <a href="mailto:esiahkapinga3@gmail.com" class="underline">esiahkapinga3@gmail.com</a>
-        </p>
-        <div class="flex justify-center gap-4 mt-2">
-          <a href="https://www.linkedin.com/in/esiah-kapinga" target="_blank">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" class="w-6 h-6" />
-          </a>
-          <a href="https://github.com/esiahkapinga" target="_blank">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="w-6 h-6 invert" />
-          </a>
-          <a href="https://www.instagram.com/esiah_kapinga" target="_blank">
-            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="w-6 h-6" />
-          </a>
-          <a href="https://youtube.com/ESIAH" target="_blank">
-            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" class="w-6 h-6" />
-          </a>
+        <div class="space-y-2 mt-4">
+          <p>&copy; 2025 Esiah Kapinga — Built with Tailwind CSS</p>
+          <p>
+            Lusaka, Zambia | P: +260770688389 |
+            <a href="mailto:esiahkapinga3@gmail.com" class="underline">esiahkapinga3@gmail.com</a>
+          </p>
+          <div class="flex justify-center gap-4 mt-2">
+            <a href="https://www.linkedin.com/in/esiah-kapinga" target="_blank">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" class="w-6 h-6">
+            </a>
+            <a href="https://github.com/esiahkapinga" target="_blank">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="w-6 h-6 invert">
+            </a>
+            <a href="https://www.instagram.com/esiah_kapinga" target="_blank">
+              <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="w-6 h-6">
+            </a>
+            <a href="https://youtube.com/ESIAH" target="_blank">
+              <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" class="w-6 h-6">
+            </a>
+          </div>
         </div>
       </div>
     </footer>
