@@ -35,9 +35,17 @@
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-5px); }
       }
+      @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .animate-spin-slow {
+        animation: spin-slow 20s linear infinite;
+      }
     </style>
   </head>
   <body class="bg-white text-brand-dark font-body">
+    <!-- Header -->
     <header class="bg-white shadow p-6 sticky top-0 z-50">
       <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
         <h1 class="text-3xl font-display font-bold floating">Esiah Kapinga</h1>
@@ -49,8 +57,8 @@
       </div>
     </header>
 
-    <!-- HERO / BANNER -->
-    <section class="bg-gradient-to-r from-brand-yellow via-black to-brand-yellow py-20 px-4">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-brand-accent via-black to-brand-accent py-20 px-4">
       <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
         <div class="md:w-1/2 mb-10 md:mb-0">
           <h1 class="text-4xl md:text-5xl font-display font-bold leading-tight mb-4">Esiah Kapinga</h1>
@@ -64,11 +72,11 @@
         </div>
       </div>
     </section>
-  
+
+    <!-- Projects Section -->
     <section id="projects" class="py-12 bg-gray-100">
       <div class="max-w-5xl mx-auto" data-aos="fade-up">
         <h3 class="text-2xl font-display font-bold mb-8 text-center">Featured Projects</h3>
-
         <!-- Project 1 -->
         <div class="bg-white rounded shadow p-6 mb-6">
           <h4 class="text-xl font-semibold mb-2">1. Phylogenetic Analysis of Tinospora spp.</h4>
@@ -76,7 +84,6 @@
           <p class="text-sm mt-2 italic">Tools: MEGAX, NCBI, BLAST, UniProtKB</p>
           <a href="#" class="inline-block mt-4 px-4 py-2 text-white bg-gradient-to-r from-brand-yellow to-brand-accent rounded hover:opacity-90">View Details</a>
         </div>
-
         <!-- Project 2 -->
         <div class="bg-white rounded shadow p-6 mb-6">
           <h4 class="text-xl font-semibold mb-2">2. WHO COVID-19 Global Data Visualization (Python)</h4>
@@ -84,7 +91,6 @@
           <p class="text-sm mt-2 italic">Tools: Python, Plotly, Folium</p>
           <a href="#" class="inline-block mt-4 px-4 py-2 text-white bg-gradient-to-r from-brand-yellow to-brand-accent rounded hover:opacity-90">View Details</a>
         </div>
-
         <!-- Project 3 -->
         <div class="bg-white rounded shadow p-6 mb-6">
           <h4 class="text-xl font-semibold mb-2">3. UNICEF Child Mortality Analysis (R)</h4>
@@ -95,7 +101,7 @@
       </div>
     </section>
 
-       <!-- SKILLS SECTION (Tiles) -->
+    <!-- Skills Section -->
     <section id="skills" class="py-16 px-4 bg-white text-brand-dark">
       <div class="max-w-6xl mx-auto" data-aos="fade-up">
         <h3 class="text-3xl font-display font-bold text-center mb-12">Technical Skills</h3>
@@ -135,7 +141,8 @@
         </div>
       </div>
     </section>
-    
+
+    <!-- Contact Section -->
     <section id="contact" class="py-12 text-center" data-aos="fade-up">
       <h3 class="text-2xl font-display font-bold mb-4">Let's Connect</h3>
       <p class="mb-6">Email: <a href="mailto:esiahkapinga3@gmail.com" class="text-brand-accent underline">esiahkapinga3@gmail.com</a></p>
@@ -147,23 +154,42 @@
       </form>
     </section>
 
-    <footer class="text-center py-6 bg-black text-white text-sm mt-12">      
-      <div class="flex flex-col items-center">
-        <div class="text-5xl mb-2 animate-pulse">⏰</div>
-        <p class="text-xl font-bold">CONNECT — It only takes a minute</p>
+    <!-- Footer -->
+    <footer class="text-center py-6 bg-black text-white text-sm mt-12">
+      <div class="flex flex-col items-center mb-6">
+        <div class="flex items-center justify-center gap-8">
+          <div class="text-5xl animate-pulse">⏰</div>
+          <div class="relative w-24 h-24">
+            <div class="absolute inset-0 rounded-full bg-white opacity-20 animate-spin-slow z-0"></div>
+            <img src="images/signature.png" alt="Esiah Signature Logo" class="relative z-10 w-full h-full object-contain">
+          </div>
+        </div>
+        <p class="text-xl font-bold mt-4">CONNECT — It only takes a minute</p>
       </div>
-      
+      <div class="h-4"></div>
       <div class="space-y-2">
         <p>&copy; 2025 Esiah Kapinga — Built with Tailwind CSS</p>
-        <p>Lusaka, Zambia | P: +260770688389 | <a href="mailto:esiahkapinga3@gmail.com" class="underline">esiahkapinga3@gmail.com</a></p>
+        <p>
+          Lusaka, Zambia | P: +260770688389 |
+          <a href="mailto:esiahkapinga3@gmail.com" class="underline">esiahkapinga3@gmail.com</a>
+        </p>
         <div class="flex justify-center gap-4 mt-2">
-          <a href="https://www.linkedin.com/in/esiah-kapinga" target="_blank"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" class="w-6 h-6"></a>
-          <a href="https://github.com/esiahkapinga" target="_blank"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="w-6 h-6 invert"></a>
-          <a href="https://www.instagram.com/esiah_kapinga" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="w-6 h-6"></a>
-          <a href="https://youtube.com/ESIAH" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" class="w-6 h-6"></a>
+          <a href="https://www.linkedin.com/in/esiah-kapinga" target="_blank">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" class="w-6 h-6">
+          </a>
+          <a href="https://github.com/esiahkapinga" target="_blank">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="w-6 h-6 invert">
+          </a>
+          <a href="https://www.instagram.com/esiah_kapinga" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="w-6 h-6">
+          </a>
+          <a href="https://youtube.com/ESIAH" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" class="w-6 h-6">
+          </a>
         </div>
       </div>
     </footer>
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>AOS.init();</script>
   </body>
