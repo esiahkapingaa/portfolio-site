@@ -22,6 +22,9 @@
               display: ['Poppins', 'sans-serif'],
               body: ['Inter', 'sans-serif'],
             },
+            animation: {
+              'spin-slow': 'spin 20s linear infinite',
+            },
           },
         },
       };
@@ -34,26 +37,12 @@
       }
 
       @keyframes float {
-        0%,
-        100% {
+        0%, 100% {
           transform: translateY(0);
         }
         50% {
           transform: translateY(-5px);
         }
-      }
-
-      @keyframes spin-slow {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .animate-spin-slow {
-        animation: spin-slow 20s linear infinite;
       }
     </style>
   </head>
@@ -72,7 +61,7 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-black via-brand-yellow to-black py-20 px-4 text-white">
+    <section class="bg-gradient-to-r from-black via-brand-yellow to-brand-yellow py-20 px-4 text-white">
       <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
         <div class="md:w-1/2 mb-10 md:mb-0">
           <h1 class="text-4xl md:text-5xl font-display font-bold leading-tight mb-4">Esiah Kapinga</h1>
@@ -185,7 +174,7 @@
       <div class="flex flex-col items-center mb-6">
         <div class="relative w-24 h-24 mx-auto">
           <!-- Black star SVG spinning -->
-          <svg class="absolute inset-0 w-full h-full animate-spin-slow z-0" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg" >
+          <svg class="absolute inset-0 w-full h-full animate-spin-slow z-0" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2L14.09 8.26L20.97 8.27L15.54 12.97L17.63 19.22L12 14.53L6.37 19.22L8.46 12.97L3.03 8.27L9.91 8.26L12 2Z"/>
           </svg>
           <img src="images/signature.png" alt="Esiah Signature Logo" class="relative z-10 w-full h-full object-contain">
