@@ -13,9 +13,9 @@
             colors: {
               brand: {
                 yellow: '#F5A623',
-                orange: '#ff7a00',
-                dark: '#0F172A',
-                accent: '#ff7a00'
+                dark: '#1A1A1A',
+                accent: '#2563EB',
+                orange: '#FF7A00'
               }
             },
             fontFamily: {
@@ -33,32 +33,77 @@
       }
       @keyframes float {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-6px); }
+        50% { transform: translateY(-5px); }
       }
     </style>
   </head>
-  <body class="bg-brand-dark text-white font-body">
+  <body class="bg-white text-brand-dark font-body">
+    <header class="bg-white shadow p-6 sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
+        <h1 class="text-3xl font-display font-bold floating">Esiah Kapinga</h1>
+        <nav class="space-x-4 mt-4 md:mt-0">
+          <a href="#projects" class="text-brand-accent hover:underline">Projects</a>
+          <a href="#skills" class="text-brand-accent hover:underline">Skills</a>
+          <a href="#contact" class="text-brand-accent hover:underline">Contact</a>
+        </nav>
+      </div>
+    </header>
+
     <!-- HERO / BANNER -->
     <section class="bg-brand-dark text-white py-20 px-4">
       <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
         <div class="md:w-1/2 mb-10 md:mb-0">
           <h1 class="text-4xl md:text-5xl font-display font-bold leading-tight mb-4">Esiah Kapinga</h1>
-          <h2 class="text-2xl md:text-3xl font-semibold mb-6">Bioinformatics & Health Data Analyst</h2>
-          <p class="mb-6 max-w-lg">I take health and technology at heart — not just as a profession. Let's connect.</p>
-          <a href="#contact" class="bg-brand-accent text-white px-6 py-3 rounded shadow hover:bg-brand-yellow transition">Reach Out</a>
+          <h2 class="text-4xl font-display font-bold mb-4 animate-pulse">Bioinformatics & Health Data Analyst</h2>
+          <p class="text-lg">I specialize in using R and Python to clean, analyze, and visualize global health data — turning raw data into meaningful insights. With a background in microbiology and real-world project experience, I bring both scientific depth and analytical clarity to every project.</p>
+          <p class="mt-4 italic">"I take health and technology at heart, not just as a profession. Let’s connect."</p>
+          <a href="#contact" class="bg-brand-accent text-white px-6 py-3 rounded shadow hover:bg-orange-500 transition">Reach Out</a>
         </div>
         <div class="md:w-1/2 flex justify-center">
           <img src="https://via.placeholder.com/300x300.png?text=Your+Photo+Here" alt="Esiah Illustration" class="rounded-xl shadow-lg w-72 h-72 object-cover">
         </div>
       </div>
     </section>
+  
+    <section id="projects" class="py-12 bg-gray-100">
+      <div class="max-w-5xl mx-auto" data-aos="fade-up">
+        <h3 class="text-2xl font-display font-bold mb-8 text-center">Featured Projects</h3>
 
-    <!-- CONNECT CLOCK CTA -->
-    <section class="bg-brand-yellow text-brand-dark py-8 text-center">
-      <div class="flex flex-col items-center">
-        <div class="text-5xl mb-2">⏰</div>
-        <p class="text-xl font-bold">CONNECT — It only takes a minute</p>
+        <!-- Project 1 -->
+        <div class="bg-white rounded shadow p-6 mb-6">
+          <h4 class="text-xl font-semibold mb-2">1. Phylogenetic Analysis of Tinospora spp.</h4>
+          <p>Used MEGA X to perform phylogenetic tree analysis based on DNA sequences collected from GenBank. Showcased genetic relationships and divergence using sequence alignment and comparative genomics.</p>
+          <p class="text-sm mt-2 italic">Tools: MEGAX, NCBI, BLAST, UniProtKB</p>
+          <a href="#" class="inline-block mt-4 px-4 py-2 text-white bg-gradient-to-r from-brand-yellow to-brand-accent rounded hover:opacity-90">View Details</a>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="bg-white rounded shadow p-6 mb-6">
+          <h4 class="text-xl font-semibold mb-2">2. WHO COVID-19 Global Data Visualization (Python)</h4>
+          <p>Fetched WHO COVID-19 case data via their API and built an interactive world map showing infection rates and recovery trends using Python libraries like Plotly and Folium.</p>
+          <p class="text-sm mt-2 italic">Tools: Python, Plotly, Folium</p>
+          <a href="#" class="inline-block mt-4 px-4 py-2 text-white bg-gradient-to-r from-brand-yellow to-brand-accent rounded hover:opacity-90">View Details</a>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="bg-white rounded shadow p-6 mb-6">
+          <h4 class="text-xl font-semibold mb-2">3. UNICEF Child Mortality Analysis (R)</h4>
+          <p>Analyzed child mortality rates from UNICEF datasets using R. Cleaned and wrangled the data with dplyr and visualized regional trends with ggplot2. Produced actionable insights for public health policy.</p>
+          <p class="text-sm mt-2 italic">Tools: R, dplyr, ggplot2</p>
+          <a href="#" class="inline-block mt-4 px-4 py-2 text-white bg-gradient-to-r from-brand-yellow to-brand-accent rounded hover:opacity-90">View Details</a>
+        </div>
       </div>
+    </section>
+
+    <section id="contact" class="py-12 text-center" data-aos="fade-up">
+      <h3 class="text-2xl font-display font-bold mb-4">Let's Connect</h3>
+      <p class="mb-6">Email: <a href="mailto:esiahkapinga3@gmail.com" class="text-brand-accent underline">esiahkapinga3@gmail.com</a></p>
+      <form class="max-w-md mx-auto bg-white p-6 rounded shadow space-y-5">
+        <input type="text" placeholder="Your Name" class="w-full border p-3 rounded" required />
+        <input type="email" placeholder="Your Email" class="w-full border p-3 rounded" required />
+        <textarea placeholder="Your Message" class="w-full border p-3 rounded" rows="4" required></textarea>
+        <button class="bg-brand-dark text-white px-4 py-3 rounded hover:bg-brand-orange" type="submit">Send Message</button>
+      </form>
     </section>
 
     <!-- SKILLS SECTION (Tiles) -->
@@ -67,43 +112,47 @@
         <h3 class="text-3xl font-display font-bold text-center mb-12">Technical Skills</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
-            <div class="text-4xl mb-2">🐍</div>
+            <div class="text-4xl mb-2 animate-pulse">🐍</div>
             <p class="font-semibold">Python</p>
           </div>
           <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
-            <div class="text-4xl mb-2">📊</div>
+            <div class="text-4xl mb-2 animate-pulse">📊</div>
             <p class="font-semibold">R (ggplot2, dplyr)</p>
           </div>
           <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
-            <div class="text-4xl mb-2">📈</div>
+            <div class="text-4xl mb-2 animate-pulse">📈</div>
             <p class="font-semibold">Power BI</p>
           </div>
           <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
-            <div class="text-4xl mb-2">🌐</div>
+            <div class="text-4xl mb-2 animate-pulse">🌐</div>
             <p class="font-semibold">HTML & CSS</p>
           </div>
           <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
-            <div class="text-4xl mb-2">📊</div>
+            <div class="text-4xl mb-2 animate-pulse">📊</div>
             <p class="font-semibold">Tableau</p>
           </div>
           <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
-            <div class="text-4xl mb-2">🧬</div>
+            <div class="text-4xl mb-2 animate-pulse">🧬</div>
             <p class="font-semibold">BioRender, PyMOL</p>
           </div>
           <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
-            <div class="text-4xl mb-2">🎥</div>
+            <div class="text-4xl mb-2 animate-pulse">🎥</div>
             <p class="font-semibold">CapCut, Canva</p>
           </div>
           <div class="bg-gray-50 p-6 rounded-xl shadow text-center">
-            <div class="text-4xl mb-2">🤖</div>
+            <div class="text-4xl mb-2 animate-pulse">🤖</div>
             <p class="font-semibold">AI Tools</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="text-center py-6 bg-black text-white text-sm mt-12">
+    <footer class="text-center py-6 bg-black text-white text-sm mt-12">      
+      <div class="flex flex-col items-center">
+        <div class="text-5xl mb-2 animate-pulse">⏰</div>
+        <p class="text-xl font-bold">CONNECT — It only takes a minute</p>
+      </div>
+      
       <div class="space-y-2">
         <p>&copy; 2025 Esiah Kapinga — Built with Tailwind CSS</p>
         <p>Lusaka, Zambia | P: +260770688389 | <a href="mailto:esiahkapinga3@gmail.com" class="underline">esiahkapinga3@gmail.com</a></p>
@@ -115,7 +164,6 @@
         </div>
       </div>
     </footer>
-
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>AOS.init();</script>
   </body>
