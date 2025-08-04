@@ -69,27 +69,31 @@
     </header>
 
     <!-- Hero Section -->
-    <section id="hero" class="relative w-full min-h-screen bg-white flex flex-col-reverse md:flex-row items-center justify-between px-6 md:px-16 py-16 md:py-32 overflow-hidden">
-        <!-- Text Content -->
-        <div class="w-full md:w-1/2 z-10 text-center md:text-left">
-            <h1 class="text-4xl md:text-5xl font-display font-bold mb-4 text-black">Esiah Kapinga</h1>
-            <h2 class="text-2xl md:text-3xl font-display font-bold text-yellow-600 mb-4 animate-pulse">Bioinformatics & Health Data Analyst</h2>
-            <p class="text-lg mb-4 text-gray-700">
-                I specialize in using R and Python to clean, analyze, and visualize global health data, turning raw data into meaningful insights.
-            </p>
-            <p class="text-sm italic font-bold text-gray-500 mb-6">
-                "I take health and technology at heart, not just as a profession. Let’s connect."
-            </p>
-            <a href="#contact" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition">
-                Reach Out
-            </a>
-        </div>
-
-        <!-- Image -->
-        <div class="w-full md:w-1/2 mb-10 md:mb-0 flex justify-center">
+    <section id="hero" class="relative w-full bg-white py-8 px-4 md:px-16">
+        <div class="relative rounded-xl overflow-hidden">
+            <!-- Banner Background Image -->
             <img src="https://raw.githubusercontent.com/esiahkapingaa/portfolio-site/main/images/banner.png"
                  alt="Esiah Kapinga Banner"
-                 class="max-w-full h-auto object-contain md:max-h-[600px]" />
+                 class="w-full h-auto object-cover rounded-xl" />
+
+            <!-- Overlay Content -->
+            <div class="absolute inset-0 flex flex-col md:flex-row items-center justify-center md:justify-start px-4 md:px-12 py-8 md:py-0">
+                <div class="bg-black/60 md:bg-transparent text-white md:text-black max-w-xl text-center md:text-left p-4 rounded md:rounded-none">
+                    <h1 class="text-4xl md:text-5xl font-display font-bold mb-4">Esiah Kapinga</h1>
+                    <h2 class="text-2xl md:text-3xl font-display font-bold text-yellow-400 md:text-yellow-600 mb-4 animate-pulse">
+                        Bioinformatics & Health Data Analyst
+                    </h2>
+                    <p class="text-lg mb-4 md:text-gray-700">
+                        I specialize in using R and Python to clean, analyze, and visualize global health data, turning raw data into meaningful insights.
+                    </p>
+                    <p class="text-sm italic font-bold text-white/80 md:text-gray-500 mb-6">
+                        "I take health and technology at heart, not just as a profession. Let’s connect."
+                    </p>
+                    <a href="#contact" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition">
+                        Reach Out
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -103,7 +107,7 @@
           <h4 class="text-xl font-semibold mb-2">1. Phylogenetic Analysis of Tinospora spp.</h4>
           <p>Used MEGA X to perform phylogenetic tree analysis based on DNA sequences collected from GenBank. Showcased genetic relationships and divergence using sequence alignment and comparative genomics.</p>
           <p class="text-sm mt-2 italic">Tools: MEGAX, NCBI, BLAST, UniProtKB</p>
-          <a href="tinospora-project.html" target="_blank" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition">View Details</a>
+          <a href="tinospora-project.html" target="_blank" class="bg-yellow-500 text-white inline-block mt-4 px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition">View Details</a>
         </div>
 
         <!-- Project 2 -->
@@ -111,15 +115,14 @@
           <h4 class="text-xl font-semibold mb-2">2. WHO COVID-19 Global Data Visualization (Python)</h4>
           <p>Fetched WHO COVID-19 case data via their API and built an interactive world map showing infection rates and recovery trends using Python libraries like Plotly and Folium.</p>
           <p class="text-sm mt-2 italic">Tools: Python, Plotly, Folium</p>
-          <a href="covid19-visualization.html" target="_blank" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition">View Details</a>
+          <a href="covid19-visualization.html" target="_blank" class="bg-yellow-500 text-white inline-block mt-4 px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition">View Details</a>
         </div>
 
-        <!-- Project 3 -->
         <div class="bg-white rounded shadow p-6 mb-6">
           <h4 class="text-xl font-semibold mb-2">3. UNICEF Child Mortality Analysis (R)</h4>
           <p>Analyzed child mortality rates from UNICEF datasets using R. Cleaned and wrangled the data with dplyr and visualized regional trends with ggplot2. Produced actionable insights for public health policy.</p>
           <p class="text-sm mt-2 italic">Tools: R, dplyr, ggplot2</p>
-          <a href="unicef-mortality.html" target="_blank" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition">View Details</a>
+          <a href="unicef-mortality.html" target="_blank" class="bg-yellow-500 text-white inline-block mt-4 px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition"">View Details</a>
         </div>
       </div>
     </section>
