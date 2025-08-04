@@ -69,29 +69,54 @@
     </header>
 
     <!-- Hero Section -->
-    <section id="hero" class="relative w-full bg-white py-8 px-4 md:px-16">
-        <div class="relative rounded-3xl overflow-hidden">
-            <!-- Banner Background Image -->
+
+    <!-- Desktop Hero (md and up) -->
+    <section id="hero-desktop" class="hidden md:block w-full bg-white py-8 px-4 md:px-16">
+        <div class="relative rounded-4xl overflow-hidden">
             <img src="https://raw.githubusercontent.com/esiahkapingaa/portfolio-site/main/images/banner.png"
                  alt="Esiah Kapinga Banner"
                  class="w-full h-auto object-cover rounded-3xl" />
 
-            <!-- Overlay Content -->
-            <div class="absolute inset-0 flex flex-col md:flex-row items-center justify-center md:justify-start px-4 md:px-12 py-8 md:py-0">
-                <div class="bg-black/60 md:bg-transparent text-white md:text-white max-w-xl text-center md:text-left p-4 rounded md:rounded-none">
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold mb-4 text-white">
-                        Esiah Kapinga
-                    </h1>
-                    <h2 class="text-xl sm:text-2xl md:text-3xl font-display font-bold text-yellow-400 md:text-yellow-600 mb-4 animate-pulse">
+            <div class="absolute inset-0 flex items-center justify-start px-12 py-8">
+                <div class="bg-black/60 text-white max-w-xl text-left p-4 rounded">
+                    <h1 class="text-5xl font-display font-bold mb-4">Esiah Kapinga</h1>
+                    <h2 class="text-3xl font-display font-bold text-yellow-400 mb-4 animate-pulse">
                         Bioinformatics & Health Data Analyst
                     </h2>
-                    <p class="text-base sm:text-lg mb-4 text-white">
+                    <p class="text-lg mb-4 text-white">
                         I specialize in using R and Python to clean, analyze, and visualize global health data, turning raw data into meaningful insights.
                     </p>
-                    <p class="text-sm italic font-bold text-white/80 md:text-gray-500 mb-6">
+                    <p class="text-sm italic font-bold text-white/80 mb-6">
                         "I take health and technology at heart, not just as a profession. Let’s connect."
                     </p>
                     <a href="#contact" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition">
+                        Reach Out
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile Hero (below md) -->
+    <section id="hero-mobile" class="block md:hidden w-full bg-white py-6 px-4">
+        <div class="relative rounded-3xl overflow-hidden">
+            <img src="https://raw.githubusercontent.com/esiahkapingaa/portfolio-site/main/images/banner-phone.png"
+                 alt="Esiah Kapinga Banner Mobile"
+                 class="w-full h-auto object-cover rounded-3xl" />
+
+            <div class="absolute inset-0 flex items-center justify-center px-4 pt-6">
+                <div class="bg-black/60 text-white text-center p-4 rounded">
+                    <h1 class="text-2xl font-display font-bold mb-2">Esiah Kapinga</h1>
+                    <h2 class="text-lg font-display font-bold text-yellow-400 mb-3 animate-pulse">
+                        Bioinformatics & Health Data Analyst
+                    </h2>
+                    <p class="text-sm mb-3">
+                        I specialize in using R and Python to clean, analyze, and visualize global health data, turning raw data into meaningful insights.
+                    </p>
+                    <p class="text-xs italic font-bold text-white/80 mb-4">
+                        "I take health and technology at heart, not just as a profession. Let’s connect."
+                    </p>
+                    <a href="#contact" class="bg-yellow-500 text-white px-3 py-2 rounded shadow-md text-xs font-semibold hover:bg-yellow-600 transition">
                         Reach Out
                     </a>
                 </div>
@@ -219,13 +244,13 @@
         <span id="current-time" class="text-sm font-mono mt-1"></span>
         <p class="text-xl font-semibold mb-2">Real-Time Tracking</p>
         <p class="text-sm text-gray-600">
-          Stay oriented—every second counts in health data and beyond.
+          Stay oriented, every second counts in health data and beyond.
         </p>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-black text-white py-14 text-center">
+    <footer class="bg-black text-white py-10 text-center">
         <div class="max-w-4xl mx-auto flex flex-col items-center space-y-8">
             <div class="w-full flex justify-center items-center">
                 <img src="images/signature.png" alt="Signature" class="mt-2 w-24 h-auto object-contain" />
