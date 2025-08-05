@@ -3,7 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Esiah Kapinga | Bioinformatics & Health Data Analyst</title>
+
+    <!-- SEO for Social Media -->
+    <!-- Open Graph (Facebook, LinkedIn, etc.) -->
+    <meta property="og:title" content="Esiiah's Portfolio" />
+    <meta property="og:description" content="Explore featured data science and bioinformatics projects by Esiiah." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://esiiah.github.io/portfolio-site/" />
+    <meta property="og:image" content="https://esiiah.github.io/portfolio-site/images/social-preview.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Esiiah's Portfolio" />
+    <meta name="twitter:description" content="Explore featured data science and bioinformatics projects by Esiiah." />
+    <meta name="twitter:image" content="https://esiiah.github.io/portfolio-site/images/social-preview.png" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -72,7 +86,7 @@
     <!-- Desktop Hero (md and up) -->
     <section id="hero-desktop" class="hidden md:block w-full bg-white pt-2 pb-6 px-2 md:px-16">
         <div class="relative rounded-4xl overflow-hidden">
-            <img src="https://raw.githubusercontent.com/esiahkapingaa/portfolio-site/main/images/banner.png"
+            <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/banner.png"
                  alt="Esiah Kapinga Banner"
                  class="w-full h-auto object-cover rounded-3xl" />
 
@@ -88,7 +102,7 @@
                     <p class="text-sm italic font-bold text-white/80 mb-6">
                         "I take health and technology at heart, not just as a profession. Let’s connect."
                     </p>
-                    <a href="#contact" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition">
+                    <a href="#contact" class="bg-yellow-500 text-white px-8 py-4 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition">
                         Reach Out
                     </a>
                 </div>
@@ -99,7 +113,7 @@
     <!-- Mobile Hero (below md) -->
     <section id="hero-mobile" class="block md:hidden w-full bg-white py-6 px-4">
         <div class="relative rounded-3xl overflow-hidden">
-            <img src="https://raw.githubusercontent.com/esiahkapingaa/portfolio-site/main/images/banner-mobile.png"
+            <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/banner-mobile.png"
                  alt="Esiah Kapinga Banner Mobile"
                  class="w-full h-auto object-cover rounded-3xl" />
 
@@ -129,33 +143,85 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="py-12 bg-gray-100">
-      <div class="max-w-5xl mx-auto" data-aos="fade-up">
-        <h3 class="text-2xl font-display font-bold mb-8 text-center">Featured Projects</h3>
+    <!-- Education Section -->
+    <section id="education" class="py-10 px-4 bg-gray-50">
+      <h2 class="text-3xl font-bold text-center mb-8">Education</h2>
 
+      <div class="max-w-3xl mx-auto space-y-6">
+
+        <!-- Marwadi University -->
+        <div class="bg-white rounded-xl shadow p-6">
+          <h3 class="text-xl font-semibold">Bachelor of Science in Microbiology</h3>
+          <p class="text-gray-600">Marwadi University · Rajkot, India · Graduated May 2025</p>
+          <p class="text-sm text-gray-500 mt-2">
+            Major in Molecular Biology, Bioinformatics, and Health Informatics. Graduated First Class with Distinction (GPA: 7.83/10).
+          </p>
+          <p class="text-sm text-gray-500 mt-2">
+            Relevant Coursework: Molecular Biology, Chemistry, Bioinformatics & Computational Biology, Public Health, Microbial Genetics, Research Communication.
+          </p>
+        </div>
+
+        <!-- ZAQA Recognition -->
+        <div class="bg-white rounded-xl shadow p-6">
+          <h3 class="text-xl font-semibold">ZAQA Degree Recognition Certificate</h3>
+          <p class="text-gray-600">Zambia Qualifications Authority · Lusaka, Zambia · Validated July 2025</p>
+          <p class="text-sm text-gray-500 mt-2">Recognized equivalency for Bachelor’s Degree earned abroad.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-10 px-4 bg-white">
+      <h2 class="text-3xl font-bold text-center mb-8">Featured Projects</h2>
+
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        
         <!-- Project 1 -->
-        <div class="bg-white rounded shadow p-6 mb-6">
-          <h4 class="text-xl font-semibold mb-2">1. Phylogenetic Analysis of Tinospora spp.</h4>
-          <p>Used MEGA X to perform phylogenetic tree analysis based on DNA sequences collected from GenBank. Showcased genetic relationships and divergence using sequence alignment and comparative genomics.</p>
-          <p class="text-sm mt-2 italic">Tools: MEGAX, NCBI, BLAST, UniProtKB</p>
-          <a href="tinospora-project.html" target="_blank" class="bg-yellow-500 text-white inline-block mt-4 px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition">View Details</a>
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col">
+          <img src="images/tinospora-project.png" alt="Tinospora spp. Phylogenetic Analysis" class="w-full h-48 object-cover" />
+          <div class="p-5 flex flex-col flex-grow">
+            <h3 class="text-xl font-semibold mb-2">1. Phylogenetic Analysis of Tinospora spp.</h3>
+            <p class="text-sm text-gray-600 flex-grow">
+              Used MEGA X to perform phylogenetic tree analysis based on DNA sequences collected from GenBank. Showcased genetic relationships and divergence using sequence alignment and comparative genomics.
+            </p>
+            <p class="text-xs text-gray-500 italic mt-2">Tools: MEGAX, NCBI, BLAST, UniProtKB</p>
+            <a href="tinospora-project.html" target="_blank" class="mt-4 inline-block px-4 py-2 bg-yellow-400 text-black font-medium rounded hover:bg-yellow-300 transition">
+              View Details
+            </a>
+          </div>
         </div>
 
         <!-- Project 2 -->
-        <div class="bg-white rounded shadow p-6 mb-6">
-          <h4 class="text-xl font-semibold mb-2">2. WHO COVID-19 Global Data Visualization (Python)</h4>
-          <p>Fetched WHO COVID-19 case data via their API and built an interactive world map showing infection rates and recovery trends using Python libraries like Plotly and Folium.</p>
-          <p class="text-sm mt-2 italic">Tools: Python, Plotly, Folium</p>
-          <a href="covid19-visualization.html" target="_blank" class="bg-yellow-500 text-white inline-block mt-4 px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition">View Details</a>
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col">
+          <img src="images/who-covid-project.png" alt="WHO COVID-19 Data Visualization" class="w-full h-48 object-cover" />
+          <div class="p-5 flex flex-col flex-grow">
+            <h3 class="text-xl font-semibold mb-2">2. WHO COVID-19 Global Data Visualization (Python)</h3>
+            <p class="text-sm text-gray-600 flex-grow">
+              Fetched WHO COVID-19 case data via their API and built an interactive world map showing infection rates and recovery trends using Python libraries like Plotly and Folium.
+            </p>
+            <p class="text-xs text-gray-500 italic mt-2">Tools: Python, Plotly, Folium</p>
+            <a href="covid19-visualization.html" target="_blank" class="mt-4 inline-block px-4 py-2 bg-yellow-400 text-black font-medium rounded hover:bg-yellow-300 transition">
+              View Details
+            </a>
+          </div>
         </div>
 
-        <div class="bg-white rounded shadow p-6 mb-6">
-          <h4 class="text-xl font-semibold mb-2">3. UNICEF Child Mortality Analysis (R)</h4>
-          <p>Analyzed child mortality rates from UNICEF datasets using R. Cleaned and wrangled the data with dplyr and visualized regional trends with ggplot2. Produced actionable insights for public health policy.</p>
-          <p class="text-sm mt-2 italic">Tools: R, dplyr, ggplot2</p>
-          <a href="unicef-mortality.html" target="_blank" class="bg-yellow-500 text-white inline-block mt-4 px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition"">View Details</a>
+        <!-- Project 3 -->
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col">
+          <img src="images/unicef-project.png" alt="UNICEF Child Mortality Analysis" class="w-full h-48 object-cover" />
+          <div class="p-5 flex flex-col flex-grow">
+            <h3 class="text-xl font-semibold mb-2">3. UNICEF Child Mortality Analysis (R)</h3>
+            <p class="text-sm text-gray-600 flex-grow">
+              Analyzed child mortality rates from UNICEF datasets using R. Cleaned and wrangled the data with dplyr and visualized regional trends with ggplot2. Produced actionable insights for public health policy.
+            </p>
+            <p class="text-xs text-gray-500 italic mt-2">Tools: R, dplyr, ggplot2</p>
+            <a href="unicef-mortality.html" target="_blank" class="mt-4 inline-block px-4 py-2 bg-yellow-400 text-black font-medium rounded hover:bg-yellow-300 transition">
+              View Details
+            </a>
+          </div>
         </div>
+
       </div>
     </section>
 
@@ -261,14 +327,14 @@
                 <img src="images/signature.png" alt="Signature" class="mt-2 w-24 h-auto object-contain" />
             </div>
 
-            <p class="text-sm">&copy; 2025 Esiah Kapinga | Built with Tailwind CSS</p>
+            <p class="text-sm">&copy; 2025 Esiah Kapinga | Built with HTML (Tailwind CSS) </p>
             <p class="text-sm">Lusaka, Zambia | P: +260770688389 | <a href="mailto:esiahkapinga3@gmail.com" class="underline">esiahkapinga3@gmail.com</a></p>
 
             <div class="flex justify-center gap-4 mt-2">
                 <a href="https://www.linkedin.com/in/esiah-kapinga" target="_blank">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" class="w-6 h-6">
                 </a>
-                <a href="https://github.com/esiahkapinga" target="_blank">
+                <a href="https://github.com/esiiah" target="_blank">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="w-6 h-6 invert">
                 </a>
                 <a href="https://www.instagram.com/esiah_kapinga" target="_blank">
