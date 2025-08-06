@@ -14,13 +14,42 @@
       <p class="text-lg italic">A Molecular Approach to Genetic Relatedness and Taxonomic Resolution</p>
     </header>
 
-    <!-- Banner -->
-    <section class="w-full">
-      <img
-        src="images/Tinospora-banner.png"
-        alt="Tinospora spp. Phylogenetic Analysis"
-        class="w-full object-cover h-48 sm:h-64 md:h-80 rounded-b-3xl shadow-[0_10px_20px_rgba(37,99,235,0.4)]"
-      />
+
+    <!-- Desktop Banner -->
+    <section class="hidden md:block w-full bg-white pt-2 pb-6 px-2 md:px-16">
+        <div class="relative rounded-4xl overflow-hidden">
+            <img src="images/Tinospora-banner.png"
+                 alt="Tinospora spp. Phylogenetic Analysis"
+                 class="w-full h-auto object-cover rounded-[3rem]" />
+
+            <div class="absolute inset-0 flex items-center justify-start px-12 py-8">
+                <div class="bg-black/60 text-white max-w-xl text-left p-4 rounded">
+                    <h1 class="text-4xl font-display font-bold mb-2">Phylogenetic Tree Mapping</h1>
+                    <h2 class="text-2xl font-display font-bold text-green-300 mb-2">Tinospora spp. Evolutionary Insights</h2>
+                    <p class="text-sm text-white">
+                        Explored genetic relationships among Tinospora species using sequence alignment, phylogenetic trees, and molecular analysis.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile Banner -->
+    <section class="block md:hidden w-full bg-white py-6 px-4">
+        <div class="relative rounded-3xl overflow-hidden">
+            <img src="images/Tinospora-banner.png"
+                 alt="Tinospora spp. Phylogenetic Analysis"
+                 class="w-full h-auto object-cover rounded-3xl" />
+
+            <div class="absolute inset-0 px-4 pt-2 flex flex-col items-start justify-start text-left">
+                <h1 class="text-xl font-display font-bold text-white mb-1">Phylogenetic Tree Mapping</h1>
+                <h2 class="text-base font-display font-bold text-green-300 mb-2">Tinospora spp. Evolutionary Insights</h2>
+                <p class="text-xs text-white">
+                    Explored genetic relationships among Tinospora species using sequence alignment and molecular tools.
+                </p>
+                <div class="h-20"></div>
+            </div>
+        </div>
     </section>
 
     <main class="max-w-5xl mx-auto px-6 py-10 space-y-10">
