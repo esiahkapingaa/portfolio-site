@@ -1,17 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UNICEF Child Mortality Project</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-white text-gray-800 font-sans leading-relaxed">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UNICEF Child Mortality Project</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-white text-gray-800 font-sans leading-relaxed">
 
-  <section class="max-w-5xl mx-auto px-4 py-12">
-    <h1 class="text-3xl md:text-4xl font-bold text-brand-accent mb-4">
-      Reducing Child Mortality in Sub-Saharan Africa: A Data-Driven Analysis of UNICEF Trends Using R
-    </h1>
+    <!-- Header -->
+    <header class="text-center py-8 bg-yellow-50 shadow-md">
+      <h1 class="text-4xl font-bold mb-2">UNICEF Child Mortality Analysis (R)</h1>
+      <p class="text-lg italic">
+        Reducing Child Mortality in Sub-Saharan Africa: A Data-Driven Analysis of UNICEF Trends Using R
+      </p>
+    </header>
+
+    <!-- Banner -->
+    <section class="w-full">
+      <img
+        src="images/unicef-banner.png"
+        alt="UNICEF Child Mortality Project Banner"
+        class="w-full object-cover h-48 sm:h-64 md:h-80 rounded-b-3xl shadow-[0_10px_20px_rgba(245,158,11,0.4)]"
+      />
+    </section>
 
     <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Overview</h2>
     <p class="mb-4">
@@ -81,13 +96,34 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td class="border px-3 py-2">R</td><td class="border px-3 py-2">Statistical computing</td></tr>
-        <tr><td class="border px-3 py-2">dplyr</td><td class="border px-3 py-2">Data transformation</td></tr>
-        <tr><td class="border px-3 py-2">tidyr</td><td class="border px-3 py-2">Reshaping data</td></tr>
-        <tr><td class="border px-3 py-2">ggplot2</td><td class="border px-3 py-2">Visualization</td></tr>
-        <tr><td class="border px-3 py-2">readr</td><td class="border px-3 py-2">CSV reading</td></tr>
-        <tr><td class="border px-3 py-2">lubridate</td><td class="border px-3 py-2">Date handling</td></tr>
-        <tr><td class="border px-3 py-2">scales</td><td class="border px-3 py-2">Axis formatting</td></tr>
+        <tr>
+          <td class="border px-3 py-2">R</td>
+          <td class="border px-3 py-2">Statistical computing</td>
+        </tr>
+        <tr>
+          <td class="border px-3 py-2">dplyr</td>
+          <td class="border px-3 py-2">Data transformation</td>
+        </tr>
+        <tr>
+          <td class="border px-3 py-2">tidyr</td>
+          <td class="border px-3 py-2">Reshaping data</td>
+        </tr>
+        <tr>
+          <td class="border px-3 py-2">ggplot2</td>
+          <td class="border px-3 py-2">Visualization</td>
+        </tr>
+        <tr>
+          <td class="border px-3 py-2">readr</td>
+          <td class="border px-3 py-2">CSV reading</td>
+        </tr>
+        <tr>
+          <td class="border px-3 py-2">lubridate</td>
+          <td class="border px-3 py-2">Date handling</td>
+        </tr>
+        <tr>
+          <td class="border px-3 py-2">scales</td>
+          <td class="border px-3 py-2">Axis formatting</td>
+        </tr>
       </tbody>
     </table>
 
@@ -98,12 +134,11 @@
       <li>Strategic maternal/child health investment</li>
       <li>Academic research and education</li>
     </ul>
+    
+    <footer class="text-sm text-gray-500 pt-8 border-t border-gray-700">
+      <p><strong>Notes:</strong> Data follows UNICEF/UN definitions. Visualizations exported as <code>.png</code> and <code>.svg</code> for web. Trends are normalized by population growth.</p>
+      <p class="mt-4">&copy; 2025 Esiah Kapinga - UNICEF Child Mortality Analysis (R)</p>
+    </footer>    
 
-    <p class="text-sm italic text-gray-600">
-      <strong>Notes:</strong> Data follows UNICEF/UN definitions. Visualizations exported as <code>.png</code> and <code>.svg</code> for web. Trends are normalized by population growth.
-    </p>
-
-  </section>
-
-</body>
+  </body>
 </html>
