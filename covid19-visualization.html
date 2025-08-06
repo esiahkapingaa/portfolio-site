@@ -8,9 +8,19 @@
   </head>
   <body class="bg-white text-black font-sans">
 
+    <!-- Header -->
+    <header class="text-center py-8 bg-yellow-50 shadow-md">
+      <h1 class="text-4xl font-bold mb-2">COVID-19 Trend Dashboard</h1>
+      <p class="text-lg italic">Global COVID-19 Trends: Interactive Visualization Using WHO Data</p>
+    </header>    
+
     <!-- Banner -->
     <section class="w-full">
-      <img src="images/covid-banner.png" alt="COVID-19 Visualization Banner" class="w-full object-cover h-64 rounded-b-3xl shadow-md" />
+      <img
+        src="images/covid-banner.png"
+        alt="COVID-19 Visualization Banner"
+        class="w-full object-cover h-64 rounded-b-3xl shadow-[0_10px_20px_rgba(14,165,233,0.4)]"
+      />
     </section>
 
     <!-- Content -->
@@ -69,7 +79,7 @@
       </section>
 
       <section>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-2">⚙Methods & Tools</h2>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-2">Methods & Tools</h2>
         <ol class="list-decimal list-inside space-y-2 text-gray-700">
           <li><strong>Data Retrieval</strong>: Accessed WHO or COVID19 API, parsed JSON into Pandas, cleaned missing/inconsistent values.</li>
           <li><strong>Data Wrangling</strong>: Aggregated case data, calculated rates, merged with GeoJSON country coordinates.</li>
@@ -138,9 +148,9 @@
         </ul>
       </section>
 
-      <footer class="text-sm text-gray-500 pt-8 border-t mt-8">
+      <footer class="text-sm text-gray-500 pt-8 border-t border-gray-700">
         <p>All visualizations and maps are interactive. Data is updated regularly. Ethical considerations were applied regarding reporting accuracy and transparency.</p>
-        <p class="mt-4">&copy; 2025 Esiah Kapinga — COVID-19 Visualization Project</p>
+        <p class="mt-4">&copy; 2025 Esiah Kapinga - COVID-19 Dashboard Visualization Project</p>
       </footer>
     </main>
   </body>
