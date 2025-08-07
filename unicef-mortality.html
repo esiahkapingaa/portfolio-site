@@ -3,32 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UNICEF Child Mortality Analysis (R)</title>
+    <title>UNICEF Child Mortality Trends in R — Esiah Kapinga</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Analyzed global child mortality data from UNICEF using R to uncover regional disparities in under-five death rates and health access." />
+    <meta name="keywords" content="UNICEF, child mortality, R programming, data analysis, under-five deaths, global health, Esiah Kapinga, public health, data science" />
+    <meta name="author" content="Esiah Kapinga" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#2563eb" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/esiah-logo.png" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="UNICEF Child Mortality Trends in R — Esiah Kapinga" />
+    <meta property="og:description" content="Explore how R was used to analyze UNICEF mortality data, revealing disparities in child survival rates across regions." />
+    <meta property="og:image" content="images/unicef-banner.png" />
+    <meta property="og:url" content="https://yourdomain.com/unicef-child-mortality.html" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="UNICEF Child Mortality Trends in R — Esiah Kapinga" />
+    <meta name="twitter:description" content="Global analysis of under-five mortality using UNICEF data and R programming to uncover regional health disparities." />
+    <meta name="twitter:image" content="images/unicef-banner.png" />
+
+    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   </head>
   <body class="bg-white text-black font-sans">
 
-    <!-- Header / Navigation -->
+    <!-- Header / Navigation for other pages -->
     <header class="bg-white shadow p-4 sticky top-0 z-50">
-      <div class="max-w-6xl mx-auto flex items-center justify-between overflow-x-auto">
-        <!-- Logo and Name -->
-        <div class="flex items-center gap-2 flex-shrink-0">
-          <img src="images/logo-esiah.png" alt="Esiah Logo" class="h-8 w-auto" />
-          <h1 class="text-xl font-display font-semibold tracking-wide">Esiah</h1>
-        </div>
+        <div class="max-w-6xl mx-auto flex items-center justify-between overflow-x-auto">
+            <!-- Logo and Name -->
+            <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+                <img src="images/esiah-logo.png" alt="Esiah Logo" class="h-8 w-auto" />
+                <h1 class="text-xl font-display font-semibold tracking-wide">Esiah</h1>
+            </a>
 
-        <!-- Navigation Buttons -->
-        <nav class="flex gap-3 overflow-x-auto ml-4 scrollbar-hide">
-          <a href="#projects" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Projects</a>
-          <a href="#contact" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Contact</a>
-          <a href="#home" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Home</a>
-        </nav>
-      </div>
+            <!-- Navigation Buttons -->
+            <nav class="flex gap-3 overflow-x-auto ml-4 scrollbar-hide">
+                <a href="index.html#projects" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Projects</a>
+                <a href="index.html#contact" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Contact</a>
+                <a href="index.html#home" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Home</a>
+            </nav>
+        </div>
     </header>
 
     <!-- Desktop Banner -->
     <section class="hidden md:block w-full bg-white pt-2 pb-6 px-2 md:px-16">
-        <div class="relative rounded-4xl overflow-hidden">
+        <div class="relative overflow-hidden rounded-[3rem] max-w-full mx-auto">
             <img src="images/unicef-banner.png"
                  alt="UNICEF Child Mortality Project Banner"
                  class="w-full h-auto object-cover rounded-[3rem]" />
