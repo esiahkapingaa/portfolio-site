@@ -8,31 +8,23 @@
   </head>
   <body class="bg-white text-black font-sans">
 
-    <!-- Header / Navigation -->
+    <!-- Header / Navigation for other pages -->
     <header class="bg-white shadow p-4 sticky top-0 z-50">
       <div class="max-w-6xl mx-auto flex items-center justify-between overflow-x-auto">
         <!-- Logo and Name -->
-        <a href="#home" class="flex items-center gap-2 flex-shrink-0">
-          <img src="images/logo-esiah.png" alt="Esiah Logo" class="h-8 w-auto" />
+        <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+          <img src="images/esiah-logo.png" alt="Esiah Logo" class="h-8 w-auto" />
           <h1 class="text-xl font-display font-semibold tracking-wide">Esiah</h1>
         </a>
 
         <!-- Navigation Buttons -->
-        <nav>
-          <ul class="flex gap-3 overflow-x-auto ml-4 scrollbar-hide">
-            <li>
-              <a href="#home" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap hover:text-cyan-400">Home</a>
-            </li>
-            <li>
-              <a href="#projects" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap hover:text-cyan-400">Projects</a>
-            </li>
-            <li>
-              <a href="#contact" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap hover:text-cyan-400">Contact</a>
-            </li>
-          </ul>
+        <nav class="flex gap-3 overflow-x-auto ml-4 scrollbar-hide">
+          <a href="index.html#projects" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Projects</a>
+          <a href="index.html#contact" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Contact</a>
+          <a href="index.html#home" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Home</a>
         </nav>
       </div>
-    </header>   
+    </header> 
 
     <!-- Desktop Banner -->
     <section id="hero-desktop" class="hidden md:block w-full bg-white pt-2 pb-6 px-2 md:px-16">
@@ -40,6 +32,7 @@
             <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/covid-banner.png"
                  alt="COVID-19 Visualization Banner"
                  class="w-full h-auto object-cover rounded-[3rem]" />
+          </div>
 
             <div class="absolute inset-0 flex items-center justify-start px-12 py-8">
                 <!-- Gradient background fading from black to transparent -->
