@@ -266,12 +266,13 @@
 
 
     <!-- Experience Section -->
+    <!-- Experience Section -->
     <section id="experience" class="py-10 px-4 bg-white">
       <h2 class="text-3xl font-bold text-center mb-8">My Experience</h2>
 
       <!-- Image Carousel -->
-      <div class="relative w-full overflow-hidden rounded-3xl border border-yellow-400 shadow-lg shadow-blue-500/30">
-        <div class="flex w-[600%] animate-slide pause-on-hover">
+      <div class="relative w-full max-w-screen-lg mx-auto overflow-hidden rounded-3xl border border-yellow-400 shadow-lg shadow-blue-500/30">
+        <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
           <img src="images/experience-images/e-1.png" alt="Gokul Hospital" class="w-full aspect-[16/9] object-cover rounded-3xl flex-shrink-0" />
           <img src="images/experience-images/e-2.png" alt="Excelerate Program" class="w-full aspect-[16/9] object-cover rounded-3xl flex-shrink-0" />
           <img src="images/experience-images/e-3.png" alt="Graduation" class="w-full aspect-[16/9] object-cover rounded-3xl flex-shrink-0" />
@@ -457,6 +458,33 @@
         duration: 1000,
         once: true,
       });
+
+      // Carousel slide one at a time with pause on hover
+      const carousel = document.querySelector('#experience .flex');
+      const images = carousel.children;
+      const totalImages = images.length;
+      let currentIndex = 0;
+      let interval;
+
+      function slide() {
+        currentIndex = (currentIndex + 1) % totalImages;
+        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+      }
+
+      function startSliding() {
+        interval = setInterval(slide, 2000);
+      }
+
+      function stopSliding() {
+        clearInterval(interval);
+      }
+
+      // Start sliding when page loads
+      startSliding();
+
+      // Pause sliding on hover
+      carousel.parentElement.addEventListener('mouseenter', stopSliding);
+      carousel.parentElement.addEventListener('mouseleave', startSliding);
     </script>
   </body>
 </html>
