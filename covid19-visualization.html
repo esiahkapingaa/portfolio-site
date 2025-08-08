@@ -1,39 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>COVID-19 Global Visualization — Esiah Kapinga</title>
+  <head> 
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COVID-19 Global Visualization — Esiah Kapinga</title>
 
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Interactive COVID-19 dashboard using Python and WHO data. Explore global trends and insights through visual data storytelling." />
-  <meta name="keywords" content="COVID-19 dashboard, data visualization, global health, Python, WHO data, Esiah Kapinga, analytics" />
-  <meta name="author" content="Esiah Kapinga" />
-  <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#facc15" />
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Interactive COVID-19 dashboard using Python and WHO data. Explore global trends and insights through visual data storytelling." />
+    <meta name="keywords" content="COVID-19 dashboard, data visualization, global health, Python, WHO data, Esiah Kapinga, analytics" />
+    <meta name="author" content="Esiah Kapinga" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#facc15" />
 
-  <!-- Canonical Link -->
-  <link rel="canonical" href="https://esiiah.github.io/portfolio-site/covid-dashboard.html" />
+    <!-- Canonical Link -->
+    <link rel="canonical" href="https://esiiah.github.io/portfolio-site/covid-dashboard.html" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="images/esiah-logo.png" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/esiah-logo.png" />
 
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="COVID-19 Global Dashboard — Esiah Kapinga" />
-  <meta property="og:description" content="Track global COVID-19 trends using WHO data and Python. Visualized for clarity and insight." />
-  <meta property="og:image" content="images/your-project-banner.png" />
-  <meta property="og:url" content="https://esiiah.github.io/portfolio-site/covid-dashboard.html" />
-  <meta property="og:type" content="website" />
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="COVID-19 Global Dashboard — Esiah Kapinga" />
+    <meta property="og:description" content="Track global COVID-19 trends using WHO data and Python. Visualized for clarity and insight." />
+    <meta property="og:image" content="images/your-project-banner.png" />
+    <meta property="og:url" content="https://esiiah.github.io/portfolio-site/covid-dashboard.html" />
+    <meta property="og:type" content="website" />
 
-  <!-- Twitter Card Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="COVID-19 Global Dashboard — Esiah Kapinga" />
-  <meta name="twitter:description" content="Data visualization of COVID-19 trends worldwide using Python and WHO data." />
-  <meta name="twitter:image" content="images/your-project-banner.png" />
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="COVID-19 Global Dashboard — Esiah Kapinga" />
+    <meta name="twitter:description" content="Data visualization of COVID-19 trends worldwide using Python and WHO data." />
+    <meta name="twitter:image" content="images/your-project-banner.png" />
 
-  <!-- Tailwind CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-</head>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                yellow: '#F5A623',
+                dark: '#1A1A1A',
+                accent: '#2563EB',
+                orange: '#FF7A00',
+              },
+            },
+            fontFamily: {
+              display: ['Poppins', 'sans-serif'],
+              body: ['Inter', 'sans-serif'],
+            },
+            animation: {
+              'spin-slow': 'spin 6s linear infinite',
+              'fadeInOut': 'fadeInOut 3s ease-in-out infinite',
+              'pulse-slow': 'pulse 5s infinite',
+              'slide': 'slide 30s infinite linear',
+            },
+            keyframes: {
+              fadeInOut: {
+                '0%, 100%': { opacity: 0 },
+                '50%': { opacity: 1 },
+              },
+              slide: {
+                '0%': { transform: 'translateX(0%)' },
+                '20%': { transform: 'translateX(-100%)' },
+                '40%': { transform: 'translateX(-200%)' },
+                '60%': { transform: 'translateX(-300%)' },
+                '80%': { transform: 'translateX(-400%)' },
+                '100%': { transform: 'translateX(-500%)' },
+              },
+            },
+            scrollBehavior: 'smooth',
+            borderRadius: {
+              '3rem': '3rem',
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>  
+  </head>
   <body class="bg-white text-black font-sans">
 
     <!-- Header / Navigation for other pages -->
