@@ -155,7 +155,7 @@
 
     <main class="px-4 md:px-16 py-8">
       <!-- Overview -->
-      <section>
+      <section class="mb-8">
         <h2 class="text-2xl font-semibold mb-2">Overview</h2>
         <p>
           This project investigates the phylogenetic relationships among six species, including <em>Tinospora</em> spp., <em>Paratinospora sagittata</em>, and <em>Menispermum dauricum</em>, using chloroplast <em>rbcL</em> gene sequences sourced from GenBank. 
@@ -165,7 +165,7 @@
       </section>
 
       <!-- Objectives -->
-      <section>
+      <section class="mb-8">
         <h2 class="text-2xl font-semibold mb-2">Objectives</h2>
         <ul class="list-disc pl-6 space-y-1">
           <li>Retrieve and curate <em>rbcL</em> chloroplast sequences from GenBank for six target taxa.</li>
@@ -176,7 +176,7 @@
       </section>
 
       <!-- Target Species Table -->
-      <section>
+      <section class="mb-8">
         <h2 class="text-2xl font-semibold mb-4">Targeted Species</h2>
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse border border-black">
@@ -224,12 +224,12 @@
       </section>
 
       <!-- Button for CDS file-->
-      <section>
+      <section class="mb-8">
         <a href="T.spp.txt" download class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Download CDS Sequence</a>
       </section>
 
       <!-- Methods -->
-      <section>
+      <section class="mb-8">
         <h2 class="text-2xl font-semibold mb-2">Methods & Tools</h2>
         <ol class="list-decimal pl-6 space-y-2">
           <li><strong>Sequence Retrieval:</strong> Downloaded <em>rbcL</em> sequences from GenBank and verified via BLASTn.</li>
@@ -241,7 +241,7 @@
       </section>
 
       <!-- Results -->
-      <section>
+      <section class="mb-8">
         <h2 class="text-2xl font-semibold mb-2">Results</h2>
         <ul class="list-disc pl-6 space-y-1">
           <li><em>T. cordifolia</em> and <em>T. sinensis</em> clustered together with 99% bootstrap support.</li>
@@ -252,18 +252,18 @@
       </section>
 
       <!-- Phylogenetic Trees -->
-      <section>
+      <section class="mb-8">
         <h2 class="text-2xl font-semibold mb-4">Phylogenetic Analysis</h2>
 
         <!-- Maximum Likelihood -->
-        <div class="border border-black p-4 mb-6 bg-gray-100">
+        <div class="border border-black p-4 mb-8 bg-gray-100">
           <div class="flex flex-col items-center mb-4">
             <h3 class="text-lg font-semibold mb-2">Maximum Likelihood (JTT)</h3>
             <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-ML.png" alt="Phylo ML" width="792" height="404" class="mb-2 w-full md:w-auto">
             <a href="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-ML.png" download class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Download High-Resolution</a>
           </div>
           <div class="text-sm">
-            Evolutionary analysis by the Maximum Likelihood method.<br>
+            <strong>Caption:</strong> Evolutionary analysis by the Maximum Likelihood method.<br>
             The phylogeny was inferred using the Maximum Likelihood method and Jones-Taylor-Thornton (1992) model [1] of amino acid substitutions and the tree with the highest log likelihood (-4,626.27) is shown. The initial tree for the heuristic search was selected by choosing the tree with the superior log-likelihood between a Neighbor-Joining (NJ) tree [2] and a Maximum Parsimony (MP) tree. The NJ tree was generated using a matrix of pairwise distances computed using the Jones-Taylor-Thornton (1992) model [1]. The MP tree had the shortest length among 10 MP tree searches, each performed with a randomly generated starting tree. The proportion of sites where at least 1 unambiguous base is present in at least 1 sequence for each descendent clade is shown next to each internal node in the tree. The analytical procedure encompassed 6 amino acid sequences with 1,449 positions in the final dataset. Evolutionary analyses were conducted in MEGA12 [3].<br><br>
             1. Jones D.T., Taylor W.R., and Thornton J.M. (1992). The rapid generation of mutation data matrices from protein sequences. Computer Applications in the Biosciences 8: 275-282.<br>
             2. Saitou N. and Nei M. (1987). The neighbor-joining method: A new method for reconstructing phylogenetic trees. Molecular Biology and Evolution 4:406-425.<br>
@@ -280,7 +280,7 @@
             <a href="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-NJ.png" download class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Download High-Resolution</a>
           </div>
           <div class="text-sm">
-            Evolutionary relationships of 6 taxa.<br>
+            <strong>Caption:</strong> Evolutionary relationships of 6 taxa.<br>
             The evolutionary history was inferred using the Neighbor-Joining method [1]. The optimal tree with the sum of branch length = 0.033 is shown. The evolutionary distances were computed using the Poisson correction method [2] and are in the units of the number of amino acid substitutions per site. The proportion of sites where at least 1 unambiguous base is present in at least 1 sequence for each descendent clade is shown next to each internal node in the tree. The analytical procedure encompassed 6 amino acid sequences. The pairwise deletion option was applied to all ambiguous positions for each sequence pair resulting in a final data set comprising 1,449 positions. Evolutionary analyses were conducted in MEGA12 [3].<br><br>
             1. Saitou N. and Nei M. (1987). The neighbor-joining method: A new method for reconstructing phylogenetic trees. Molecular Biology and Evolution 4:406-425.<br>
             2. Zuckerkandl E. and Pauling L. (1965). Evolutionary divergence and convergence in proteins. Edited in <em>Evolving Genes and Proteins</em> by V. Bryson and H.J. Vogel, pp. 97-166. Academic Press, New York.<br>
@@ -291,7 +291,7 @@
       </section>
 
       <!-- Applications -->
-      <section>
+      <section class="mb-8">
         <h2 class="text-2xl font-semibold mb-2">Applications</h2>
         <ul class="list-disc pl-6 space-y-1">
           <li>Improves taxonomic clarity within <em>Tinospora</em> and related genera.</li>
