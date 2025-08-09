@@ -221,7 +221,11 @@
             </tbody>
           </table>
         </div>
-        <a href="/data/T.spp.txt" download class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Download CDS Sequence</a>
+      </section>
+
+      <!-- Button for CDS file-->
+      <section>
+        <a href="T.spp.txt" download class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Download CDS Sequence</a>
       </section>
 
       <!-- Methods -->
@@ -250,48 +254,39 @@
       <!-- Phylogenetic Trees -->
       <section>
         <h2 class="text-2xl font-semibold mb-4">Phylogenetic Analysis</h2>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse border border-black">
-            <thead>
-              <tr class="bg-gray-200 text-black">
-                <th class="p-2 border border-black">Method</th>
-                <th class="p-2 border border-black">Tree</th>
-                <th class="p-2 border border-black">Caption</th>
-              </tr>
-            </thead>
-            <tbody class="bg-gray-100 text-black">
-              <tr>
-                <td class="p-2 border border-black">Maximum Likelihood (JTT)</td>
-                <td class="p-2 border border-black">
-                  <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-ML.png" alt="Phylo ML" width="792" height="404" class="mb-2">
-                  <a href="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-ML.png" download class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Download High-Resolution</a>
-                </td>
-                <td class="p-2 border border-black text-sm">
-                  Evolutionary analysis by the Maximum Likelihood method.<br>
-                  The phylogeny was inferred using the Maximum Likelihood method and Jones-Taylor-Thornton (1992) model [1] of amino acid substitutions and the tree with the highest log likelihood (-4,626.27) is shown. The initial tree for the heuristic search was selected by choosing the tree with the superior log-likelihood between a Neighbor-Joining (NJ) tree [2] and a Maximum Parsimony (MP) tree. The NJ tree was generated using a matrix of pairwise distances computed using the Jones-Taylor-Thornton (1992) model [1]. The MP tree had the shortest length among 10 MP tree searches, each performed with a randomly generated starting tree. The proportion of sites where at least 1 unambiguous base is present in at least 1 sequence for each descendent clade is shown next to each internal node in the tree. The analytical procedure encompassed 6 amino acid sequences with 1,449 positions in the final dataset. Evolutionary analyses were conducted in MEGA12 [3].<br><br>
-                  1. Jones D.T., Taylor W.R., and Thornton J.M. (1992). The rapid generation of mutation data matrices from protein sequences. Computer Applications in the Biosciences 8: 275-282.<br>
-                  2. Saitou N. and Nei M. (1987). The neighbor-joining method: A new method for reconstructing phylogenetic trees. Molecular Biology and Evolution 4:406-425.<br>
-                  3. Kumar S., Stecher G., Suleski M., Sanderford M., Sharma S., and Tamura K. (2024). Molecular Evolutionary Genetics Analysis Version 12 for adaptive and green computing. Molecular Biology and Evolution 41:1-9.<br>
-                  <em>Disclaimer:</em> While every effort has been made to ensure the accuracy of the caption, it is provided "as is" without warranty of any kind. Users are advised to thoroughly review the caption before its use for any purpose and report any errors or issues to the authors at www.megasoftware.net. The authors and their employers disclaim any liability for damages, including but not limited to special or consequential damages. Additionally, the authors expressly disclaim all other warranties, whether expressed or implied, including the suitability of the caption text for a specific purpose, use, or application.
-                </td>
-              </tr>
-              <tr>
-                <td class="p-2 border border-black">Neighbor-Joining (Poisson)</td>
-                <td class="p-2 border border-black">
-                  <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-NJ.png" alt="Phylo NJ" width="792" height="404" class="mb-2">
-                  <a href="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-NJ.png" download class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Download High-Resolution</a>
-                </td>
-                <td class="p-2 border border-black text-sm">
-                  Evolutionary relationships of 6 taxa.<br>
-                  The evolutionary history was inferred using the Neighbor-Joining method [1]. The optimal tree with the sum of branch length = 0.033 is shown. The evolutionary distances were computed using the Poisson correction method [2] and are in the units of the number of amino acid substitutions per site. The proportion of sites where at least 1 unambiguous base is present in at least 1 sequence for each descendent clade is shown next to each internal node in the tree. The analytical procedure encompassed 6 amino acid sequences. The pairwise deletion option was applied to all ambiguous positions for each sequence pair resulting in a final data set comprising 1,449 positions. Evolutionary analyses were conducted in MEGA12 [3].<br><br>
-                  1. Saitou N. and Nei M. (1987). The neighbor-joining method: A new method for reconstructing phylogenetic trees. Molecular Biology and Evolution 4:406-425.<br>
-                  2. Zuckerkandl E. and Pauling L. (1965). Evolutionary divergence and convergence in proteins. Edited in <em>Evolving Genes and Proteins</em> by V. Bryson and H.J. Vogel, pp. 97-166. Academic Press, New York.<br>
-                  3. Kumar S., Stecher G., Suleski M., Sanderford M., Sharma S., and Tamura K. (2024). Molecular Evolutionary Genetics Analysis Version 12 for adaptive and green computing. Molecular Biology and Evolution 41:1-9.<br>
-                  <em>Disclaimer:</em> While every effort has been made to ensure the accuracy of the caption, it is provided "as is" without warranty of any kind. Users are advised to thoroughly review the caption before its use for any purpose and report any errors or issues to the authors at www.megasoftware.net. The authors and their employers disclaim any liability for damages, including but not limited to special or consequential damages. Additionally, the authors expressly disclaim all other warranties, whether expressed or implied, including the suitability of the caption text for a specific purpose, use, or application.
-                </td>
-              </tr>
-            </tbody>
-          </table>
+
+        <!-- Maximum Likelihood -->
+        <div class="border border-black p-4 mb-6 bg-gray-100">
+          <div class="flex flex-col items-center mb-4">
+            <h3 class="text-lg font-semibold mb-2">Maximum Likelihood (JTT)</h3>
+            <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-ML.png" alt="Phylo ML" width="792" height="404" class="mb-2 w-full md:w-auto">
+            <a href="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-ML.png" download class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Download High-Resolution</a>
+          </div>
+          <div class="text-sm">
+            Evolutionary analysis by the Maximum Likelihood method.<br>
+            The phylogeny was inferred using the Maximum Likelihood method and Jones-Taylor-Thornton (1992) model [1] of amino acid substitutions and the tree with the highest log likelihood (-4,626.27) is shown. The initial tree for the heuristic search was selected by choosing the tree with the superior log-likelihood between a Neighbor-Joining (NJ) tree [2] and a Maximum Parsimony (MP) tree. The NJ tree was generated using a matrix of pairwise distances computed using the Jones-Taylor-Thornton (1992) model [1]. The MP tree had the shortest length among 10 MP tree searches, each performed with a randomly generated starting tree. The proportion of sites where at least 1 unambiguous base is present in at least 1 sequence for each descendent clade is shown next to each internal node in the tree. The analytical procedure encompassed 6 amino acid sequences with 1,449 positions in the final dataset. Evolutionary analyses were conducted in MEGA12 [3].<br><br>
+            1. Jones D.T., Taylor W.R., and Thornton J.M. (1992). The rapid generation of mutation data matrices from protein sequences. Computer Applications in the Biosciences 8: 275-282.<br>
+            2. Saitou N. and Nei M. (1987). The neighbor-joining method: A new method for reconstructing phylogenetic trees. Molecular Biology and Evolution 4:406-425.<br>
+            3. Kumar S., Stecher G., Suleski M., Sanderford M., Sharma S., and Tamura K. (2024). Molecular Evolutionary Genetics Analysis Version 12 for adaptive and green computing. Molecular Biology and Evolution 41:1-9.<br>
+            <em>Disclaimer:</em> While every effort has been made to ensure the accuracy of the caption, it is provided "as is" without warranty of any kind. Users are advised to thoroughly review the caption before its use for any purpose and report any errors or issues to the authors at www.megasoftware.net. The authors and their employers disclaim any liability for damages, including but not limited to special or consequential damages. Additionally, the authors expressly disclaim all other warranties, whether expressed or implied, including the suitability of the caption text for a specific purpose, use, or application.
+          </div>
+        </div>
+
+        <!-- Neighbor-Joining -->
+        <div class="border border-black p-4 bg-gray-100">
+          <div class="flex flex-col items-center mb-4">
+            <h3 class="text-lg font-semibold mb-2">Neighbor-Joining (Poisson)</h3>
+            <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-NJ.png" alt="Phylo NJ" width="792" height="404" class="mb-2 w-full md:w-auto">
+            <a href="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/PhyloAnalysis-NJ.png" download class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Download High-Resolution</a>
+          </div>
+          <div class="text-sm">
+            Evolutionary relationships of 6 taxa.<br>
+            The evolutionary history was inferred using the Neighbor-Joining method [1]. The optimal tree with the sum of branch length = 0.033 is shown. The evolutionary distances were computed using the Poisson correction method [2] and are in the units of the number of amino acid substitutions per site. The proportion of sites where at least 1 unambiguous base is present in at least 1 sequence for each descendent clade is shown next to each internal node in the tree. The analytical procedure encompassed 6 amino acid sequences. The pairwise deletion option was applied to all ambiguous positions for each sequence pair resulting in a final data set comprising 1,449 positions. Evolutionary analyses were conducted in MEGA12 [3].<br><br>
+            1. Saitou N. and Nei M. (1987). The neighbor-joining method: A new method for reconstructing phylogenetic trees. Molecular Biology and Evolution 4:406-425.<br>
+            2. Zuckerkandl E. and Pauling L. (1965). Evolutionary divergence and convergence in proteins. Edited in <em>Evolving Genes and Proteins</em> by V. Bryson and H.J. Vogel, pp. 97-166. Academic Press, New York.<br>
+            3. Kumar S., Stecher G., Suleski M., Sanderford M., Sharma S., and Tamura K. (2024). Molecular Evolutionary Genetics Analysis Version 12 for adaptive and green computing. Molecular Biology and Evolution 41:1-9.<br>
+            <em>Disclaimer:</em> While every effort has been made to ensure the accuracy of the caption, it is provided "as is" without warranty of any kind. Users are advised to thoroughly review the caption before its use for any purpose and report any errors or issues to the authors at www.megasoftware.net. The authors and their employers disclaim any liability for damages, including but not limited to special or consequential damages. Additionally, the authors expressly disclaim all other warranties, whether expressed or implied, including the suitability of the caption text for a specific purpose, use, or application.
+          </div>
         </div>
       </section>
 
