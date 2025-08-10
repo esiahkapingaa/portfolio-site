@@ -1,7 +1,6 @@
 # analysis.R
 # UNICEF + World Bank SSA Child Mortality Analysis
 
-# --- 1. Install & load required libraries safely ---
 required_packages <- c("tidyverse", "janitor", "lubridate", "scales")
 
 for (pkg in required_packages) {
