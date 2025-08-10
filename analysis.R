@@ -1,16 +1,17 @@
-
 # analysis.R
 # UNICEF + World Bank SSA Child Mortality Analysis
 
-# --- 1. Load libraries ---
-library(tidyverse)
-library(janitor)
-library(lubridate)
-library(scales)
+# --- 1. Install & load required libraries safely ---
+required_packages <- c("tidyverse", "janitor", "lubridate", "scales")
+
+for (pkg in required_packages) {
+  if (!require(pkg, character.only = TRUE)) {
+    install.packages(pkg, repos = "https://cran.r-project.org")
+    library(pkg, character.only = TRUE)
+  }
+}
 
 # --- 2. Read the data ---
-
-# Adjust paths if running from root repo folder
 u5mr <- read_csv("unicef-ssa-child-mortality/unicef_u5mr.csv") %>% clean_names()
 imr <- read_csv("unicef-ssa-child-mortality/unicef_imr.csv") %>% clean_names()
 neonatal <- read_csv("unicef-ssa-child-mortality/unicef_neonatal.csv") %>% clean_names()
@@ -19,7 +20,6 @@ fertility <- read_csv("unicef-ssa-child-mortality/worldbank_fertility.csv") %>% 
 region_codes <- read_csv("unicef-ssa-child-mortality/un_region_codes.csv") %>% clean_names()
 
 # --- 3. Filter to Sub-Saharan Africa countries ---
-
 ssa_countries <- region_codes %>%
   filter(region_name == "Sub-Saharan Africa") %>%
   pull(country_name)
@@ -29,7 +29,6 @@ imr <- imr %>% filter(country %in% ssa_countries)
 neonatal <- neonatal %>% filter(country %in% ssa_countries)
 
 # --- 4. Reshape data to long format ---
-
 u5mr_long <- u5mr %>%
   pivot_longer(cols = starts_with("y"), names_to = "year", values_to = "u5mr") %>%
   mutate(year = as.integer(str_remove(year, "y")))
@@ -43,7 +42,6 @@ neonatal_long <- neonatal %>%
   mutate(year = as.integer(str_remove(year, "y")))
 
 # --- 5. Merge datasets ---
-
 mortality <- u5mr_long %>%
   left_join(imr_long, by = c("country", "year")) %>%
   left_join(neonatal_long, by = c("country", "year")) %>%
@@ -51,13 +49,11 @@ mortality <- u5mr_long %>%
   left_join(fertility, by = c("country", "year"))
 
 # --- 6. Clean data ---
-
 mortality <- mortality %>%
   filter(year >= 2000 & year <= 2022) %>%
   drop_na(u5mr, imr, neonatal_mortality)
 
 # --- 7. Calculate rate reductions (example with U5MR) ---
-
 mortality <- mortality %>%
   group_by(country) %>%
   arrange(year) %>%
@@ -65,8 +61,6 @@ mortality <- mortality %>%
   ungroup()
 
 # --- 8. Visualizations ---
-
-# a) Regional Trend Line (Mean U5MR by year)
 p1 <- mortality %>%
   group_by(year) %>%
   summarise(mean_u5mr = mean(u5mr, na.rm = TRUE)) %>%
@@ -74,10 +68,9 @@ p1 <- mortality %>%
   geom_line(color = "#1f77b4", size = 1.2) +
   labs(title = "Average Under-5 Mortality Rate in SSA (2000–2022)",
        y = "Deaths per 1,000 live births", x = "Year") +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(labels = scales::comma) +
   theme_minimal()
 
-# b) Country Rankings in 2022
 p2 <- mortality %>%
   filter(year == 2022) %>%
   arrange(desc(u5mr)) %>%
@@ -88,7 +81,6 @@ p2 <- mortality %>%
        y = "U5MR per 1,000", x = "Country") +
   theme_minimal()
 
-# c) GDP vs U5MR Scatter plot in 2022
 p3 <- mortality %>%
   filter(year == 2022) %>%
   ggplot(aes(x = gdp_per_capita, y = u5mr)) +
@@ -99,7 +91,6 @@ p3 <- mortality %>%
   theme_minimal()
 
 # --- 9. Save outputs ---
-
 ggsave("unicef-ssa-child-mortality/ssa_trend.png", plot = p1, width = 8, height = 5, dpi = 300)
 ggsave("unicef-ssa-child-mortality/ssa_rankings.png", plot = p2, width = 8, height = 5, dpi = 300)
 ggsave("unicef-ssa-child-mortality/ssa_gdp_vs_u5mr.png", plot = p3, width = 8, height = 5, dpi = 300)
