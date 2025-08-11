@@ -3,22 +3,20 @@ library(janitor)
 library(lubridate)
 library(scales)
 
-data <- read_csv("data.csv") %>%
-  clean_names() %>%
-  mutate(date = ymd(date)) %>%
-  drop_na()
+input_folder <- "unicef-ssa-child-mortality"
+output_folder <- "cleaned_data"
 
-summary_data <- data %>%
-  group_by(category) %>%
-  summarise(total = sum(value, na.rm = TRUE))
+if (!dir.exists(output_folder)) {
+  dir.create(output_folder)
+}
 
-write_csv(data, "cleaned_data.csv")
-write_csv(summary_data, "summary_data.csv")
+csv_files <- list.files(input_folder, pattern = "\\.csv$", full.names = TRUE)
 
-ggplot(summary_data, aes(x = category, y = total)) +
-  geom_col(fill = "steelblue") +
-  scale_y_continuous(labels = comma) +
-  theme_minimal() +
-  labs(title = "Example Summary Plot", x = "Category", y = "Total")
-
-ggsave("summary_plot.png")
+for (file in csv_files) {
+  data <- read_csv(file) %>%
+    clean_names() %>%
+    drop_na()
+  
+  output_file <- file.path(output_folder, basename(file))
+  write_csv(data, output_file)
+}
