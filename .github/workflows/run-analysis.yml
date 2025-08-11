@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:  # allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   r-analysis:
@@ -19,15 +19,24 @@ jobs:
         with:
           r-version: '4.2'
 
+      - name: Cache R packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-packages-${{ hashFiles('**/DESCRIPTION') }}
+          restore-keys: |
+            ${{ runner.os }}-r-packages-
+
       - name: Install dependencies
         run: |
-          R -e "install.packages(c('tidyverse', 'janitor', 'lubridate', 'scales'), repos='https://cloud.r-project.org')"
+          Rscript -e 'install.packages(c("tidyverse", "janitor", "lubridate", "scales"), repos="https://cloud.r-project.org")'
 
       - name: Run analysis script
         run: Rscript analysis.R
 
-      - name: Upload cleaned CSV files
+      - name: Upload outputs
         uses: actions/upload-artifact@v4
         with:
-          name: cleaned-data
-          path: cleaned_data/
+          name: analysis-outputs
+          path: |
+            cleaned_data/*.csv
