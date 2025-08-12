@@ -147,112 +147,117 @@
     </section>
     
     <main class="px-4 md:px-16 py-8">
-      <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Overview</h2>
-      <p class="mb-4">
-        This project explores historical and recent trends in <strong>under-five child mortality</strong> across Sub-Saharan African countries, using data from <a href="https://data.unicef.org/resources/dataset" class="text-blue-600 underline" target="_blank">UNICEF’s Data Warehouse</a> and World Bank indicators. It applies data wrangling and visualization techniques in R to reveal disparities, assess progress toward SDG 3.2, and suggest interventions.
-      </p>
+        <!-- Overview -->
+        <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Overview</h2>
+        <p class="mb-4">
+            This project explores historical and recent trends in 
+            <strong>under-five child mortality</strong> across Sub-Saharan African countries, using data from 
+            <a href="https://data.unicef.org/resources/dataset" class="text-blue-600 underline" target="_blank">UNICEF’s Data Warehouse</a> 
+            and World Bank indicators. It applies data wrangling and visualization techniques in R to reveal disparities, assess progress toward SDG 3.2, and suggest interventions.
+        </p>
 
-      <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Objectives</h2>
-      <ul class="list-disc ml-6 space-y-1">
-        <li>Import and clean UNICEF child mortality datasets using <code>readr</code>, <code>tidyr</code>, and <code>dplyr</code></li>
-        <li>Harmonize U5MR, IMR, and neonatal mortality indicators</li>
-        <li>Segment analysis by region, country, and income group</li>
-        <li>Track trends from 2000 onward</li>
-        <li>Visualize disparities with <code>ggplot2</code></li>
-        <li>Generate insights for development strategy</li>
-      </ul>
+        <!-- Objectives -->
+        <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Objectives</h2>
+        <ul class="list-disc ml-6 space-y-1">
+            <li>Import and clean UNICEF child mortality datasets using <code>readr</code>, <code>tidyr</code>, and <code>dplyr</code></li>
+            <li>Harmonize U5MR, IMR, and neonatal mortality indicators</li>
+            <li>Segment analysis by region, country, and income group</li>
+            <li>Track trends from 2000 onward</li>
+            <li>Visualize disparities with <code>ggplot2</code></li>
+            <li>Generate insights for development strategy</li>
+        </ul>
 
-    <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Data Sources</h2>
-    <table class="table-auto w-full border text-sm mb-4">
-      <thead>
-        <tr class="bg-gray-100 text-left">
-          <th class="border px-3 py-2">Source</th>
-          <th class="border px-3 py-2">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="border px-3 py-2">UNICEF Data Warehouse</td>
-          <td class="border px-3 py-2"><a href="https://data.unicef.org/resources/dataset" target="_blank" class="text-blue-600 underline">Official child mortality data</a></td>
-        </tr>
-        <tr>
-          <td class="border px-3 py-2">World Bank</td>
-          <td class="border px-3 py-2">GDP, health access, fertility overlays</td>
-        </tr>
-        <tr>
-          <td class="border px-3 py-2">UN Region Codes</td>
-          <td class="border px-3 py-2">Country mapping to Sub-Saharan Africa</td>
-        </tr>
-      </tbody>
-    </table>
+        <!-- Data Sources -->
+        <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Data Sources</h2>
+        <table class="table-auto w-full border text-sm mb-4">
+            <thead>
+                <tr class="bg-gray-100 text-left">
+                    <th class="border px-3 py-2">Source</th>
+                    <th class="border px-3 py-2">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border px-3 py-2">UNICEF Data Warehouse</td>
+                    <td class="border px-3 py-2">
+                        <a href="https://data.unicef.org/resources/dataset" target="_blank" class="text-blue-600 underline">Official child mortality data</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border px-3 py-2">World Bank</td>
+                    <td class="border px-3 py-2">GDP, health access, fertility overlays</td>
+                </tr>
+                <tr>
+                    <td class="border px-3 py-2">UN Region Codes</td>
+                    <td class="border px-3 py-2">Country mapping to Sub-Saharan Africa</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="text-sm italic text-gray-600 mb-4">
+            <strong>Key Variables:</strong> Country, Year, U5MR, IMR, Neonatal_Mortality, Births, Deaths, Region
+        </p>
 
-    <p class="text-sm italic text-gray-600 mb-4">
-      <strong>Key Variables:</strong> Country, Year, U5MR, IMR, Neonatal_Mortality, Births, Deaths, Region
-    </p>
+        <!-- Methods & Tools -->
+        <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Methods &amp; Tools</h2>
+        <ol class="list-decimal ml-6 space-y-2 mb-6">
+            <li><strong>Data Cleaning:</strong> Used <code>read_csv()</code>, <code>clean_names()</code>, filtered for SSA countries, and removed NA values</li>
+            <li><strong>Wrangling:</strong> Grouped by country/year, added rate reductions, merged GDP overlays</li>
+            <li><strong>Visualization:</strong> Plotted time series, rankings, and heatmaps using <code>ggplot2</code></li>
+        </ol>
 
-    <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Methods & Tools</h2>
-    <ol class="list-decimal ml-6 space-y-2 mb-6">
-      <li><strong>Data Cleaning:</strong> Used <code>read_csv()</code>, <code>clean_names()</code>, filtered for SSA countries, and removed NA values</li>
-      <li><strong>Wrangling:</strong> Grouped by country/year, added rate reductions, merged GDP overlays</li>
-      <li><strong>Visualization:</strong> Plotted time series, rankings, and heatmaps using <code>ggplot2</code></li>
-    </ol>
+        <!-- Key Findings -->
+        <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Key Findings</h2>
+        <ul class="list-disc ml-6 space-y-1">
+            <li>U5MR declined from 145/1,000 (2000) to 72/1,000 (2022) in SSA</li>
+            <li>🇳🇬 Nigeria: Highest burden, modest decline</li>
+            <li>🇪🇹 Ethiopia: &gt;60% drop due to immunization and access</li>
+            <li>Conflict zones like South Sudan stagnated</li>
+            <li>High fertility + low GDP correlate with poor child survival</li>
+        </ul>
 
-    <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Key Findings</h2>
-    <ul class="list-disc ml-6 space-y-1">
-      <li>U5MR declined from 145/1,000 (2000) to 72/1,000 (2022) in SSA</li>
-      <li>🇳🇬 Nigeria: Highest burden, modest decline</li>
-      <li>🇪🇹 Ethiopia: >60% drop due to immunization and access</li>
-      <li>Conflict zones like South Sudan stagnated</li>
-      <li>High fertility + low GDP correlate with poor child survival</li>
-    </ul>
+        <!-- Tools Used -->
+        <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Tools Used</h2>
+        <table class="table-auto w-full border text-sm mb-6">
+            <thead>
+                <tr class="bg-gray-100 text-left">
+                    <th class="border px-3 py-2">Tool</th>
+                    <th class="border px-3 py-2">Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="border px-3 py-2">R</td><td class="border px-3 py-2">Statistical computing</td></tr>
+                <tr><td class="border px-3 py-2">dplyr</td><td class="border px-3 py-2">Data transformation</td></tr>
+                <tr><td class="border px-3 py-2">tidyr</td><td class="border px-3 py-2">Reshaping data</td></tr>
+                <tr><td class="border px-3 py-2">ggplot2</td><td class="border px-3 py-2">Visualization</td></tr>
+                <tr><td class="border px-3 py-2">readr</td><td class="border px-3 py-2">CSV reading</td></tr>
+                <tr><td class="border px-3 py-2">lubridate</td><td class="border px-3 py-2">Date handling</td></tr>
+                <tr><td class="border px-3 py-2">scales</td><td class="border px-3 py-2">Axis formatting</td></tr>
+            </tbody>
+        </table>
 
-    <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Tools Used</h2>
-    <table class="table-auto w-full border text-sm mb-6">
-      <thead>
-        <tr class="bg-gray-100 text-left">
-          <th class="border px-3 py-2">Tool</th>
-          <th class="border px-3 py-2">Purpose</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="border px-3 py-2">R</td>
-          <td class="border px-3 py-2">Statistical computing</td>
-        </tr>
-        <tr>
-          <td class="border px-3 py-2">dplyr</td>
-          <td class="border px-3 py-2">Data transformation</td>
-        </tr>
-        <tr>
-          <td class="border px-3 py-2">tidyr</td>
-          <td class="border px-3 py-2">Reshaping data</td>
-        </tr>
-        <tr>
-          <td class="border px-3 py-2">ggplot2</td>
-          <td class="border px-3 py-2">Visualization</td>
-        </tr>
-        <tr>
-          <td class="border px-3 py-2">readr</td>
-          <td class="border px-3 py-2">CSV reading</td>
-        </tr>
-        <tr>
-          <td class="border px-3 py-2">lubridate</td>
-          <td class="border px-3 py-2">Date handling</td>
-        </tr>
-        <tr>
-          <td class="border px-3 py-2">scales</td>
-          <td class="border px-3 py-2">Axis formatting</td>
-        </tr>
-      </tbody>
-    </table>
+        <!-- Applications -->
+        <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Applications</h2>
+        <ul class="list-disc ml-6 space-y-1 mb-6">
+            <li>Public health planning in SSA</li>
+            <li>SDG 3.2 monitoring</li>
+            <li>Strategic maternal/child health investment</li>
+            <li>Academic research and education</li>
+        </ul>
 
-    <h2 class="text-xl font-semibold mt-6 mb-2 text-gray-700">Applications</h2>
-    <ul class="list-disc ml-6 space-y-1 mb-6">
-      <li>Public health planning in SSA</li>
-      <li>SDG 3.2 monitoring</li>
-      <li>Strategic maternal/child health investment</li>
-      <li>Academic research and education</li>
-    </ul>
+        <!-- Interactive Visuals -->
+        <h2 class="text-xl font-semibold mt-8 mb-4 text-gray-700">Interactive Visualizations</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <iframe src="unicef-ssa-child-mortality/bar-chart-fr" class="w-full h-80 border rounded-lg" loading="lazy" title="Top 10 fertility rate (2021)"></iframe>
+            <iframe src="unicef-ssa-child-mortality/bar-chart-GDP" class="w-full h-80 border rounded-lg" loading="lazy" title="Top 10 GDP per capita (2021)"></iframe>
+            <iframe src="unicef-ssa-child-mortality/heatmap" class="w-full h-80 border rounded-lg" loading="lazy" title="Mortality heatmap (U5MR, IMR, Neonatal)"></iframe>
+            <iframe src="unicef-ssa-child-mortality/maps-mr" class="w-full h-80 border rounded-lg" loading="lazy" title="Under-5 mortality rate map (per 1000 births)"></iframe>
+            <iframe src="unicef-ssa-child-mortality/nm-vs-fr" class="w-full h-80 border rounded-lg" loading="lazy" title="Neonatal mortality vs fertility rate"></iframe>
+            <iframe src="unicef-ssa-child-mortality/u5mr-vs-gdp" class="w-full h-80 border rounded-lg" loading="lazy" title="U5MR vs GDP per capita (2023)"></iframe>
+            <iframe src="unicef-ssa-child-mortality/table-mr" class="w-full h-80 border rounded-lg" loading="lazy" title="Mortality measures table (41,832 entries)"></iframe>
+            <iframe src="unicef-ssa-child-mortality/U5MR_Trend_Interactive_inline.html" class="w-full h-80 border rounded-lg" loading="lazy" title="U5MR trend 2000-2025"></iframe>
+        </div>
+    </main>
+
     
     <!-- Footer -->
     <footer class="text-center text-gray-500 pt-8 border-t border-gray-700">
