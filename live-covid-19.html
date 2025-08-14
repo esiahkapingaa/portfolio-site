@@ -7,17 +7,36 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    #map { height: 600px; width: 100%; }
-    .legend { 
-      background: white; 
-      padding: 10px; 
-      font-size: 14px; 
-      line-height: 18px; 
-      color: #555;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+    }
+    section {
+      max-width: 1200px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    #map {
+      height: 600px;
+      width: 100%;
+      border-radius: 8px;
+    }
+    .info-panel {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fafafa;
+      border-radius: 8px;
+    }
+    .info-panel h3 {
+      margin-top: 0;
     }
     .legend i {
-      width: 18px;
-      height: 18px;
+      width: 14px;
+      height: 14px;
       float: left;
       margin-right: 8px;
       opacity: 0.8;
@@ -25,8 +44,24 @@
   </style>
 </head>
 <body>
-<h2>COVID-19 Cases by Country (WHO Style)</h2>
-<div id="map"></div>
+
+<section>
+  <h2>COVID-19 Cases by Country (WHO Style)</h2>
+  <div id="map"></div>
+
+  <div class="info-panel">
+    <h3>WHO Region Color Codes</h3>
+    <p>This map shows the number of COVID-19 cases reported by country, using WHO regional colors:</p>
+    <ul>
+      <li><i style="background:#7b4bc2"></i> Africa</li>
+      <li><i style="background:#ff7f0e"></i> Americas</li>
+      <li><i style="background:#d62728"></i> Eastern Mediterranean</li>
+      <li><i style="background:#1f77b4"></i> Europe</li>
+      <li><i style="background:#2ca02c"></i> South-East Asia</li>
+      <li><i style="background:#bcbd22"></i> Western Pacific</li>
+    </ul>
+  </div>
+</section>
 
 <script>
 const map = L.map('map').setView([20, 0], 2);
@@ -37,7 +72,6 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   maxZoom: 19
 }).addTo(map);
 
-// WHO region colors
 const regionColors = {
   "Africa": "#7b4bc2",
   "Americas": "#ff7f0e",
@@ -48,7 +82,7 @@ const regionColors = {
   "Other": "#999"
 };
 
-// Map countries to WHO regions (example subset)
+// Example mapping (can be expanded)
 const countryRegionMap = {
   "Thailand": "South-East Asia",
   "Brazil": "Americas",
@@ -60,40 +94,41 @@ const countryRegionMap = {
   "China": "Western Pacific"
 };
 
-// Fetch COVID-19 data
 fetch("https://disease.sh/v3/covid-19/countries")
   .then(res => res.json())
   .then(data => {
     data.forEach(country => {
       const region = countryRegionMap[country.country] || "Other";
       const color = regionColors[region];
+      
+      // Smaller circle radius
+      const radius = Math.sqrt(country.cases) / 200; 
 
-      // Scale circle radius
-      const radius = Math.sqrt(country.cases) / 100; 
+      const circle = L.circleMarker(
+        [country.countryInfo.lat, country.countryInfo.long],
+        {
+          radius: radius,
+          fillColor: color,
+          color: "#555",
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.7
+        }
+      ).addTo(map);
 
-      L.circleMarker([country.countryInfo.lat, country.countryInfo.long], {
-        radius: radius,
-        fillColor: color,
-        color: "#555",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.7
-      }).addTo(map)
-        .bindPopup(`<b>${country.country}</b><br>Cases: ${country.cases.toLocaleString()}<br>Region: ${region}`);
+      // Show popup on hover
+      circle.bindPopup(
+        `<b>${country.country}</b><br>Cases: ${country.cases.toLocaleString()}<br>Region: ${region}`
+      );
+
+      circle.on("mouseover", function(e) {
+        this.openPopup();
+      });
+      circle.on("mouseout", function(e) {
+        this.closePopup();
+      });
     });
   });
-
-// Add legend
-const legend = L.control({position: 'bottomright'});
-legend.onAdd = function (map) {
-  const div = L.DomUtil.create('div', 'legend');
-  div.innerHTML += "<strong>WHO Regions</strong><br>";
-  for (let region in regionColors) {
-    div.innerHTML += `<i style="background:${regionColors[region]}"></i>${region}<br>`;
-  }
-  return div;
-};
-legend.addTo(map);
 </script>
 </body>
 </html>
