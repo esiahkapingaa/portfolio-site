@@ -288,10 +288,8 @@ select {
 <section>
      <h2>Overview</h2>
      <p>This project leverages real-time COVID-19 data fetched from the <a href="https://disease.sh" target="_blank">disease.sh API</a> to visualize global trends, including infection rates, recovery trajectories, and geographical impact. Using JavaScript, Leaflet.js, and GeoJSON, the project builds an interactive dashboard and live maps, providing up-to-date epidemiological insights.</p>
-</section>
 
-        <!-- Objectives -->
-<section>
+     <!-- Objectives -->
      <h2>Objectives</h2>
         <ul>
           <li>Fetch real-time COVID-19 data globally via the disease.sh API</li>
@@ -301,7 +299,6 @@ select {
           <li>Provide insights into pandemic progression and regional differences using live data</li>
          </ul>
 </section>
-</main>
 
 <section>
   <h2>COVID-19 Cases by Country (WHO Style)</h2>
@@ -328,6 +325,46 @@ select {
       <li><i style="background:#bcbd22"></i> Western Pacific</li>
     </ul>
   </div>
+  
+<!-- Country Search & Stats Subsection -->
+<div class="country-stats" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
+    <h3>Search Country Data</h3>
+    
+    <label for="countrySelect">Select Country:</label>
+    <select id="countrySelect">
+        <option value="">--Choose a Country--</option>
+        <!-- Country options will be populated dynamically -->
+    </select>
+
+    <label for="countryRange" style="margin-left: 10px;">Select Time Range:</label>
+    <select id="countryRange">
+        <option value="7">Last 7 Days</option>
+        <option value="30">Last 30 Days</option>
+        <option value="365">Last 365 Days</option>
+        <option value="all">All Time</option>
+    </select>
+
+    <div id="countryInfo" style="margin-top: 15px; font-size: 0.95rem; color: #111;">
+        <p><strong>Cases:</strong> <span id="casesCount">—</span></p>
+        <p><strong>Deaths:</strong> <span id="deathsCount">—</span></p>
+        <p><strong>Recovered:</strong> <span id="recoveredCount">—</span></p>
+    </div>
+</div>
+</section>
+
+<!-- Trend Charts Section -->
+<section id="trend-section" style="margin-top: 40px;">
+    <h2>COVID-19 Trends</h2>
+    <p>Showing daily trends for the selected country and time range.</p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+        <div style="flex: 1; min-width: 350px;">
+            <canvas id="casesChart"></canvas>
+        </div>
+        <div style="flex: 1; min-width: 350px;">
+            <canvas id="deathsChart"></canvas>
+        </div>
+    </div>
 </section>
 
     <!-- Data Sources -->
@@ -347,10 +384,8 @@ select {
             WHO COVID-19 Data Endpoint: <br>
             <a href="https://covid19.who.int/page-data/table/page-data.json" target="_blank">https://covid19.who.int/page-data/table/page-data.json</a>
         </p>
-    </section>
 
     <!-- Methods & Tools -->
-    <section>
         <h2>Methods & Tools</h2>
         <ol>
             <li><strong>Data Retrieval</strong>: Accessed WHO or COVID19 API, parsed JSON into Pandas, cleaned missing/inconsistent values.</li>
@@ -358,10 +393,8 @@ select {
             <li><strong>Mapping (Folium)</strong>: Built choropleth maps and circle marker layers with popups.</li>
             <li><strong>Visualization (Plotly)</strong>: Created interactive time series plots, bar charts, and optional animations.</li>
         </ol>
-    </section>
 
     <!-- Example Insights -->
-    <section>
         <h2>Example Insights</h2>
         <ul>
             <li>India, USA, and Brazil exhibited consistent surges aligned with policy delays.</li>
@@ -369,11 +402,9 @@ select {
             <li>African nations showed underreporting patterns — visualized as data sparsity.</li>
             <li>Reinfection waves (Delta, Omicron) visualized in animated strain-period plots.</li>
         </ul>
-    </section>
 
       <!-- Tools Used for Interactive Live Data Map -->
-    <section>
-        <h2>Tools Used</h2>
+        <h2>Tools Used for Interactive Live Data Map</h2>
         <table>
             <thead>
                 <tr><th>Tool</th><th>Purpose</th></tr>
@@ -387,11 +418,9 @@ select {
                 <tr><td>Optional Libraries (Chart.js / Plotly)</td><td>Interactive charts linked with map data</td></tr>
             </tbody>
         </table>
-    </section>
 
     <!-- Tools We can use for Static Map-->
-    <section>
-        <h2>Tools Used</h2>
+        <h2>Tools We can use for Static Map</h2>
         <table>
             <thead>
                 <tr><th>Tool</th><th>Purpose</th></tr>
@@ -405,10 +434,8 @@ select {
                 <tr><td>Jupyter Notebook</td><td>Interactive development</td></tr>
             </tbody>
         </table>
-    </section>
 
     <!-- Applications -->
-    <section>
         <h2>Applications</h2>
         <ul>
             <li>Public health communication to display global pandemic impact</li>
@@ -431,113 +458,223 @@ select {
     <p style="margin-top:0.5rem;">&copy; 2025 Esiah Kapinga - COVID-19 Live Data Project</p>
 </footer>
   
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// Ensure map doesn't repeat horizontally
+// ========================
+// MAP INITIALIZATION
+// ========================
 const map = L.map('map', {
     worldCopyJump: true, // prevents multiple map tiles when panning horizontally
-    maxBounds: [[-90, -180], [90, 180]] // restrict to global bounds
+    maxBounds: [[-90, -180], [90, 180]]
 }).setView([20, 0], 2);
 
-map.setMaxBounds([
-    [-90, -180],
-    [90, 180]
-]);
+map.setMaxBounds([[-90, -180], [90, 180]]);
 map.setMinZoom(2);
 map.setMaxZoom(6);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-  subdomains: 'abcd',
-  maxZoom: 19
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+    subdomains: 'abcd',
+    maxZoom: 19
 }).addTo(map);
 
+// ========================
+// REGION COLORS & MAPPING
+// ========================
 const regionColors = {
-  "Africa": "#7b4bc2",
-  "Americas": "#ff7f0e",
-  "Eastern Mediterranean": "#d62728",
-  "Europe": "#1f77b4",
-  "South-East Asia": "#2ca02c",
-  "Western Pacific": "#bcbd22",
-  "Other": "#999"
+    "Africa": "#7b4bc2",
+    "Americas": "#ff7f0e",
+    "Eastern Mediterranean": "#d62728",
+    "Europe": "#1f77b4",
+    "South-East Asia": "#2ca02c",
+    "Western Pacific": "#bcbd22",
+    "Other": "#999"
 };
 
-// WHO Region mapping
 const countryRegionMap = {
-  "Algeria": "Africa", "Nigeria": "Africa", "South Africa": "Africa", "Kenya": "Africa", "Ethiopia": "Africa", "Egypt": "Eastern Mediterranean",
-  "United States": "Americas", "Brazil": "Americas", "Canada": "Americas", "Mexico": "Americas", "Argentina": "Americas", "Chile": "Americas",
-  "Pakistan": "Eastern Mediterranean", "Iran": "Eastern Mediterranean", "Afghanistan": "Eastern Mediterranean", "Saudi Arabia": "Eastern Mediterranean",
-  "France": "Europe", "Germany": "Europe", "Italy": "Europe", "Spain": "Europe", "United Kingdom": "Europe", "Russia": "Europe", "Ukraine": "Europe",
-  "India": "South-East Asia", "Indonesia": "South-East Asia", "Thailand": "South-East Asia", "Bangladesh": "South-East Asia", "Nepal": "South-East Asia",
-  "China": "Western Pacific", "Japan": "Western Pacific", "Australia": "Western Pacific", "Philippines": "Western Pacific", "Vietnam": "Western Pacific", "New Zealand": "Western Pacific"
+    "Algeria": "Africa", "Nigeria": "Africa", "South Africa": "Africa", "Kenya": "Africa", "Ethiopia": "Africa", "Egypt": "Eastern Mediterranean",
+    "United States": "Americas", "Brazil": "Americas", "Canada": "Americas", "Mexico": "Americas", "Argentina": "Americas", "Chile": "Americas",
+    "Pakistan": "Eastern Mediterranean", "Iran": "Eastern Mediterranean", "Afghanistan": "Eastern Mediterranean", "Saudi Arabia": "Eastern Mediterranean",
+    "France": "Europe", "Germany": "Europe", "Italy": "Europe", "Spain": "Europe", "United Kingdom": "Europe", "Russia": "Europe", "Ukraine": "Europe",
+    "India": "South-East Asia", "Indonesia": "South-East Asia", "Thailand": "South-East Asia", "Bangladesh": "South-East Asia", "Nepal": "South-East Asia",
+    "China": "Western Pacific", "Japan": "Western Pacific", "Australia": "Western Pacific", "Philippines": "Western Pacific", "Vietnam": "Western Pacific", "New Zealand": "Western Pacific"
 };
 
 let markers = [];
 
+// ========================
+// LOAD MAP DATA
+// ========================
 async function loadData(days) {
-  markers.forEach(m => map.removeLayer(m));
-  markers = [];
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
 
-  const countriesRes = await fetch("https://disease.sh/v3/covid-19/countries");
-  const countries = await countriesRes.json();
+    const countriesRes = await fetch("https://disease.sh/v3/covid-19/countries");
+    const countries = await countriesRes.json();
 
-  // Step 1: gather cases for all countries
-  const countryData = [];
+    const countryData = [];
+    for (let c of countries) {
+        const histRes = await fetch(`https://disease.sh/v3/covid-19/historical/${encodeURIComponent(c.country)}?lastdays=${days === 'all' ? 1000 : days}`);
+        const hist = await histRes.json();
 
-  for (let c of countries) {
-    const histRes = await fetch(`https://disease.sh/v3/covid-19/historical/${encodeURIComponent(c.country)}?lastdays=${days === 'all' ? 1000 : days}`);
-    const hist = await histRes.json();
+        if (!hist.timeline || !hist.timeline.cases) continue;
 
-    if (!hist.timeline || !hist.timeline.cases) continue;
+        const casesTimeline = Object.values(hist.timeline.cases);
+        let casesCount = 0;
+        for (let i = 1; i < casesTimeline.length; i++) {
+            casesCount += casesTimeline[i] - casesTimeline[i - 1];
+        }
 
-    const casesTimeline = Object.values(hist.timeline.cases);
-    let casesCount = 0;
-    for (let i = 1; i < casesTimeline.length; i++) {
-      casesCount += casesTimeline[i] - casesTimeline[i-1];
+        countryData.push({
+            country: c.country,
+            lat: c.countryInfo.lat,
+            long: c.countryInfo.long,
+            cases: casesCount
+        });
     }
 
-    countryData.push({
-      country: c.country,
-      lat: c.countryInfo.lat,
-      long: c.countryInfo.long,
-      cases: casesCount
+    const maxCases = Math.max(...countryData.map(d => d.cases));
+    const maxRadius = 40;
+
+    countryData.forEach(c => {
+        const region = countryRegionMap[c.country] || "Other";
+        const color = regionColors[region];
+        const radius = Math.sqrt(c.cases / maxCases) * maxRadius;
+
+        const circle = L.circleMarker([c.lat, c.long], {
+            radius: radius,
+            fillColor: color,
+            color: "#555",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.7
+        }).bindPopup(
+            `<b>${c.country}</b><br>Cases in range: ${c.cases.toLocaleString()}<br>Region: ${region}`
+        );
+
+        circle.on("mouseover", function () { this.openPopup(); });
+        circle.on("mouseout", function () { this.closePopup(); });
+
+        markers.push(circle);
+        circle.addTo(map);
     });
-  }
-
-  // Step 2: find max cases in this range
-  const maxCases = Math.max(...countryData.map(d => d.cases));
-
-  // Step 3: create circles with relative sizing
-  const maxRadius = 40; // maximum circle radius
-  countryData.forEach(c => {
-    const region = countryRegionMap[c.country] || "Other";
-    const color = regionColors[region];
-
-    const radius = Math.sqrt(c.cases / maxCases) * maxRadius;
-
-    const circle = L.circleMarker([c.lat, c.long], {
-      radius: radius,
-      fillColor: color,
-      color: "#555",
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.7
-    }).bindPopup(
-      `<b>${c.country}</b><br>Cases in range: ${c.cases.toLocaleString()}<br>Region: ${region}`
-    );
-
-    circle.on("mouseover", function() { this.openPopup(); });
-    circle.on("mouseout", function() { this.closePopup(); });
-
-    markers.push(circle);
-    circle.addTo(map);
-  });
 }
 
 loadData(7);
 
 document.getElementById("range").addEventListener("change", (e) => {
-  loadData(e.target.value);
+    loadData(e.target.value);
 });
+
+// ========================
+// COUNTRY SELECT OPTIONS
+// ========================
+const countrySelect = document.getElementById('countrySelect');
+
+async function loadCountryOptions() {
+    const res = await fetch('https://disease.sh/v3/covid-19/countries');
+    const countries = await res.json();
+    countries.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.country;
+        opt.textContent = c.country;
+        countrySelect.appendChild(opt);
+    });
+}
+loadCountryOptions();
+
+// ========================
+// COUNTRY DATA DISPLAY
+// ========================
+async function loadCountryData(country, days) {
+    if (!country) return;
+    const res = await fetch(`https://disease.sh/v3/covid-19/historical/${country}?lastdays=${days === 'all' ? 1000 : days}`);
+    const data = await res.json();
+    if (!data.timeline) return;
+
+    const casesTimeline = Object.values(data.timeline.cases);
+    const deathsTimeline = Object.values(data.timeline.deaths);
+    const recoveredTimeline = Object.values(data.timeline.recovered);
+
+    const casesCount = days === 'all' ? casesTimeline[casesTimeline.length - 1] : casesTimeline[casesTimeline.length - 1] - casesTimeline[0];
+    const deathsCount = days === 'all' ? deathsTimeline[deathsTimeline.length - 1] : deathsTimeline[deathsTimeline.length - 1] - deathsTimeline[0];
+    const recoveredCount = days === 'all' ? recoveredTimeline[recoveredTimeline.length - 1] : recoveredTimeline[recoveredTimeline.length - 1] - recoveredTimeline[0];
+
+    document.getElementById('casesCount').textContent = casesCount.toLocaleString();
+    document.getElementById('deathsCount').textContent = deathsCount.toLocaleString();
+    document.getElementById('recoveredCount').textContent = recoveredCount.toLocaleString();
+}
+
+countrySelect.addEventListener('change', () => {
+    const country = countrySelect.value;
+    const days = document.getElementById('countryRange').value;
+    loadCountryData(country, days);
+    updateTrendCharts(country, days);
+});
+
+document.getElementById('countryRange').addEventListener('change', () => {
+    const country = countrySelect.value;
+    const days = document.getElementById('countryRange').value;
+    loadCountryData(country, days);
+    updateTrendCharts(country, days);
+});
+
+// ========================
+// TREND CHARTS
+// ========================
+let casesChartInstance;
+let deathsChartInstance;
+
+function createOrUpdateChart(chartInstance, ctx, label, labels, data, borderColor) {
+    if (chartInstance) {
+        chartInstance.data.labels = labels;
+        chartInstance.data.datasets[0].data = data;
+        chartInstance.update();
+        return chartInstance;
+    }
+    return new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: label,
+                data: data,
+                borderColor: borderColor,
+                backgroundColor: borderColor + '33',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                x: { display: true },
+                y: { display: true }
+            }
+        }
+    });
+}
+
+async function updateTrendCharts(country, days) {
+    if (!country) return;
+    const res = await fetch(`https://disease.sh/v3/covid-19/historical/${country}?lastdays=${days === 'all' ? 1000 : days}`);
+    const data = await res.json();
+    if (!data.timeline) return;
+
+    const labels = Object.keys(data.timeline.cases);
+    const casesData = Object.values(data.timeline.cases);
+    const deathsData = Object.values(data.timeline.deaths);
+
+    const ctxCases = document.getElementById('casesChart').getContext('2d');
+    const ctxDeaths = document.getElementById('deathsChart').getContext('2d');
+
+    casesChartInstance = createOrUpdateChart(casesChartInstance, ctxCases, 'Cases', labels, casesData, '#007bff');
+    deathsChartInstance = createOrUpdateChart(deathsChartInstance, ctxDeaths, 'Deaths', labels, deathsData, '#ff0000');
+}
 </script>
 </body>
 </html>
