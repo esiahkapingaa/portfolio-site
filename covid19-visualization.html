@@ -92,6 +92,13 @@
       integrity="sha256-o9N1jv7Q+o8kB1mM0JTdZyLFt2gR5I1j3sXhZ+6Ck/k="
       crossorigin=""
     ></script>
+    <style>
+    #covid-map {
+        height: 600px !important;
+        width: 100% !important;
+    }
+</style>
+
   </head>
   <body class="bg-white text-black font-sans">
 
@@ -328,44 +335,43 @@
     </footer>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize the map
-            const map = L.map('covid-map').setView([20, 0], 2);
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const map = L.map('covid-map').setView([20, 0], 2);
 
-            // Add OpenStreetMap tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-          
-            map.invalidateSize(); // Ensures Leaflet recalculates dimensions
+    L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-            // Example COVID data (replace with API data later)
-            const covidData = [
-                { country: "USA", lat: 37.0902, lng: -95.7129, cases: 100000 },
-                { country: "India", lat: 20.5937, lng: 78.9629, cases: 90000 },
-                { country: "Brazil", lat: -14.2350, lng: -51.9253, cases: 85000 }
-            ];
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 100);
 
-            // Add circles to map
-            covidData.forEach(data => {
-                L.circle([data.lat, data.lng], {
-                    color: 'red',
-                    fillColor: '#f03',
-                    fillOpacity: 0.5,
-                    radius: Math.sqrt(data.cases) * 100
-                })
-                .addTo(map)
-                .bindPopup(`<b>${data.country}</b><br>Cases: ${data.cases}`);
-            });
+    map.on('tileerror', (error) => {
+        console.error('Tile loading error:', error);
+    });
 
-            // Optional: Add a sample marker
-            L.marker([20, 0]).addTo(map)
-                .bindPopup('Sample marker')
-                .openPopup();
-        });
-    </script>
+    const covidData = [
+        { country: "USA", lat: 37.0902, lng: -95.7129, cases: 100000 },
+        { country: "India", lat: 20.5937, lng: 78.9629, cases: 90000 },
+        { country: "Brazil", lat: -14.2350, lng: -51.9253, cases: 85000 }
+    ];
+
+    covidData.forEach(data => {
+        L.circle([data.lat, data.lng], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: Math.sqrt(data.cases) * 100
+        }).addTo(map).bindPopup(`<b>${data.country}</b><br>Cases: ${data.cases}`);
+    });
+
+    L.marker([20, 0]).addTo(map)
+        .bindPopup('Sample marker')
+        .openPopup();
+});
+</script>
 
 </body>
 </html>
