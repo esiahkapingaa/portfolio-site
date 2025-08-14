@@ -6,171 +6,117 @@
   <title>COVID-19 WHO-Style Map - Date Range</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f5f5f5;
-    }
-    section {
-      max-width: 1200px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      border-radius: 8px;
-    }
-    #map {
-      height: 600px;
-      width: 100%;
-      border-radius: 8px;
-    }
-    .info-panel {
-      margin-top: 20px;
-      padding: 15px;
-      background: #fafafa;
-      border-radius: 8px;
-    }
-    select {
-      padding: 5px;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-    .legend {
-      list-style: none;
-      padding-left: 0;
-    }
-    .legend li {
-      display: flex;
-      align-items: center;
-      margin: 4px 0;
-    }
-    .legend i {
-      width: 14px;
-      height: 14px;
-      display: inline-block;
-      margin-right: 8px;
-      border-radius: 3px;
-    }
-  </style>
 </head>
-<body>
+<body class="bg-gray-100 font-sans">
 
-<section>
-  <h2>COVID-19 Cases by Country (WHO Style)</h2>
-  
-  <label for="range">Select Time Range:</label>
-  <select id="range">
-    <option value="7">Last 7 Days</option>
-    <option value="30">Last 30 Days</option>
-    <option value="365">Last 365 Days</option>
-    <option value="all">All Time</option>
-  </select>
+  <section class="max-w-6xl mx-auto bg-white p-6 md:p-10 mt-6 rounded-lg shadow-md">
+    <h2 class="text-2xl md:text-3xl font-semibold mb-4">COVID-19 Cases by Country (WHO Style)</h2>
+    
+    <label for="range" class="block text-gray-700 font-medium mb-2">Select Time Range:</label>
+    <select id="range" class="mb-6 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400">
+      <option value="7">Last 7 Days</option>
+      <option value="30">Last 30 Days</option>
+      <option value="365">Last 365 Days</option>
+      <option value="all">All Time</option>
+    </select>
 
-  <div id="map"></div>
+    <div id="map" class="w-full h-96 md:h-[600px] rounded-lg shadow-inner"></div>
 
-  <div class="info-panel">
-    <h3>WHO Region Color Codes</h3>
-    <p>This map shows reported COVID-19 cases by selected date range, using WHO regional colors:</p>
-    <ul class="legend">
-      <li><i style="background:#7b4bc2"></i> Africa</li>
-      <li><i style="background:#ff7f0e"></i> Americas</li>
-      <li><i style="background:#d62728"></i> Eastern Mediterranean</li>
-      <li><i style="background:#1f77b4"></i> Europe</li>
-      <li><i style="background:#2ca02c"></i> South-East Asia</li>
-      <li><i style="background:#bcbd22"></i> Western Pacific</li>
-    </ul>
-  </div>
-</section>
+    <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+      <h3 class="text-xl font-semibold mb-2">WHO Region Color Codes</h3>
+      <p class="text-gray-700 mb-4">This map shows reported COVID-19 cases by selected date range, using WHO regional colors:</p>
+      <ul class="flex flex-wrap gap-4">
+        <li class="flex items-center"><span class="w-4 h-4 mr-2 rounded" style="background:#7b4bc2;"></span>Africa</li>
+        <li class="flex items-center"><span class="w-4 h-4 mr-2 rounded" style="background:#ff7f0e;"></span>Americas</li>
+        <li class="flex items-center"><span class="w-4 h-4 mr-2 rounded" style="background:#d62728;"></span>Eastern Mediterranean</li>
+        <li class="flex items-center"><span class="w-4 h-4 mr-2 rounded" style="background:#1f77b4;"></span>Europe</li>
+        <li class="flex items-center"><span class="w-4 h-4 mr-2 rounded" style="background:#2ca02c;"></span>South-East Asia</li>
+        <li class="flex items-center"><span class="w-4 h-4 mr-2 rounded" style="background:#bcbd22;"></span>Western Pacific</li>
+      </ul>
+    </div>
+  </section>
 
-<script>
-const map = L.map('map').setView([20, 0], 2);
+  <script>
+    const map = L.map('map').setView([20, 0], 2);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-  subdomains: 'abcd',
-  maxZoom: 19
-}).addTo(map);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
 
-const regionColors = {
-  "Africa": "#7b4bc2",
-  "Americas": "#ff7f0e",
-  "Eastern Mediterranean": "#d62728",
-  "Europe": "#1f77b4",
-  "South-East Asia": "#2ca02c",
-  "Western Pacific": "#bcbd22",
-  "Other": "#999"
-};
+    const regionColors = {
+      "Africa": "#7b4bc2",
+      "Americas": "#ff7f0e",
+      "Eastern Mediterranean": "#d62728",
+      "Europe": "#1f77b4",
+      "South-East Asia": "#2ca02c",
+      "Western Pacific": "#bcbd22",
+      "Other": "#999"
+    };
 
-// WHO Region mapping
-const countryRegionMap = {
-  // Africa
-  "Algeria": "Africa", "Nigeria": "Africa", "South Africa": "Africa", "Kenya": "Africa", "Ethiopia": "Africa", "Egypt": "Eastern Mediterranean",
-  // Americas
-  "United States": "Americas", "Brazil": "Americas", "Canada": "Americas", "Mexico": "Americas", "Argentina": "Americas", "Chile": "Americas",
-  // Eastern Mediterranean
-  "Pakistan": "Eastern Mediterranean", "Iran": "Eastern Mediterranean", "Afghanistan": "Eastern Mediterranean", "Saudi Arabia": "Eastern Mediterranean",
-  // Europe
-  "France": "Europe", "Germany": "Europe", "Italy": "Europe", "Spain": "Europe", "United Kingdom": "Europe", "Russia": "Europe", "Ukraine": "Europe",
-  // South-East Asia
-  "India": "South-East Asia", "Indonesia": "South-East Asia", "Thailand": "South-East Asia", "Bangladesh": "South-East Asia", "Nepal": "South-East Asia",
-  // Western Pacific
-  "China": "Western Pacific", "Japan": "Western Pacific", "Australia": "Western Pacific", "Philippines": "Western Pacific", "Vietnam": "Western Pacific", "New Zealand": "Western Pacific"
-};
+    const countryRegionMap = {
+      "Algeria": "Africa", "Nigeria": "Africa", "South Africa": "Africa", "Kenya": "Africa", "Ethiopia": "Africa", "Egypt": "Eastern Mediterranean",
+      "United States": "Americas", "Brazil": "Americas", "Canada": "Americas", "Mexico": "Americas", "Argentina": "Americas", "Chile": "Americas",
+      "Pakistan": "Eastern Mediterranean", "Iran": "Eastern Mediterranean", "Afghanistan": "Eastern Mediterranean", "Saudi Arabia": "Eastern Mediterranean",
+      "France": "Europe", "Germany": "Europe", "Italy": "Europe", "Spain": "Europe", "United Kingdom": "Europe", "Russia": "Europe", "Ukraine": "Europe",
+      "India": "South-East Asia", "Indonesia": "South-East Asia", "Thailand": "South-East Asia", "Bangladesh": "South-East Asia", "Nepal": "South-East Asia",
+      "China": "Western Pacific", "Japan": "Western Pacific", "Australia": "Western Pacific", "Philippines": "Western Pacific", "Vietnam": "Western Pacific", "New Zealand": "Western Pacific"
+    };
 
-let markers = [];
+    let markers = [];
 
-async function loadData(days) {
-  markers.forEach(m => map.removeLayer(m));
-  markers = [];
+    async function loadData(days) {
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
 
-  const countriesRes = await fetch("https://disease.sh/v3/covid-19/countries");
-  const countries = await countriesRes.json();
+      const countriesRes = await fetch("https://disease.sh/v3/covid-19/countries");
+      const countries = await countriesRes.json();
 
-  for (let c of countries) {
-    const histRes = await fetch(`https://disease.sh/v3/covid-19/historical/${c.country}?lastdays=${days === 'all' ? 1000 : days}`);
-    const hist = await histRes.json();
+      for (let c of countries) {
+        const histRes = await fetch(`https://disease.sh/v3/covid-19/historical/${c.country}?lastdays=${days === 'all' ? 1000 : days}`);
+        const hist = await histRes.json();
 
-    if (!hist.timeline || !hist.timeline.cases) continue;
+        if (!hist.timeline || !hist.timeline.cases) continue;
 
-    const casesTimeline = Object.values(hist.timeline.cases);
-    let casesCount;
+        const casesTimeline = Object.values(hist.timeline.cases);
+        let casesCount;
 
-    if (days === 'all') {
-      casesCount = casesTimeline[casesTimeline.length - 1];
-    } else {
-      casesCount = casesTimeline[casesTimeline.length - 1] - casesTimeline[0];
+        if (days === 'all') {
+          casesCount = casesTimeline[casesTimeline.length - 1];
+        } else {
+          casesCount = casesTimeline[casesTimeline.length - 1] - casesTimeline[0];
+        }
+
+        const region = countryRegionMap[c.country] || "Other";
+        const color = regionColors[region];
+        const radius = Math.sqrt(casesCount) / 300;
+
+        const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
+          radius: radius,
+          fillColor: color,
+          color: "#555",
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.7
+        }).bindPopup(
+          `<b>${c.country}</b><br>Cases in range: ${casesCount.toLocaleString()}<br>Region: ${region}`
+        );
+
+        circle.on("mouseover", function() { this.openPopup(); });
+        circle.on("mouseout", function() { this.closePopup(); });
+
+        markers.push(circle);
+        circle.addTo(map);
+      }
     }
 
-    const region = countryRegionMap[c.country] || "Other";
-    const color = regionColors[region];
+    loadData(7);
 
-    const radius = Math.sqrt(casesCount) / 300; // adjusted size
+    document.getElementById("range").addEventListener("change", (e) => {
+      loadData(e.target.value);
+    });
+  </script>
 
-    const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
-      radius: radius,
-      fillColor: color,
-      color: "#555",
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.7
-    }).bindPopup(
-      `<b>${c.country}</b><br>Cases in range: ${casesCount.toLocaleString()}<br>Region: ${region}`
-    );
-
-    circle.on("mouseover", function() { this.openPopup(); });
-    circle.on("mouseout", function() { this.closePopup(); });
-
-    markers.push(circle);
-    circle.addTo(map);
-  }
-}
-
-loadData(7);
-
-document.getElementById("range").addEventListener("change", (e) => {
-  loadData(e.target.value);
-});
-</script>
 </body>
 </html>
