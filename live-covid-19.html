@@ -36,12 +36,21 @@
       margin-bottom: 10px;
       font-size: 14px;
     }
+    .legend {
+      list-style: none;
+      padding-left: 0;
+    }
+    .legend li {
+      display: flex;
+      align-items: center;
+      margin: 4px 0;
+    }
     .legend i {
       width: 14px;
       height: 14px;
-      float: left;
+      display: inline-block;
       margin-right: 8px;
-      opacity: 0.8;
+      border-radius: 3px;
     }
   </style>
 </head>
@@ -63,7 +72,7 @@
   <div class="info-panel">
     <h3>WHO Region Color Codes</h3>
     <p>This map shows reported COVID-19 cases by selected date range, using WHO regional colors:</p>
-    <ul>
+    <ul class="legend">
       <li><i style="background:#7b4bc2"></i> Africa</li>
       <li><i style="background:#ff7f0e"></i> Americas</li>
       <li><i style="background:#d62728"></i> Eastern Mediterranean</li>
@@ -78,7 +87,7 @@
 const map = L.map('map').setView([20, 0], 2);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors &copy; <a href="https://www.carto.com/">CARTO</a>',
+  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
   subdomains: 'abcd',
   maxZoom: 19
 }).addTo(map);
@@ -93,23 +102,25 @@ const regionColors = {
   "Other": "#999"
 };
 
-// Simple mapping for example
+// WHO Region mapping
 const countryRegionMap = {
-  "Thailand": "South-East Asia",
-  "Brazil": "Americas",
-  "United States": "Americas",
-  "India": "South-East Asia",
-  "South Africa": "Africa",
-  "France": "Europe",
-  "Egypt": "Eastern Mediterranean",
-  "China": "Western Pacific"
+  // Africa
+  "Algeria": "Africa", "Nigeria": "Africa", "South Africa": "Africa", "Kenya": "Africa", "Ethiopia": "Africa", "Egypt": "Eastern Mediterranean",
+  // Americas
+  "United States": "Americas", "Brazil": "Americas", "Canada": "Americas", "Mexico": "Americas", "Argentina": "Americas", "Chile": "Americas",
+  // Eastern Mediterranean
+  "Pakistan": "Eastern Mediterranean", "Iran": "Eastern Mediterranean", "Afghanistan": "Eastern Mediterranean", "Saudi Arabia": "Eastern Mediterranean",
+  // Europe
+  "France": "Europe", "Germany": "Europe", "Italy": "Europe", "Spain": "Europe", "United Kingdom": "Europe", "Russia": "Europe", "Ukraine": "Europe",
+  // South-East Asia
+  "India": "South-East Asia", "Indonesia": "South-East Asia", "Thailand": "South-East Asia", "Bangladesh": "South-East Asia", "Nepal": "South-East Asia",
+  // Western Pacific
+  "China": "Western Pacific", "Japan": "Western Pacific", "Australia": "Western Pacific", "Philippines": "Western Pacific", "Vietnam": "Western Pacific", "New Zealand": "Western Pacific"
 };
 
 let markers = [];
 
-// Function to get and display data
 async function loadData(days) {
-  // Clear old markers
   markers.forEach(m => map.removeLayer(m));
   markers = [];
 
@@ -134,7 +145,7 @@ async function loadData(days) {
     const region = countryRegionMap[c.country] || "Other";
     const color = regionColors[region];
 
-    const radius = Math.sqrt(casesCount) / 500; // smaller circles
+    const radius = Math.sqrt(casesCount) / 300; // adjusted size
 
     const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
       radius: radius,
@@ -155,10 +166,8 @@ async function loadData(days) {
   }
 }
 
-// Initial load
 loadData(7);
 
-// Change range when dropdown changes
 document.getElementById("range").addEventListener("change", (e) => {
   loadData(e.target.value);
 });
