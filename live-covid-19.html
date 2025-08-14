@@ -210,6 +210,26 @@ header .hero-text {
 .hero-text h2 { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700; color: #FBBF24; margin-bottom: 0.5rem; }
 .hero-text p { font-size: 0.875rem; }
 
+  /* Hide desktop on small screens */
+.desktop-banner {
+    display: none;
+}
+
+.mobile-banner {
+    display: block;
+}
+
+/* Show desktop only on larger screens */
+@media screen and (min-width: 768px) {
+    .desktop-banner {
+        display: block;
+    }
+    .mobile-banner {
+        display: none;
+    }
+}
+
+
 /* Main Content */
 main {
     padding: 2rem 4rem;
