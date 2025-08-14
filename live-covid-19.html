@@ -99,17 +99,64 @@ header nav a.resume:hover { background: #FEF08A; }
 header nav a.contact { background: #FEF3C7; color: #B45309; border-color: #FBBF24; }
 header nav a.contact:hover { background: #FEF08A; }
 
-/* Hero Desktop */
+/* Map fix so it doesn't overlap header */
+#map {
+    margin-top: 80px; /* adjust if your header height changes */
+}
+
+/* Hero Desktop with overlay text + gradient */
 #hero-desktop {
     display: none;
     width: 100%;
-    padding: 0.5rem 4rem 1.5rem 4rem;
+    padding: 0.5rem 0; /* removed large side padding so it can go edge-to-edge */
+    position: relative;
 }
+
 #hero-desktop img {
     width: 100%;
     height: auto;
     border-radius: 3rem;
     display: block;
+}
+
+#hero-desktop .hero-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 2rem;
+    color: white;
+    z-index: 2;
+}
+
+#hero-desktop .hero-text h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+#hero-desktop .hero-text h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #FBBF24;
+    margin-bottom: 0.5rem;
+}
+#hero-desktop .hero-text p {
+    font-size: 1rem;
+    max-width: 600px;
+}
+
+/* Gradient overlay */
+#hero-desktop::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
+    border-radius: 3rem;
+    z-index: 1;
 }
 
 /* Hero Mobile */
@@ -141,20 +188,26 @@ main {
     margin: auto;
 }
 
-/* Sections */
-section { 
-    margin-bottom: 2rem; 
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    background: white;
-    padding: 20px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    border-radius: 8px;
+
+/* Make sections full width on mobile but keep rounded cards */
+@media (max-width: 768px) {
+    section {
+        width: 100%;
+        max-width: none;
+        margin-left: 0;
+        margin-right: 0;
+        border-radius: 0; /* section goes full width */
+        padding: 0; /* remove outer padding */
+        box-shadow: none;
+    }
+    section .section-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        margin: 1rem;
+    }
 }
-section h2 { font-size: 1.5rem; font-weight: 600; color: #111; margin-bottom: 0.5rem; }
-section ul, section ol { margin-left: 1.25rem; color: #374151; }
-section ul li, section ol li { margin-bottom: 0.5rem; }
 
 /* Tables */
 table { border-collapse: collapse; width: 100%; }
@@ -244,12 +297,11 @@ select {
         height: 400px; /* smaller map for mobile */
     }
 }
-
 </style>
 </head>
-<body>
 
- <!-- Header -->
+<body style="margin:0; padding:0; background-color:white; font-family:sans-serif; color:black;">
+<!-- Header -->
 <header>
     <div class="container">
         <a href="index.html" class="logo">
@@ -267,8 +319,17 @@ select {
 
 <!-- Hero Desktop -->
 <section id="hero-desktop">
-    <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/covid-banner.png" alt="COVID-19 Banner" />
+    <div style="position: relative;">
+        <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/covid-banner.png" alt="COVID-19 Banner" />
+        <div class="hero-overlay"></div>
+        <div class="hero-text">
+            <h1>Global Pandemic Trends</h1>
+            <h2>COVID-19 Visualization (Python)</h2>
+            <p>Tracked and visualized global COVID-19 cases with Python using official WHO data.</p>
+        </div>
+    </div>
 </section>
+
 
 <!-- Hero Mobile -->
 <section id="hero-mobile">
@@ -283,7 +344,7 @@ select {
 </section>
   
 <!-- Main Content -->
-<main>
+<main style="padding: 1rem 4%; max-width: 100%;">
 <!-- Overview -->
 <section>
      <h2>Overview</h2>
