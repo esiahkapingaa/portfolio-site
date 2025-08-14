@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>COVID-19 WHO-Style Map</title>
+  <title>COVID-19 WHO-Style Map - Date Range</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -31,8 +31,10 @@
       background: #fafafa;
       border-radius: 8px;
     }
-    .info-panel h3 {
-      margin-top: 0;
+    select {
+      padding: 5px;
+      margin-bottom: 10px;
+      font-size: 14px;
     }
     .legend i {
       width: 14px;
@@ -47,11 +49,20 @@
 
 <section>
   <h2>COVID-19 Cases by Country (WHO Style)</h2>
+  
+  <label for="range">Select Time Range:</label>
+  <select id="range">
+    <option value="7">Last 7 Days</option>
+    <option value="30">Last 30 Days</option>
+    <option value="365">Last 365 Days</option>
+    <option value="all">All Time</option>
+  </select>
+
   <div id="map"></div>
 
   <div class="info-panel">
     <h3>WHO Region Color Codes</h3>
-    <p>This map shows the number of COVID-19 cases reported by country, using WHO regional colors:</p>
+    <p>This map shows reported COVID-19 cases by selected date range, using WHO regional colors:</p>
     <ul>
       <li><i style="background:#7b4bc2"></i> Africa</li>
       <li><i style="background:#ff7f0e"></i> Americas</li>
@@ -82,7 +93,7 @@ const regionColors = {
   "Other": "#999"
 };
 
-// Example mapping (can be expanded)
+// Simple mapping for example
 const countryRegionMap = {
   "Thailand": "South-East Asia",
   "Brazil": "Americas",
@@ -94,41 +105,63 @@ const countryRegionMap = {
   "China": "Western Pacific"
 };
 
-fetch("https://disease.sh/v3/covid-19/countries")
-  .then(res => res.json())
-  .then(data => {
-    data.forEach(country => {
-      const region = countryRegionMap[country.country] || "Other";
-      const color = regionColors[region];
-      
-      // Smaller circle radius
-      const radius = Math.sqrt(country.cases) / 200; 
+let markers = [];
 
-      const circle = L.circleMarker(
-        [country.countryInfo.lat, country.countryInfo.long],
-        {
-          radius: radius,
-          fillColor: color,
-          color: "#555",
-          weight: 1,
-          opacity: 1,
-          fillOpacity: 0.7
-        }
-      ).addTo(map);
+// Function to get and display data
+async function loadData(days) {
+  // Clear old markers
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
 
-      // Show popup on hover
-      circle.bindPopup(
-        `<b>${country.country}</b><br>Cases: ${country.cases.toLocaleString()}<br>Region: ${region}`
-      );
+  const countriesRes = await fetch("https://disease.sh/v3/covid-19/countries");
+  const countries = await countriesRes.json();
 
-      circle.on("mouseover", function(e) {
-        this.openPopup();
-      });
-      circle.on("mouseout", function(e) {
-        this.closePopup();
-      });
-    });
-  });
+  for (let c of countries) {
+    const histRes = await fetch(`https://disease.sh/v3/covid-19/historical/${c.country}?lastdays=${days === 'all' ? 1000 : days}`);
+    const hist = await histRes.json();
+
+    if (!hist.timeline || !hist.timeline.cases) continue;
+
+    const casesTimeline = Object.values(hist.timeline.cases);
+    let casesCount;
+
+    if (days === 'all') {
+      casesCount = casesTimeline[casesTimeline.length - 1];
+    } else {
+      casesCount = casesTimeline[casesTimeline.length - 1] - casesTimeline[0];
+    }
+
+    const region = countryRegionMap[c.country] || "Other";
+    const color = regionColors[region];
+
+    const radius = Math.sqrt(casesCount) / 500; // smaller circles
+
+    const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
+      radius: radius,
+      fillColor: color,
+      color: "#555",
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 0.7
+    }).bindPopup(
+      `<b>${c.country}</b><br>Cases in range: ${casesCount.toLocaleString()}<br>Region: ${region}`
+    );
+
+    circle.on("mouseover", function() { this.openPopup(); });
+    circle.on("mouseout", function() { this.closePopup(); });
+
+    markers.push(circle);
+    circle.addTo(map);
+  }
+}
+
+// Initial load
+loadData(7);
+
+// Change range when dropdown changes
+document.getElementById("range").addEventListener("change", (e) => {
+  loadData(e.target.value);
+});
 </script>
 </body>
 </html>
