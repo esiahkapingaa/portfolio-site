@@ -46,44 +46,51 @@ body {
 header {
     background: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 1rem 0;       /* only vertical padding */
-    max-width: 100%;
+    padding: 1rem 0;       /* vertical padding only */
+    width: 100%;
     position: sticky;
     top: 0;
     z-index: 50;
 }
 
 header .container {
-    max-width: 1200px;     /* max width for big screens */
+    max-width: 1200px;     /* container max width for large screens */
     margin: 0 auto;        /* center container */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 4%;         /* horizontal padding inside container */
+    padding: 0 4%;         /* horizontal padding for content */
     overflow-x: auto;
 }
-}
+
+/* Logo + Name */
 header .logo {
-    display: flex;
+    display: flex;          /* side by side */
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0;
     text-decoration: none;
-    color: inherit;
 }
+
 header .logo img {
     height: 2rem;
 }
+
 header .logo h1 {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: 1.25rem;
+    color: #111;           /* force black */
+    margin: 0;             /* remove default margin */
 }
+
+/* Navigation links */
 header nav {
     display: flex;
     gap: 0.5rem;
     overflow-x: auto;
 }
+
 header nav a {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
@@ -94,6 +101,7 @@ header nav a {
     transition: 0.3s;
     border: 1px solid transparent;
 }
+
 header nav a.home { background: #FEF3C7; color: #B45309; border-color: #FBBF24; }
 header nav a.home:hover { background: #FEF08A; }
 header nav a.projects { background: #F59E0B; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
@@ -149,6 +157,11 @@ header nav a.contact:hover { background: #FEF08A; }
     font-size: 1rem;
     max-width: 600px;
 }
+header .hero-text {
+    background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0));
+    padding: 1.5rem;
+    border-radius: 1rem; /* optional */
+}
 
 /* Gradient overlay */
 #hero-desktop::after {
@@ -175,12 +188,18 @@ header nav a.contact:hover { background: #FEF08A; }
     border-radius: 1.5rem;
 }
 .hero-text {
+    background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
+    padding: 1rem;
+    border-radius: 0.75rem; /* keep mobile rounding */
+}
+
+.hero-text {
     position: absolute;
     top: 0;
     left: 0;
-    padding: 1rem;
     color: white;
 }
+
 .hero-text h1 { font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem; }
 .hero-text h2 { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700; color: #FBBF24; margin-bottom: 0.5rem; }
 .hero-text p { font-size: 0.875rem; }
@@ -323,28 +342,34 @@ select {
 
 <!-- Hero Desktop -->
 <section id="hero-desktop">
-    <div style="position: relative;">
-        <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/covid-banner.png" alt="COVID-19 Banner" />
-        <div class="hero-overlay"></div>
-        <div class="hero-text">
-            <h1>Global Pandemic Trends</h1>
-            <h2>COVID-19 Visualization (Python)</h2>
-            <p>Tracked and visualized global COVID-19 cases with Python using official WHO data.</p>
-        </div>
+<div class="absolute inset-0 flex items-center justify-start px-12 py-8">
+    <!-- Gradient background fading from black to transparent -->
+    <div
+        class="relative max-w-xl text-left p-6"
+        <h1 class="text-4xl font-display font-bold text-white drop-shadow-lg mb-2">
+            Child Health Disparities
+        </h1>
+        <h2 class="text-2xl font-display font-bold text-yellow-300 drop-shadow-md mb-2">
+            UNICEF Mortality Trends in R
+        </h2>
+        <p class="text-sm text-white drop-shadow-sm">
+            Analyzed under-five mortality rates across regions using R to uncover key global health patterns.
+        </p>
     </div>
+</div>
+
 </section>
 
 
 <!-- Hero Mobile -->
 <section id="hero-mobile">
-    <div style="position: relative;">
-        <img src="images/covid-mb-banner.png" alt="COVID-19 Mobile Banner" />
-        <div class="hero-text">
-            <h1>Global Pandemic Trends</h1>
-            <h2>COVID-19 Visualization (Python)</h2>
-            <p>Tracked and visualized global COVID-19 cases with Python using official WHO data.</p>
-        </div>
-    </div>
+<div class="p-4 rounded-lg"
+    <h1 class="text-xl font-display font-bold text-white mb-1 drop-shadow-md">Child Health Disparities</h1>
+    <h2 class="text-base font-display font-bold text-yellow-300 mb-2 drop-shadow-sm">UNICEF Mortality Analysis (R)</h2>
+    <p class="text-xs text-white drop-shadow-sm">
+        Insights into under-five mortality through regional and global data visualization in R.
+    </p>
+</div>
 </section>
   
 <!-- Main Content -->
