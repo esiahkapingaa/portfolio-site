@@ -3,117 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>COVID-19 Global Map — Esiah Kapinga</title>
+  <title>COVID-19 Map — Esiah Kapinga</title>
 
-  <!-- Tailwind CSS v3 -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              yellow: '#F5A623',
-              dark: '#1A1A1A',
-              accent: '#2563EB',
-              orange: '#FF7A00',
-            },
-          },
-          fontFamily: {
-            display: ['Poppins', 'sans-serif'],
-            body: ['Inter', 'sans-serif'],
-          }
-        },
-      },
-    };
-  </script>
 
   <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
   <!-- Leaflet JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-o9N1jv7Q+o8kB1mM0JTdZyLFt2gR5I1j3sXhZ+6Ck/k="
-    crossorigin=""
-  ></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-o9N1jv7Q+o8kB1mM0JTdZyLFt2gR5I1j3sXhZ+6Ck/k=" crossorigin=""></script>
 
   <style>
-    /* Map container */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
     #covid-map {
       height: 600px;
       width: 100%;
-      border: 2px solid #ddd; /* just to visualize */
+      background-color: #eee; /* temporary so we can see the container */
     }
   </style>
 </head>
-<body class="bg-white text-black font-sans">
-  <!-- Header -->
-  <header class="bg-white shadow p-4 sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto flex items-center justify-between overflow-x-auto">
-      <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
-        <img src="images/esiah-logo.png" alt="Esiah Logo" class="h-8 w-auto" />
-        <h1 class="text-xl font-display font-semibold tracking-wide">Esiah</h1>
-      </a>
-    </div>
-  </header>
+<body class="bg-white text-black">
 
-  <!-- Map Section -->
-  <main class="px-4 md:px-16 py-8">
-    <section class="mt-8">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-2">Interactive COVID-19 Map</h2>
-      <div id="covid-map"></div>
-    </section>
-  </main>
+<header class="bg-white shadow p-4 sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto flex items-center justify-between overflow-x-auto">
+    <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+      <img src="images/esiah-logo.png" alt="Esiah Logo" class="h-8 w-auto" />
+      <h1 class="text-xl font-sans font-semibold tracking-wide">Esiah</h1>
+    </a>
+  </div>
+</header>
 
-  <!-- Leaflet Map Script -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initialize map
-      const map = L.map('covid-map').setView([20, 0], 2);
+<main class="px-4 md:px-16 py-8">
+  <section class="mt-8">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-2">Interactive COVID-19 Map</h2>
+    <div id="covid-map"></div>
+  </section>
+</main>
 
-      // Add Stamen Toner Lite tiles (HTTPS, GitHub Pages–friendly)
-      const tiles = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png', {
-        attribution: 'Map tiles by <a href="http://stamen.com/">Stamen Design</a>, ' +
-                     '<a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-        subdomains: 'abcd',
-        maxZoom: 20
-      }).addTo(map);
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize map
+    const map = L.map('covid-map').setView([20, 0], 2);
 
-      // Tile error logging
-      tiles.on('tileerror', function(e) {
-        console.error('Tile failed to load:', e);
-      });
+    // Add tile layer (Stamen Toner Lite, HTTPS)
+    const tiles = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com/">Stamen Design</a>, ' +
+                   '<a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }).addTo(map);
 
-      // Fix map rendering after page load
-      setTimeout(() => map.invalidateSize(), 100);
+    // Tile load error logging
+    tiles.on('tileerror', e => console.error('Tile load error', e));
 
-      // Sample COVID-19 data
-      const covidData = [
-        { country: "USA", lat: 37.0902, lng: -95.7129, cases: 100000 },
-        { country: "India", lat: 20.5937, lng: 78.9629, cases: 90000 },
-        { country: "Brazil", lat: -14.2350, lng: -51.9253, cases: 85000 }
-      ];
+    // Force Leaflet to redraw map after container is rendered
+    setTimeout(() => map.invalidateSize(), 200);
 
-      // Add circle markers
-      covidData.forEach(data => {
-        L.circle([data.lat, data.lng], {
-          color: 'red',
-          fillColor: '#f03',
-          fillOpacity: 0.5,
-          radius: Math.sqrt(data.cases) * 100
-        }).addTo(map).bindPopup(`<b>${data.country}</b><br>Cases: ${data.cases}`);
-      });
+    // Sample COVID data
+    const covidData = [
+      { country: "USA", lat: 37.0902, lng: -95.7129, cases: 100000 },
+      { country: "India", lat: 20.5937, lng: 78.9629, cases: 90000 },
+      { country: "Brazil", lat: -14.2350, lng: -51.9253, cases: 85000 }
+    ];
 
-      // Add sample marker
-      L.marker([20, 0]).addTo(map)
-        .bindPopup('Sample marker')
-        .openPopup();
+    // Add circles
+    covidData.forEach(d => {
+      L.circle([d.lat, d.lng], {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        radius: Math.sqrt(d.cases) * 100
+      }).addTo(map).bindPopup(`<b>${d.country}</b><br>Cases: ${d.cases}`);
     });
-  </script>
+
+    // Sample marker
+    L.marker([20, 0]).addTo(map).bindPopup('Sample marker').openPopup();
+  });
+</script>
+
 </body>
 </html>
