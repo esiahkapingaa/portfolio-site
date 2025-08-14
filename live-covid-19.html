@@ -42,79 +42,85 @@ body {
     color: #111;
 }
 
-/* Header / Navbar */
+/* Reset for header area */
 header {
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 1rem 0;       /* vertical padding only */
-    width: 100%;
-    position: sticky;
-    top: 0;
-    z-index: 50;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 header .container {
-    max-width: 1200px;     /* container max width for large screens */
-    margin: 0 auto;        /* center container */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 4%;         /* horizontal padding for content */
-    overflow-x: auto;
+  max-width: 96rem; /* similar to max-w-6xl */
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow-x: auto;
 }
 
-/* Logo + Name */
 header .logo {
-    display: flex;          /* side by side */
-    align-items: center;
-    gap: 0.5rem;
-    flex-shrink: 0;
-    text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: black;
 }
 
 header .logo img {
-    height: 2rem;
+  height: 2rem;
+  width: auto;
 }
 
 header .logo h1 {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 1.25rem;
-    color: #111;           /* force black */
-    margin: 0;             /* remove default margin */
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
 }
 
-/* Navigation links */
 header nav {
-    display: flex;
-    gap: 0.5rem;
-    overflow-x: auto;
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  margin-left: 1rem;
+  scrollbar-width: none; /* Firefox */
+}
+
+header nav::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 header nav a {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: 0.3s;
-    border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
 }
 
-header nav a.home { background: #FEF3C7; color: #B45309; border-color: #FBBF24; }
-header nav a.home:hover { background: #FEF08A; }
-header nav a.projects { background: #F59E0B; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-header nav a.projects:hover { background: #D97706; }
-header nav a.resume { background: #FEF3C7; color: #B45309; border-color: #FBBF24; }
-header nav a.resume:hover { background: #FEF08A; }
-header nav a.contact { background: #FEF3C7; color: #B45309; border-color: #FBBF24; }
-header nav a.contact:hover { background: #FEF08A; }
-
-/* Map fix so it doesn't overlap header */
-#map {
-    margin-top: 80px; /* adjust if your header height changes */
+header .btn-yellow-light {
+  background-color: #fef9c3;
+  color: #ca8a04;
+  border: 1px solid #facc15;
 }
+header .btn-yellow-light:hover {
+  background-color: #fef08a;
+}
+
+header .btn-yellow-solid {
+  background-color: #eab308;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+header .btn-yellow-solid:hover {
+  background-color: #ca8a04;
+}
+
 
 /* Hero Desktop with overlay text + gradient */
 #hero-desktop {
@@ -324,21 +330,23 @@ select {
 </head>
 
 <body style="margin:0; padding:0; background-color:white; font-family:sans-serif; color:black;">
-<!-- Header -->
 <header>
-    <div class="container">
-        <a href="index.html" class="logo">
-            <img src="images/esiah-logo.png" alt="Esiah Logo" />
-            <h1>Esiah</h1>
-        </a>
-        <nav>
-            <a href="index.html#home" class="home">Home</a>
-            <a href="index.html#projects" class="projects">Projects</a>
-            <a href="Esiah-Kapinga-Resume.pdf" download class="resume">Resume</a>
-            <a href="index.html#contact" class="contact">Contact</a>
-        </nav>
-    </div>
-</header> 
+  <div class="container">
+    <!-- Logo and Name -->
+    <a href="index.html" class="logo">
+      <img src="images/esiah-logo.png" alt="Esiah Logo" />
+      <h1>Esiah</h1>
+    </a>
+
+    <!-- Navigation -->
+    <nav>
+      <a href="index.html#home" class="btn-yellow-light">Home</a>
+      <a href="index.html#projects" class="btn-yellow-solid">Projects</a>
+      <a href="Esiah-Kapinga-Resume.pdf" download class="btn-yellow-light">Resume</a>
+      <a href="index.html#contact" class="btn-yellow-light">Contact</a>
+    </nav>
+  </div>
+</header>
 
 <!-- Hero Desktop -->
 <section id="hero-desktop">
