@@ -3,58 +3,243 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>COVID-19 WHO-Style Map - Date Range</title>
+  <title>COVID-19 WHO-Style Map - Live Covid-19 data</title>
+  
+  <!-- SEO Meta -->
+<meta name="description" content="Interactive COVID-19 dashboard using Python and WHO data. Explore global trends and insights through visual data storytelling." />
+<meta name="keywords" content="COVID-19 dashboard, Up to date covid-19 data, Covid-19 Cases today, data visualization, global health, Python, WHO data, Esiah Kapinga, analytics" />
+<meta name="author" content="Esiah Kapinga" />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#facc15" />
+<link rel="canonical" href="https://esiiah.github.io/portfolio-site/live-covid-19.html" />
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="images/esiah-logo.png" />
+
+<!-- Open Graph & Twitter -->
+<meta property="og:title" content="COVID-19 Up-To-Date Data — Esiah Kapinga" />
+<meta property="og:description" content="Track global COVID-19 trends using WHO data using disease-sh APIs and Python and HTTPS. Visualized for clarity and insight." />
+<meta property="og:image" content="images/your-project-banner.png" />
+<meta property="og:url" content="https://esiiah.github.io/portfolio-site/covid-dashboard.html" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="COVID-19 Global Dashboard — Esiah Kapinga" />
+<meta name="twitter:description" content="Data visualization of COVID-19 trends worldwide using Python,HTTPS, and WHO data through disease-sh API." />
+<meta name="twitter:image" content="images/your-project-banner.png" />
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f5f5f5;
-    }
-    section {
-      max-width: 1200px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      border-radius: 8px;
-    }
-    #map {
-      height: 600px;
-      width: 100%;
-      border-radius: 8px;
-    }
-    .info-panel {
-      margin-top: 20px;
-      padding: 15px;
-      background: #fafafa;
-      border-radius: 8px;
-    }
-    select {
-      padding: 5px;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-    .legend {
-      list-style: none;
-      padding-left: 0;
-    }
-    .legend li {
-      display: flex;
-      align-items: center;
-      margin: 4px 0;
-    }
-    .legend i {
-      width: 14px;
-      height: 14px;
-      display: inline-block;
-      margin-right: 8px;
-      border-radius: 3px;
-    }
-  </style>
+  
+<style>
+/* Root & Fonts */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #ffffff;
+    color: #111;
+}
+
+/* Header / Navbar */
+header {
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+header .container {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow-x: auto;
+}
+header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    text-decoration: none;
+    color: inherit;
+}
+header .logo img {
+    height: 2rem;
+}
+header .logo h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+header nav {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+}
+header nav a {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: 0.3s;
+    border: 1px solid transparent;
+}
+header nav a.home { background: #FEF3C7; color: #B45309; border-color: #FBBF24; }
+header nav a.home:hover { background: #FEF08A; }
+header nav a.projects { background: #F59E0B; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+header nav a.projects:hover { background: #D97706; }
+header nav a.resume { background: #FEF3C7; color: #B45309; border-color: #FBBF24; }
+header nav a.resume:hover { background: #FEF08A; }
+header nav a.contact { background: #FEF3C7; color: #B45309; border-color: #FBBF24; }
+header nav a.contact:hover { background: #FEF08A; }
+
+/* Hero Desktop */
+#hero-desktop {
+    display: none;
+    width: 100%;
+    padding: 0.5rem 4rem 1.5rem 4rem;
+}
+#hero-desktop img {
+    width: 100%;
+    height: auto;
+    border-radius: 3rem;
+    display: block;
+}
+
+/* Hero Mobile */
+#hero-mobile {
+    display: block;
+    width: 100%;
+    padding: 1.5rem 1rem;
+}
+#hero-mobile img {
+    width: 100%;
+    height: auto;
+    border-radius: 1.5rem;
+}
+.hero-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 1rem;
+    color: white;
+}
+.hero-text h1 { font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem; }
+.hero-text h2 { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700; color: #FBBF24; margin-bottom: 0.5rem; }
+.hero-text p { font-size: 0.875rem; }
+
+/* Main Content */
+main {
+    padding: 2rem 4rem;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Sections */
+section { 
+    margin-bottom: 2rem; 
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+section h2 { font-size: 1.5rem; font-weight: 600; color: #111; margin-bottom: 0.5rem; }
+section ul, section ol { margin-left: 1.25rem; color: #374151; }
+section ul li, section ol li { margin-bottom: 0.5rem; }
+
+/* Tables */
+table { border-collapse: collapse; width: 100%; }
+th, td { padding: 0.5rem; border: 1px solid #D1D5DB; text-align: left; }
+thead { background: #F3F4F6; }
+
+/* Footer */
+footer {
+    text-align: center;
+    color: #6B7280;
+    padding: 2rem 1rem;
+    border-top: 1px solid #374151;
+}
+footer a { color: #2563EB; text-decoration: underline; }
+footer .social-icons { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
+footer .social-icons img { width: 1.5rem; height: 1.5rem; }
+
+/* Map & Info Panel */
+#map {
+    height: 600px;
+    width: 100%;
+    border-radius: 8px;
+}
+.info-panel {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fafafa;
+    border-radius: 8px;
+}
+select {
+    padding: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.legend {
+    list-style: none;
+    padding-left: 0;
+}
+.legend li {
+    display: flex;
+    align-items: center;
+    margin: 4px 0;
+}
+.legend i {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 8px;
+    border-radius: 3px;
+}
+
+/* Animations */
+@keyframes spin-slow { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+@keyframes fadeInOut { 0%,100%{opacity:0;} 50%{opacity:1;} }
+@keyframes slide { 0% {transform: translateX(0);} 20% {transform: translateX(-100%);} 40% {transform: translateX(-200%);} 60% {transform: translateX(-300%);} 80% {transform: translateX(-400%);} 100% {transform: translateX(-500%);} }
+
+/* Responsive */
+@media (min-width: 768px) {
+    #hero-desktop { display: block; }
+    #hero-mobile { display: none; }
+}
+</style>
 </head>
 <body>
+
+<!-- Main Content -->
+<main>
+<!-- Overview -->
+<section>
+     <h2>Overview</h2>
+     <p>This project leverages real-time COVID-19 data fetched from the <a href="https://disease.sh" target="_blank">disease.sh API</a> to visualize global trends, including infection rates, recovery trajectories, and geographical impact. Using JavaScript, Leaflet.js, and GeoJSON, the project builds an interactive dashboard and live maps, providing up-to-date epidemiological insights.</p>
+</section>
+
+        <!-- Objectives -->
+<section>
+     <h2>Objectives</h2>
+        <ul>
+          <li>Fetch real-time COVID-19 data globally via the disease.sh API</li>
+          <li>Build an interactive world map showing live infection hotspots and recovery distribution</li>
+          <li>Plot live daily trends for confirmed cases, deaths, and recoveries by country/region</li>
+          <li>Enable user filtering by date range and country to see dynamic data changes</li>
+          <li>Provide insights into pandemic progression and regional differences using live data</li>
+         </ul>
+</section>
+</main>
 
 <section>
   <h2>COVID-19 Cases by Country (WHO Style)</h2>
@@ -83,6 +268,107 @@
   </div>
 </section>
 
+    <!-- Data Sources -->
+    <section>
+        <h2>Data Sources</h2>
+        <table>
+            <thead>
+                <tr><th>Source</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>WHO API</td><td>Official COVID-19 data</td></tr>
+                <tr><td>Country GeoJSON</td><td>Country shapes for maps</td></tr>
+                <tr><td>World Bank (optional)</td><td>Demographic overlays (population)</td></tr>
+            </tbody>
+        </table>
+        <p style="margin-top:0.5rem;font-size:0.875rem;font-style:italic;">
+            WHO COVID-19 Data Endpoint: <br>
+            <a href="https://covid19.who.int/page-data/table/page-data.json" target="_blank">https://covid19.who.int/page-data/table/page-data.json</a>
+        </p>
+    </section>
+
+    <!-- Methods & Tools -->
+    <section>
+        <h2>Methods & Tools</h2>
+        <ol>
+            <li><strong>Data Retrieval</strong>: Accessed WHO or COVID19 API, parsed JSON into Pandas, cleaned missing/inconsistent values.</li>
+            <li><strong>Data Wrangling</strong>: Aggregated case data, calculated rates, merged with GeoJSON country coordinates.</li>
+            <li><strong>Mapping (Folium)</strong>: Built choropleth maps and circle marker layers with popups.</li>
+            <li><strong>Visualization (Plotly)</strong>: Created interactive time series plots, bar charts, and optional animations.</li>
+        </ol>
+    </section>
+
+    <!-- Example Insights -->
+    <section>
+        <h2>Example Insights</h2>
+        <ul>
+            <li>India, USA, and Brazil exhibited consistent surges aligned with policy delays.</li>
+            <li>Recovery rates rose significantly post-July 2021 with mass vaccination campaigns.</li>
+            <li>African nations showed underreporting patterns — visualized as data sparsity.</li>
+            <li>Reinfection waves (Delta, Omicron) visualized in animated strain-period plots.</li>
+        </ul>
+    </section>
+
+      <!-- Tools Used for Interactive Live Data Map -->
+    <section>
+        <h2>Tools Used</h2>
+        <table>
+            <thead>
+                <tr><th>Tool</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>JavaScript</td><td>Fetch live API data and build interactive visualizations</td></tr>
+                <tr><td>Leaflet.js</td><td>Interactive maps with markers, popups, and layers</td></tr>
+                <tr><td>disease.sh API</td><td>Real-time global COVID-19 data</td></tr>
+                <tr><td>GeoJSON</td><td>Country coordinates and shapes for mapping</td></tr>
+                <tr><td>HTML & CSS</td><td>Page structure, styling, and responsive layout</td></tr>
+                <tr><td>Optional Libraries (Chart.js / Plotly)</td><td>Interactive charts linked with map data</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Tools We can use for Static Map-->
+    <section>
+        <h2>Tools Used</h2>
+        <table>
+            <thead>
+                <tr><th>Tool</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Python</td><td>Data processing and visualization</td></tr>
+                <tr><td>Pandas</td><td>Data cleaning and manipulation</td></tr>
+                <tr><td>Plotly</td><td>Interactive graphs and plots</td></tr>
+                <tr><td>Folium</td><td>Geospatial mapping</td></tr>
+                <tr><td>GeoJSON</td><td>Geolocation mapping</td></tr>
+                <tr><td>Jupyter Notebook</td><td>Interactive development</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Applications -->
+    <section>
+        <h2>Applications</h2>
+        <ul>
+            <li>Public health communication to display global pandemic impact</li>
+            <li>Support for policy decision-making and resource allocation</li>
+            <li>Educational tool for understanding epidemiological data</li>
+            <li>Research support in real-time COVID surveillance and modeling</li>
+        </ul>
+    </section>
+</main>
+  
+<!-- Footer -->
+<footer>
+    <p>All visualizations and maps are interactive. Data is updated regularly. Ethical considerations were applied regarding reporting accuracy and transparency.</p>
+    <div class="social-icons">
+        <a href="https://www.linkedin.com/in/esiah-kapinga" target="_blank"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn"></a>
+        <a href="https://github.com/esiiah" target="_blank"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub"></a>
+        <a href="https://www.instagram.com/esiah_kapinga" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
+        <a href="https://youtube.com/esiah.1" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
+    </div>
+    <p style="margin-top:0.5rem;">&copy; 2025 Esiah Kapinga - COVID-19 Live Data Project</p>
+</footer>
+  
 <script>
 const map = L.map('map').setView([20, 0], 2);
 
@@ -104,17 +390,11 @@ const regionColors = {
 
 // WHO Region mapping
 const countryRegionMap = {
-  // Africa
   "Algeria": "Africa", "Nigeria": "Africa", "South Africa": "Africa", "Kenya": "Africa", "Ethiopia": "Africa", "Egypt": "Eastern Mediterranean",
-  // Americas
   "United States": "Americas", "Brazil": "Americas", "Canada": "Americas", "Mexico": "Americas", "Argentina": "Americas", "Chile": "Americas",
-  // Eastern Mediterranean
   "Pakistan": "Eastern Mediterranean", "Iran": "Eastern Mediterranean", "Afghanistan": "Eastern Mediterranean", "Saudi Arabia": "Eastern Mediterranean",
-  // Europe
   "France": "Europe", "Germany": "Europe", "Italy": "Europe", "Spain": "Europe", "United Kingdom": "Europe", "Russia": "Europe", "Ukraine": "Europe",
-  // South-East Asia
   "India": "South-East Asia", "Indonesia": "South-East Asia", "Thailand": "South-East Asia", "Bangladesh": "South-East Asia", "Nepal": "South-East Asia",
-  // Western Pacific
   "China": "Western Pacific", "Japan": "Western Pacific", "Australia": "Western Pacific", "Philippines": "Western Pacific", "Vietnam": "Western Pacific", "New Zealand": "Western Pacific"
 };
 
@@ -127,6 +407,9 @@ async function loadData(days) {
   const countriesRes = await fetch("https://disease.sh/v3/covid-19/countries");
   const countries = await countriesRes.json();
 
+  // Step 1: gather cases for all countries
+  const countryData = [];
+
   for (let c of countries) {
     const histRes = await fetch(`https://disease.sh/v3/covid-19/historical/${c.country}?lastdays=${days === 'all' ? 1000 : days}`);
     const hist = await histRes.json();
@@ -134,20 +417,30 @@ async function loadData(days) {
     if (!hist.timeline || !hist.timeline.cases) continue;
 
     const casesTimeline = Object.values(hist.timeline.cases);
-    let casesCount;
+    let casesCount = days === 'all'
+      ? casesTimeline[casesTimeline.length - 1]
+      : casesTimeline[casesTimeline.length - 1] - casesTimeline[0];
 
-    if (days === 'all') {
-      casesCount = casesTimeline[casesTimeline.length - 1];
-    } else {
-      casesCount = casesTimeline[casesTimeline.length - 1] - casesTimeline[0];
-    }
+    countryData.push({
+      country: c.country,
+      lat: c.countryInfo.lat,
+      long: c.countryInfo.long,
+      cases: casesCount
+    });
+  }
 
+  // Step 2: find max cases in this range
+  const maxCases = Math.max(...countryData.map(d => d.cases));
+
+  // Step 3: create circles with relative sizing
+  const maxRadius = 40; // maximum circle radius
+  countryData.forEach(c => {
     const region = countryRegionMap[c.country] || "Other";
     const color = regionColors[region];
 
-    const radius = Math.sqrt(casesCount) / 300; // adjusted size
+    const radius = Math.sqrt(c.cases / maxCases) * maxRadius;
 
-    const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
+    const circle = L.circleMarker([c.lat, c.long], {
       radius: radius,
       fillColor: color,
       color: "#555",
@@ -155,7 +448,7 @@ async function loadData(days) {
       opacity: 1,
       fillOpacity: 0.7
     }).bindPopup(
-      `<b>${c.country}</b><br>Cases in range: ${casesCount.toLocaleString()}<br>Region: ${region}`
+      `<b>${c.country}</b><br>Cases in range: ${c.cases.toLocaleString()}<br>Region: ${region}`
     );
 
     circle.on("mouseover", function() { this.openPopup(); });
@@ -163,7 +456,7 @@ async function loadData(days) {
 
     markers.push(circle);
     circle.addTo(map);
-  }
+  });
 }
 
 loadData(7);
