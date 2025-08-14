@@ -5,32 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>COVID-19 Global Visualization — Esiah Kapinga</title>
 
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Interactive COVID-19 dashboard using Python and WHO data. Explore global trends and insights through visual data storytelling." />
-    <meta name="keywords" content="COVID-19 dashboard, data visualization, global health, Python, WHO data, Esiah Kapinga, analytics" />
-    <meta name="author" content="Esiah Kapinga" />
-    <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#facc15" />
-
-    <!-- Canonical Link -->
-    <link rel="canonical" href="https://esiiah.github.io/portfolio-site/covid-dashboard.html" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="images/esiah-logo.png" />
-
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="COVID-19 Global Dashboard — Esiah Kapinga" />
-    <meta property="og:description" content="Track global COVID-19 trends using WHO data and Python. Visualized for clarity and insight." />
-    <meta property="og:image" content="images/your-project-banner.png" />
-    <meta property="og:url" content="https://esiiah.github.io/portfolio-site/covid-dashboard.html" />
-    <meta property="og:type" content="website" />
-
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="COVID-19 Global Dashboard — Esiah Kapinga" />
-    <meta name="twitter:description" content="Data visualization of COVID-19 trends worldwide using Python and WHO data." />
-    <meta name="twitter:image" content="images/your-project-banner.png" />
-
     <!-- Tailwind CSS v3 (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -48,31 +22,7 @@
             fontFamily: {
               display: ['Poppins', 'sans-serif'],
               body: ['Inter', 'sans-serif'],
-            },
-            animation: {
-              'spin-slow': 'spin 6s linear infinite',
-              'fadeInOut': 'fadeInOut 3s ease-in-out infinite',
-              'pulse-slow': 'pulse 5s infinite',
-              'slide': 'slide 30s infinite linear',
-            },
-            keyframes: {
-              fadeInOut: {
-                '0%, 100%': { opacity: 0 },
-                '50%': { opacity: 1 },
-              },
-              slide: {
-                '0%': { transform: 'translateX(0%)' },
-                '20%': { transform: 'translateX(-100%)' },
-                '40%': { transform: 'translateX(-200%)' },
-                '60%': { transform: 'translateX(-300%)' },
-                '80%': { transform: 'translateX(-400%)' },
-                '100%': { transform: 'translateX(-500%)' },
-              },
-            },
-            scrollBehavior: 'smooth',
-            borderRadius: {
-              '3rem': '3rem',
-            },
+            }
           },
         },
       };
@@ -110,12 +60,6 @@
           <img src="images/esiah-logo.png" alt="Esiah Logo" class="h-8 w-auto" />
           <h1 class="text-xl font-display font-semibold tracking-wide">Esiah</h1>
         </a>
-        <nav class="flex gap-3 overflow-x-auto ml-4 scrollbar-hide">
-          <a href="index.html#home" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Home</a>
-          <a href="index.html#projects" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Projects</a>
-          <a href="Esiah-Kapinga-Resume.pdf" download class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Resume</a>
-          <a href="index.html#contact" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Contact</a>
-        </nav>
       </div>
     </header>
 
@@ -132,18 +76,16 @@
       document.addEventListener('DOMContentLoaded', () => {
         const map = L.map('covid-map').setView([20, 0], 2);
 
-        L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '&copy; OpenStreetMap contributors'
+        // GitHub Pages–friendly Carto Light tiles
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors &copy; <a href="https://www.carto.com/">CARTO</a>',
+          subdomains: 'abcd',
+          maxZoom: 19
         }).addTo(map);
 
         setTimeout(() => {
           map.invalidateSize();
         }, 100);
-
-        map.on('tileerror', (error) => {
-          console.error('Tile loading error:', error);
-        });
 
         const covidData = [
           { country: "USA", lat: 37.0902, lng: -95.7129, cases: 100000 },
