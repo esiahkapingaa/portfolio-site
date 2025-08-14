@@ -3,29 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaflet Map - Stamen</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          integrity="sha256-o9N1jv7Q+o8kB1mM0JTdZyLFt2gR5I1j3sXhZ+6Ck/k=" crossorigin=""></script>
+  <title>Leaflet Map - Carto</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     #map { height: 600px; width: 100%; background: #eee; }
   </style>
 </head>
 <body>
-<h2>Stamen Toner Lite Map</h2>
+<h2>Carto Light Map</h2>
 <div id="map"></div>
 <script>
   const map = L.map('map').setView([20,0], 2);
 
-  L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png', {
-    attribution: 'Map tiles by <a href="http://stamen.com/">Stamen Design</a>, ' +
-                 '<a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors &copy; <a href="https://www.carto.com/">CARTO</a>',
     subdomains: 'abcd',
-    maxZoom: 20
+    maxZoom: 19
   }).addTo(map);
 
-  // sample marker
   L.marker([20,0]).addTo(map).bindPopup('Center of the map').openPopup();
 </script>
 </body>
