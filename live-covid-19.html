@@ -216,9 +216,54 @@ select {
     #hero-desktop { display: block; }
     #hero-mobile { display: none; }
 }
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+    main {
+        padding: 1rem;  /* smaller padding on phone */
+    }
+    section {
+        padding: 15px;  /* reduce section padding for better fit */
+    }
+    section h2 {
+        font-size: 1.25rem; /* smaller heading */
+    }
+    section ul li, section ol li {
+        font-size: 0.9rem; /* smaller list items */
+    }
+    .hero-text h1 {
+        font-size: 1rem;
+    }
+    .hero-text h2 {
+        font-size: 0.875rem;
+    }
+    .hero-text p {
+        font-size: 0.75rem;
+    }
+    #map {
+        height: 400px; /* smaller map for mobile */
+    }
+}
+
 </style>
 </head>
 <body>
+
+ <!-- Header -->
+<header>
+    <div class="container">
+        <a href="index.html" class="logo">
+            <img src="images/esiah-logo.png" alt="Esiah Logo" />
+            <h1>Esiah</h1>
+        </a>
+        <nav>
+            <a href="index.html#home" class="home">Home</a>
+            <a href="index.html#projects" class="projects">Projects</a>
+            <a href="Esiah-Kapinga-Resume.pdf" download class="resume">Resume</a>
+            <a href="index.html#contact" class="contact">Contact</a>
+        </nav>
+    </div>
+</header> 
 
 <!-- Hero Desktop -->
 <section id="hero-desktop">
@@ -387,7 +432,18 @@ select {
 </footer>
   
 <script>
-const map = L.map('map').setView([20, 0], 2);
+// Ensure map doesn't repeat horizontally
+const map = L.map('map', {
+    worldCopyJump: true, // prevents multiple map tiles when panning horizontally
+    maxBounds: [[-90, -180], [90, 180]] // restrict to global bounds
+}).setView([20, 0], 2);
+
+map.setMaxBounds([
+    [-90, -180],
+    [90, 180]
+]);
+map.setMinZoom(2);
+map.setMaxZoom(6);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
@@ -434,9 +490,10 @@ async function loadData(days) {
     if (!hist.timeline || !hist.timeline.cases) continue;
 
     const casesTimeline = Object.values(hist.timeline.cases);
-    let casesCount = days === 'all'
-      ? casesTimeline[casesTimeline.length - 1]
-      : casesTimeline[casesTimeline.length - 1] - casesTimeline[0];
+    let casesCount = 0;
+    for (let i = 1; i < casesTimeline.length; i++) {
+      casesCount += casesTimeline[i] - casesTimeline[i-1];
+    }
 
     countryData.push({
       country: c.country,
