@@ -92,27 +92,24 @@
       integrity="sha256-o9N1jv7Q+o8kB1mM0JTdZyLFt2gR5I1j3sXhZ+6Ck/k="
       crossorigin=""
     ></script>
+
     <style>
-    #covid-map {
+      #covid-map {
         height: 600px !important;
         width: 100% !important;
-    }
-</style>
-
+        background: #e5e5e5;
+      }
+    </style>
   </head>
+
   <body class="bg-white text-black font-sans">
-
-
-    <!-- Header / Navigation for other pages -->
+    <!-- Header -->
     <header class="bg-white shadow p-4 sticky top-0 z-50">
       <div class="max-w-6xl mx-auto flex items-center justify-between overflow-x-auto">
-        <!-- Logo and Name -->
         <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
           <img src="images/esiah-logo.png" alt="Esiah Logo" class="h-8 w-auto" />
           <h1 class="text-xl font-display font-semibold tracking-wide">Esiah</h1>
         </a>
-
-        <!-- Navigation Buttons -->
         <nav class="flex gap-3 overflow-x-auto ml-4 scrollbar-hide">
           <a href="index.html#home" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Home</a>
           <a href="index.html#projects" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Projects</a>
@@ -120,259 +117,53 @@
           <a href="index.html#contact" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Contact</a>
         </nav>
       </div>
-    </header> 
+    </header>
 
-    <!-- Desktop Banner -->
-    <section id="hero-desktop" class="hidden md:block w-full bg-white pt-2 pb-6 px-2 md:px-16">
-        <div class="relative rounded-[3rem] overflow-hidden">
-            <img src="https://raw.githubusercontent.com/esiiah/portfolio-site/main/images/covid-banner.png"
-                 alt="COVID-19 Visualization Banner"
-                 class="w-full h-auto object-cover" />
-        </div>
-    </section>
-
-    <!-- Mobile Banner -->
-    <section class="block md:hidden w-full bg-white py-6 px-4">
-        <div class="relative rounded-3xl overflow-hidden">
-            <img src="images/covid-mb-banner.png"
-                 alt="COVID-19 Visualization Banner"
-                 class="w-full h-auto object-cover rounded-3xl" />
-
-            <!-- Gradient + Text -->
-            <div class="absolute inset-0 px-4 pt-2 flex flex-col items-start justify-start text-left">
-                <div
-                    class="relative max-w-full sm:max-w-xl p-4 sm:p-6 rounded-lg shadow-lg"
-                    style="background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0));">
-                    <h1 class="text-lg sm:text-xl font-display font-bold text-white mb-1 drop-shadow-md">
-                        Global Pandemic Trends
-                    </h1>
-                    <h2 class="text-sm sm:text-base font-display font-bold text-yellow-300 mb-2 drop-shadow-sm">
-                        COVID-19 Visualization (Python)
-                    </h2>
-                    <p class="text-xs sm:text-sm text-white drop-shadow-sm">
-                        Tracked and visualized global COVID-19 cases with Python using official WHO data.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Content -->
+    <!-- Map Section -->
     <main class="px-4 md:px-16 py-8">
-        <header>
-            <!-- Desktop: Main Title + Overview -->
-            <div class="hidden md:block">
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">
-                    Global COVID-19 Trends: Interactive Visualization Using WHO Data
-                </h1>
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Overview</h2>
-                <p class="text-gray-700 text-lg">
-                    This project leverages real-time data from the World Health Organization (WHO) to visualize global COVID-19 trends, including infection rates, recovery trajectories, and geographical impact. Using Python libraries like Plotly, Folium, and Pandas, the project builds an interactive dashboard and maps to make epidemiological trends visually accessible.
-                </p>
-            </div>
-
-            <!-- Mobile: Only "Overview" -->
-            <div class="block md:hidden">
-                <h2 class="text-xl font-bold text-gray-900">Overview</h2>
-                <p class="text-gray-700 text-lg">
-                    This project leverages real-time data from the World Health Organization (WHO) to visualize global COVID-19 trends, including infection rates, recovery trajectories, and geographical impact. Using Python libraries like Plotly, Folium, and Pandas, the project builds an interactive dashboard and maps to make epidemiological trends visually accessible.
-                </p>
-            </div>
-        </header>
-
-      <section>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-2">Objectives</h2>
-        <ul class="list-disc list-inside space-y-2 text-gray-700">
-          <li>Connect to the WHO API to retrieve up-to-date COVID-19 data (cases, deaths, recoveries)</li>
-          <li>Build an interactive world map showing infection hotspots and recovery distribution</li>
-          <li>Plot daily trends for confirmed cases, deaths, and recoveries by country/region</li>
-          <li>Enable user filtering by date range and country</li>
-          <li>Extract insights into pandemic progression and regional differences</li>
-        </ul>
-      </section>
-
       <section class="mt-8">
         <h2 class="text-2xl font-semibold text-gray-800 mb-2">Interactive COVID-19 Map</h2>
-        <div id="covid-map" class="w-full" style="height: 600px; min-height: 600px; background: #e5e5e5;"></div>
+        <div id="covid-map"></div>
       </section>
-
-      <section>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-2">Data Sources</h2>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border border-gray-300">
-            <thead class="bg-gray-100">
-              <tr>
-                <th class="p-2 border">Source</th>
-                <th class="p-2 border">Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="p-2 border">WHO API</td>
-                <td class="p-2 border">Official COVID-19 data</td>
-              </tr>
-              <tr>
-                <td class="p-2 border">Country GeoJSON</td>
-                <td class="p-2 border">Country shapes for Folium maps</td>
-              </tr>
-              <tr>
-                <td class="p-2 border">World Bank (optional)</td>
-                <td class="p-2 border">Demographic overlays (e.g., population)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="mt-2 text-sm italic text-gray-600">
-          WHO COVID-19 Data Endpoint: <br />
-          <a href="https://covid19.who.int/page-data/table/page-data.json" target="_blank" class="text-blue-600 underline">https://covid19.who.int/page-data/table/page-data.json</a>
-        </p>
-        <p class="text-xs text-gray-500">
-          (Note: uses indirect GraphQL structure – alternatives include CSSEGISandData or <a href="https://covid19api.com" target="_blank" class="underline">COVID19 API</a>)
-        </p>
-      </section>
-
-      <section>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-2">Methods & Tools</h2>
-        <ol class="list-decimal list-inside space-y-2 text-gray-700">
-          <li><strong>Data Retrieval</strong>: Accessed WHO or COVID19 API, parsed JSON into Pandas, cleaned missing/inconsistent values.</li>
-          <li><strong>Data Wrangling</strong>: Aggregated case data, calculated rates, merged with GeoJSON country coordinates.</li>
-          <li><strong>Mapping (Folium)</strong>: Built choropleth maps and circle marker layers with popups.</li>
-          <li><strong>Visualization (Plotly)</strong>: Created interactive time series plots, bar charts, and optional animations.</li>
-        </ol>
-      </section>
-
-      <section>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-2">Example Insights</h2>
-        <ul class="list-disc list-inside space-y-2 text-gray-700">
-          <li>India, USA, and Brazil exhibited consistent surges aligned with policy delays.</li>
-          <li>Recovery rates rose significantly post-July 2021 with mass vaccination campaigns.</li>
-          <li>African nations showed underreporting patterns — visualized as data sparsity.</li>
-          <li>Reinfection waves (Delta, Omicron) visualized in animated strain-period plots.</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-2">Tools Used</h2>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border border-gray-300">
-            <thead class="bg-gray-100">
-              <tr>
-                <th class="p-2 border">Tool</th>
-                <th class="p-2 border">Purpose</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="p-2 border">Python</td>
-                <td class="p-2 border">Data processing and visualization</td>
-              </tr>
-              <tr>
-                <td class="p-2 border">Pandas</td>
-                <td class="p-2 border">Data cleaning and manipulation</td>
-              </tr>
-              <tr>
-                <td class="p-2 border">Plotly</td>
-                <td class="p-2 border">Interactive graphs and plots</td>
-              </tr>
-              <tr>
-                <td class="p-2 border">Folium</td>
-                <td class="p-2 border">Geospatial mapping</td>
-              </tr>
-              <tr>
-                <td class="p-2 border">GeoJSON</td>
-                <td class="p-2 border">Geolocation mapping</td>
-              </tr>
-              <tr>
-                <td class="p-2 border">Jupyter Notebook</td>
-                <td class="p-2 border">Interactive development</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-2">Applications</h2>
-        <ul class="list-disc list-inside space-y-2 text-gray-700">
-          <li>Public health communication to display global pandemic impact</li>
-          <li>Support for policy decision-making and resource allocation</li>
-          <li>Educational tool for understanding epidemiological data</li>
-          <li>Research support in real-time COVID surveillance and modeling</li>
-        </ul>
-      </section>
-
-    <!-- Footer -->
-    <footer class="text-center text-gray-500 pt-8 border-t border-gray-700">
-        <p>
-            All visualizations and maps are interactive. Data is updated regularly. Ethical considerations
-            were applied regarding reporting accuracy and transparency.
-        </p>
-        <div class="flex justify-center gap-4 mt-4">
-            <a href="https://www.linkedin.com/in/esiah-kapinga" target="_blank">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
-                     alt="LinkedIn"
-                     class="w-6 h-6" />
-            </a>
-            <a href="https://github.com/esiiah" target="_blank">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
-                     alt="GitHub"
-                     class="w-6 h-6 invert" />
-            </a>
-            <a href="https://www.instagram.com/esiah_kapinga" target="_blank">
-                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
-                     alt="Instagram"
-                     class="w-6 h-6" />
-            </a>
-            <a href="https://youtube.com/esiah.1" target="_blank">
-                <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
-                     alt="YouTube"
-                     class="w-6 h-6" />
-            </a>
-        </div>
-        <p class="mt-4">
-            &copy; 2025 Esiah Kapinga - COVID-19 Dashboard Visualization Project
-        </p>
-    </footer>
     </main>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const map = L.map('covid-map').setView([20, 0], 2);
+    <!-- Map Script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const map = L.map('covid-map').setView([20, 0], 2);
 
-    L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+        L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-    setTimeout(() => {
-        map.invalidateSize();
-    }, 100);
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 100);
 
-    map.on('tileerror', (error) => {
-        console.error('Tile loading error:', error);
-    });
+        map.on('tileerror', (error) => {
+          console.error('Tile loading error:', error);
+        });
 
-    const covidData = [
-        { country: "USA", lat: 37.0902, lng: -95.7129, cases: 100000 },
-        { country: "India", lat: 20.5937, lng: 78.9629, cases: 90000 },
-        { country: "Brazil", lat: -14.2350, lng: -51.9253, cases: 85000 }
-    ];
+        const covidData = [
+          { country: "USA", lat: 37.0902, lng: -95.7129, cases: 100000 },
+          { country: "India", lat: 20.5937, lng: 78.9629, cases: 90000 },
+          { country: "Brazil", lat: -14.2350, lng: -51.9253, cases: 85000 }
+        ];
 
-    covidData.forEach(data => {
-        L.circle([data.lat, data.lng], {
+        covidData.forEach(data => {
+          L.circle([data.lat, data.lng], {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5,
             radius: Math.sqrt(data.cases) * 100
-        }).addTo(map).bindPopup(`<b>${data.country}</b><br>Cases: ${data.cases}`);
-    });
+          }).addTo(map).bindPopup(`<b>${data.country}</b><br>Cases: ${data.cases}`);
+        });
 
-    L.marker([20, 0]).addTo(map)
-        .bindPopup('Sample marker')
-        .openPopup();
-});
-</script>
-
-</body>
+        L.marker([20, 0]).addTo(map)
+          .bindPopup('Sample marker')
+          .openPopup();
+      });
+    </script>
+  </body>
 </html>
-
