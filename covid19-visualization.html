@@ -105,7 +105,7 @@
           <a href="index.html#home" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Home</a>
           <a href="index.html#projects" class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold hover:bg-yellow-600 transition whitespace-nowrap">Projects</a>
           <a href="Esiah-Kapinga-Resume.pdf" download class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Resume</a>
-          <a href="index.html#contact" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Contact</a
+          <a href="index.html#contact" class="bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg border border-yellow-400 text-sm font-semibold hover:bg-yellow-200 transition whitespace-nowrap">Contact</a>
         </nav>
       </div>
     </header> 
@@ -181,7 +181,7 @@
 
       <section class="mt-8">
         <h2 class="text-2xl font-semibold text-gray-800 mb-2">Interactive COVID-19 Map</h2>
-        <div id="covid-map" style="height: 600px; width: 100%;"></div>
+        <div id="covid-map" class="w-full" style="height: 600px;"></div>
       </section>
 
       <section>
@@ -323,39 +323,37 @@
     </footer>
     </main>
 
-    <script>
-        // Initialize the map
-        const map = L.map('covid-map').setView([20, 0], 2);
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize the map
+    const map = L.map('covid-map').setView([20, 0], 2);
 
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-        // Sample COVID data (replace with WHO data dynamically)
-        const covidData = [
-            { country: "USA", lat: 37.0902, lng: -95.7129, cases: 100000 },
-            { country: "India", lat: 20.5937, lng: 78.9629, cases: 90000 },
-            { country: "Brazil", lat: -14.2350, lng: -51.9253, cases: 85000 },
-        ];
+    // Example COVID data (replace with API data later)
+    const covidData = [
+        { country: "USA", lat: 37.0902, lng: -95.7129, cases: 100000 },
+        { country: "India", lat: 20.5937, lng: 78.9629, cases: 90000 },
+        { country: "Brazil", lat: -14.2350, lng: -51.9253, cases: 85000 }
+    ];
 
-        // Add circles for each country
-        covidData.forEach(data => {
-            L.circle([data.lat, data.lng], {
-                color: 'red',
-                fillColor: '#f03',
-                fillOpacity: 0.5,
-                radius: Math.sqrt(data.cases) * 100
-            }).addTo(map)
-            .bindPopup(`<b>${data.country}</b><br>Cases: ${data.cases}`);
-        });
-
-        // Optional: Add a sample marker
-        L.marker([20, 0]).addTo(map)
-            .bindPopup('Sample marker')
-            .openPopup();
-    </script>
+    // Add circles to map
+    covidData.forEach(data => {
+        L.circle([data.lat, data.lng], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: Math.sqrt(data.cases) * 100
+        })
+        .addTo(map)
+        .bindPopup(`<b>${data.country}</b><br>Cases: ${data.cases}`);     
+    });
+});
+</script>
 </body>
 </html>
 
