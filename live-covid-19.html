@@ -263,39 +263,77 @@ footer .social-icons { display: flex; justify-content: center; gap: 1rem; margin
 footer .social-icons img { width: 1.5rem; height: 1.5rem; }
 
 
-#map-loader,
+:root{
+  --bg:#ffffff;
+  --panel:#fafafa;
+  --text:#111;
+  --muted:#666;
+  --border:#e7e7e7;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+h2{margin:0 0 10px}
+section{padding:16px}
+
+.map-container{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:14px;
+  align-items:start;
+}
+.map-box{
+  position:relative;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  min-height:120px;
+}
+#global-map{height:520px;}
+/* India map = half of global vertically */
+#india-map{height:260px;}
+
 #global-map-loader,
-#india-map-loader {
-    text-align: center;
-    font-weight: bold;
-    padding: 1rem;
+#india-map-loader{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:600;font-size:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.85));
+  z-index:10
 }
-.info-panel {
-    margin-top: 20px;
-    padding: 15px;
-    background: #fafafa;
-    border-radius: 8px;
+
+.india-stats{
+  padding:12px 14px;
+  background:var(--panel);
+  border-top:1px solid var(--border);
 }
-select {
-    padding: 5px;
-    margin-bottom: 10px;
-    font-size: 14px;
+
+.info-panel{
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--panel);
+  border-radius: 10px;
+  border:1px solid var(--border);
 }
-.legend {
-    list-style: none;
-    padding-left: 0;
+
+select{
+  padding:6px 8px;border-radius:8px;border:1px solid var(--border);
+  font-size:14px;background:#fff;color:var(--text)
 }
-.legend li {
-    display: flex;
-    align-items: center;
-    margin: 4px 0;
+
+.legend{list-style:none;padding:0;margin:8px 0 0}
+.legend li{display:flex;align-items:center;gap:8px;margin:4px 0}
+.legend i{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid #ddd}
+
+.country-stats{
+  margin-top: 16px; padding: 14px; background: #f9f9f9; border-radius: 10px; border:1px solid var(--border)
 }
-.legend i {
-    width: 14px;
-    height: 14px;
-    display: inline-block;
-    margin-right: 8px;
-    border-radius: 3px;
+
+/* Responsive */
+@media (max-width: 980px){
+  .map-container{grid-template-columns: 1fr}
+  #global-map{height:420px}
+  #india-map{height:240px}
 }
 
 /* Animations */
