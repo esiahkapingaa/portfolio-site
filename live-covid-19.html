@@ -610,7 +610,7 @@ const regionColors = {
   "Western Pacific": "#bcbd22",
   "Other": "#999"
 };
-// Best-effort mapping from disease.sh "continent" to WHO-like buckets
+
 function mapContinentToWHO(continent, countryName){
   if(countryName === "India") return "South-East Asia";
   if(countryName === "China" || countryName === "Japan" || countryName === "Australia" || countryName === "New Zealand" || continent === "Australia/Oceania") return "Western Pacific";
@@ -620,6 +620,7 @@ function mapContinentToWHO(continent, countryName){
   if(continent === "Africa") return "Africa";
   return "Other";
 }
+
 const fmt = n => (n===null||n===undefined) ? "—" : Number(n).toLocaleString();
 
 /* ==============================
@@ -796,6 +797,7 @@ function parseCSVRow(line){
   out.push(cur);
   return out;
 }
+
 
 /* ==============================
    COUNTRY DROPDOWN
