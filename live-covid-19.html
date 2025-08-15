@@ -680,36 +680,41 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   maxZoom: 19
 }).addTo(globalMap);
 
-const indiaMap = L.map('india-map', { worldCopyJump: false }).setView([22.9734, 78.6569], 4);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-  subdomains: 'abcd',
-  maxZoom: 19
-}).addTo(indiaMap);
-
 let globalMarkers = [];
 let globalCache = null;     // cache disease.sh countries
 let historyCache = new Map();// cache per-country historical
 
 /* ==============================
-   LOAD GLOBAL (disease.sh)
+   LOAD GLOBAL (disease.sh) - FIXED
 ============================== */
 async function loadGlobalData(days){
   document.getElementById("global-map-loader").style.display = "flex";
+
   // clear old markers
   globalMarkers.forEach(m => globalMap.removeLayer(m));
   globalMarkers = [];
 
   try{
     if(!globalCache){
-      const res = await fetch("https://disease.sh/v3/covid-19/countries?allowNull=false");
-      globalCache = await res.json();
+      const res = await fetch(`https://disease.sh/v3/covid-19/historical?lastdays=${days}`);
+      const data = await res.json();
+      globalCache = data.map(c => {
+        // combine historical into cumulative sums for last 'days'
+        const timeline = c.timeline?.cases || {};
+        const cases = Object.values(timeline).reduce((a,b)=>a+b,0);
+        const deathsTimeline = c.timeline?.deaths || {};
+        const deaths = Object.values(deathsTimeline).reduce((a,b)=>a+b,0);
+        return {
+          country: c.country,
+          continent: c.continent,
+          cases,
+          deaths,
+          countryInfo: c.countryInfo
+        };
+      });
     }
-    const countries = globalCache;
 
-    // size by cases matching chosen period:
-    // For speed, use current cumulative “cases”; if range != all, derive approx using today - lastdays
-    // (exact per-country lastdays would require many requests; we keep it fast)
+    const countries = globalCache;
     const maxCases = Math.max(...countries.map(c => c.cases || 0));
     const maxRadius = 36;
 
@@ -725,7 +730,7 @@ async function loadGlobalData(days){
         weight: 0.6,
         opacity: 1,
         fillOpacity: 0.75
-      }).bindPopup(
+      }).bindTooltip(
         `<b>${c.country}</b><br>
          Cases: ${fmt(c.cases)}<br>
          Deaths: ${fmt(c.deaths)}<br>
@@ -752,64 +757,38 @@ async function loadIndiaData(){
 
   try{
     // WHO global table CSV is small and updated weekly
-    const res = await fetch("https://covid19.who.int/WHO-COVID-19-global-table-data.csv");
-    const csv = await res.text();
+const res = await fetch("https://data.covid19india.org/data.json");
+const data = await res.json();
+const indiaLatest = data.statewise.find(s => s.state === "Total");
 
-    // Parse the "India" row
-    // Columns include: Name, WHO Region, Cases - cumulative total, Cases - newly reported in last 7 days, Deaths - cumulative total, Deaths - newly reported in last 7 days, …
-    const lines = csv.split(/\r?\n/);
-    const header = lines[0].split(',');
-    const idx = {
-      name: header.indexOf("Name"),
-      totalCases: header.indexOf("Cases - cumulative total"),
-      new7: header.indexOf("Cases - newly reported in last 7 days"),
-      totalDeaths: header.indexOf("Deaths - cumulative total"),
-      newDeaths7: header.indexOf("Deaths - newly reported in last 7 days"),
-      region: header.indexOf("WHO Region")
-    };
+const total = toNumberSafe(indiaLatest.confirmed);
+const newCases = toNumberSafe(indiaLatest.deltaconfirmed);
+const deaths = toNumberSafe(indiaLatest.deaths);
+const newDeaths = toNumberSafe(indiaLatest.deltadeaths);
 
-    let indiaRow = null;
-    for(let i=1;i<lines.length;i++){
-      const row = lines[i];
-      if(!row.trim()) continue;
-      // Handle quoted CSV with commas
-      const cols = parseCSVRow(row);
-      if((cols[idx.name]||"").toLowerCase() === "india"){
-        indiaRow = cols; break;
-      }
-    }
+// marker
+indiaMarker = L.circleMarker([22.9734, 78.6569], {
+    radius: 16,
+    fillColor: regionColors["South-East Asia"],
+    color: "#555",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+}).bindTooltip(
+    `<b>India</b><br>
+     Total Cases: ${fmt(total)}<br>
+     New Cases: ${fmt(newCases)}<br>
+     Total Deaths: ${fmt(deaths)}<br>
+     New Deaths: ${fmt(newDeaths)}`, {direction:'top', permanent:false}
+);
+indiaMarker.addTo(indiaMap);
 
-    if(indiaRow){
-      const total = toNumberSafe(indiaRow[idx.totalCases]);
-      const new7 = toNumberSafe(indiaRow[idx.new7]);
-      const deaths = toNumberSafe(indiaRow[idx.totalDeaths]);
-      const newDeaths7 = toNumberSafe(indiaRow[idx.newDeaths7]);
-      const region = "South-East Asia";
-      const color = regionColors[region];
+// panel
+document.getElementById("india-total").textContent = fmt(total);
+document.getElementById("india-new7").textContent = fmt(newCases);
+document.getElementById("india-deaths").textContent = fmt(deaths);
+document.getElementById("india-newDeaths7").textContent = fmt(newDeaths);
 
-      // Marker
-      indiaMarker = L.circleMarker([22.9734, 78.6569], {
-        radius: 16,
-        fillColor: color,
-        color: "#555",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8
-      }).bindPopup(
-        `<b>India (WHO)</b><br>
-         Total Cases: ${fmt(total)}<br>
-         New (7d): ${fmt(new7)}<br>
-         Total Deaths: ${fmt(deaths)}<br>
-         New Deaths (7d): ${fmt(newDeaths7)}`
-      );
-      indiaMarker.addTo(indiaMap);
-
-      // Panel
-      document.getElementById("india-total").textContent = fmt(total);
-      document.getElementById("india-new7").textContent = fmt(new7);
-      document.getElementById("india-deaths").textContent = fmt(deaths);
-      document.getElementById("india-newDeaths7").textContent = fmt(newDeaths7);
-    }
   }catch(err){
     console.error("Error loading India WHO data:", err);
   }finally{
