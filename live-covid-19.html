@@ -30,8 +30,10 @@
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Leaflet + Chart.js -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   
 <style>
 /* Root & Fonts */
@@ -260,27 +262,7 @@ footer a { color: #2563EB; text-decoration: underline; }
 footer .social-icons { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
 footer .social-icons img { width: 1.5rem; height: 1.5rem; }
 
-/* Map Container Layout */
-.map-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-.map-box {
-    flex: 1;
-    min-width: 300px;
-}
-#global-map, #india-map {
-    height: 400px;
-    border-radius: 8px;
-}
-@media (max-width: 768px) {
-    .map-container {
-        flex-direction: column;
-    }
-}
 
-/* Map & Info Panel */
 #map-loader,
 #global-map-loader,
 #india-map-loader {
@@ -443,102 +425,106 @@ select {
 
 <section>
   <h2>COVID-19 Cases by Country (WHO Style)</h2>
-  
-  <label for="range">Select Time Range:</label>
-  <select id="range">
+
+  <label for="range">Select Time Range:&nbsp;</label>
+  <select id="range" aria-label="Global map range">
     <option value="7">Last 7 Days</option>
     <option value="30">Last 30 Days</option>
     <option value="365">Last 365 Days</option>
     <option value="all">All Time</option>
   </select>
 
-<div class="map-container">
+  <div class="map-container" style="margin-top:10px;">
+    <!-- GLOBAL -->
     <div class="map-box">
-        <div id="global-map-loader">Loading global map...</div>
-        <div id="global-map"></div>
+      <div id="global-map-loader">Loading global map…</div>
+      <div id="global-map" role="region" aria-label="Global COVID-19 map"></div>
     </div>
+
+    <!-- INDIA -->
     <div class="map-box">
-        <div id="india-map-loader">Loading India map...</div>
-        <div id="india-map"></div>
-        <div class="india-stats">
-            <h3>India COVID-19 Data</h3>
-            <p>Cases: <span id="india-cases">--</span></p>
-        </div>
+      <div id="india-map-loader">Loading India map…</div>
+      <div id="india-map" role="region" aria-label="India COVID-19 map"></div>
+      <div class="india-stats">
+        <h3 style="margin:0 0 6px;">India COVID‑19 (WHO)</h3>
+        <div style="font-size:14px;color:var(--muted);margin-bottom:6px;">Updated weekly from WHO global table</div>
+        <p style="margin:.3rem 0;"><strong>Total Cases:</strong> <span id="india-total">—</span></p>
+        <p style="margin:.3rem 0;"><strong>New (last 7 days):</strong> <span id="india-new7">—</span></p>
+        <p style="margin:.3rem 0;"><strong>Total Deaths:</strong> <span id="india-deaths">—</span></p>
+        <p style="margin:.3rem 0;"><strong>New Deaths (7 days):</strong> <span id="india-newDeaths7">—</span></p>
+      </div>
     </div>
-</div>
+  </div>
 
   <div class="info-panel">
-    <h3>WHO Region Color Codes</h3>
-    <p>This map shows reported COVID-19 cases by selected date range, using WHO regional colors:</p>
+    <h3 style="margin:0 0 8px;">WHO Region Color Codes</h3>
+    <p style="margin:0 0 8px;">The global map uses WHO‑style region colors (mapped from continent data; India is assigned to South‑East Asia).</p>
     <ul class="legend">
       <li><i style="background:#7b4bc2"></i> Africa</li>
       <li><i style="background:#ff7f0e"></i> Americas</li>
-      <li><i style="background:#d62728"></i> Eastern Mediterranean</li>
       <li><i style="background:#1f77b4"></i> Europe</li>
-      <li><i style="background:#2ca02c"></i> South-East Asia</li>
+      <li><i style="background:#2ca02c"></i> South‑East Asia</li>
       <li><i style="background:#bcbd22"></i> Western Pacific</li>
+      <li><i style="background:#d62728"></i> Eastern Mediterranean</li>
+      <li><i style="background:#999"></i> Other/Unknown</li>
     </ul>
   </div>
+
+  <!-- Country Search & Stats -->
+  <div class="country-stats">
+    <h3 style="margin:0 0 10px;">Search Country Data</h3>
+
+    <label for="countrySelect">Select Country:&nbsp;</label>
+    <select id="countrySelect" aria-label="Country chooser">
+      <option value="">— Choose a Country —</option>
+    </select>
+
+    <label for="countryRange" style="margin-left:10px;">Select Time Range:&nbsp;</label>
+    <select id="countryRange" aria-label="Country range">
+      <option value="7">Last 7 Days</option>
+      <option value="30">Last 30 Days</option>
+      <option value="365">Last 365 Days</option>
+      <option value="all">All Time</option>
+    </select>
+
+    <div id="countryInfo" style="margin-top: 12px; font-size: 0.95rem; color: #111;">
+      <p style="margin:.3rem 0;"><strong>Cases:</strong> <span id="casesCount">—</span></p>
+      <p style="margin:.3rem 0;"><strong>Deaths:</strong> <span id="deathsCount">—</span></p>
+      <p style="margin:.3rem 0;"><strong>Recovered:</strong> <span id="recoveredCount">—</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- Trend Charts -->
+<section id="trend-section" style="margin-top: 10px;">
+  <h2>COVID‑19 Trends</h2>
+  <p style="margin:0 0 10px;">A flat placeholder line is shown until a country is selected.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:20px;">
+    <div style="flex:1;min-width:320px;">
+      <canvas id="casesChart"></canvas>
+    </div>
+    <div style="flex:1;min-width:320px;">
+      <canvas id="deathsChart"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- Sources -->
+<section>
+  <h2>Data Sources</h2>
+  <table style="width:100%;border-collapse:collapse;border:1px solid #eee">
+    <thead>
+      <tr><th style="text-align:left;padding:8px;border-bottom:1px solid #eee;">Source</th><th style="text-align:left;padding:8px;border-bottom:1px solid #eee;">Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:8px;border-bottom:1px solid #eee;">WHO Global Table CSV</td><td style="padding:8px;border-bottom:1px solid #eee;">Official weekly data used for India</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #eee;">disease.sh</td><td style="padding:8px;border-bottom:1px solid #eee;">Global country data & historical time series</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:.5rem;font-size:.875rem;font-style:italic;">
+    WHO CSV: <a href="https://covid19.who.int/WHO-COVID-19-global-table-data.csv" target="_blank" rel="noopener">https://covid19.who.int/WHO-COVID-19-global-table-data.csv</a>
+  </p>
   
-<!-- Country Search & Stats Subsection -->
-<div class="country-stats" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
-    <h3>Search Country Data</h3>
-    
-    <label for="countrySelect">Select Country:</label>
-    <select id="countrySelect">
-        <option value="">--Choose a Country--</option>
-        <!-- Country options will be populated dynamically -->
-    </select>
-
-    <label for="countryRange" style="margin-left: 10px;">Select Time Range:</label>
-    <select id="countryRange">
-        <option value="7">Last 7 Days</option>
-        <option value="30">Last 30 Days</option>
-        <option value="365">Last 365 Days</option>
-        <option value="all">All Time</option>
-    </select>
-
-    <div id="countryInfo" style="margin-top: 15px; font-size: 0.95rem; color: #111;">
-        <p><strong>Cases:</strong> <span id="casesCount">—</span></p>
-        <p><strong>Deaths:</strong> <span id="deathsCount">—</span></p>
-        <p><strong>Recovered:</strong> <span id="recoveredCount">—</span></p>
-    </div>
-</div>
-</section>
-
-<!-- Trend Charts Section -->
-<section id="trend-section" style="margin-top: 40px;">
-    <h2>COVID-19 Trends</h2>
-    <p>Showing daily trends for the selected country and time range.</p>
-
-    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-        <div style="flex: 1; min-width: 350px;">
-            <canvas id="casesChart"></canvas>
-        </div>
-        <div style="flex: 1; min-width: 350px;">
-            <canvas id="deathsChart"></canvas>
-        </div>
-    </div>
-</section>
-
-    <!-- Data Sources -->
-    <section>
-        <h2>Data Sources</h2>
-        <table>
-            <thead>
-                <tr><th>Source</th><th>Description</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>WHO API</td><td>Official COVID-19 data</td></tr>
-                <tr><td>Country GeoJSON</td><td>Country shapes for maps</td></tr>
-                <tr><td>World Bank (optional)</td><td>Demographic overlays (population)</td></tr>
-            </tbody>
-        </table>
-        <p style="margin-top:0.5rem;font-size:0.875rem;font-style:italic;">
-            WHO COVID-19 Data Endpoint: <br>
-            <a href="https://covid19.who.int/page-data/table/page-data.json" target="_blank">https://covid19.who.int/page-data/table/page-data.json</a>
-        </p>
-
     <!-- Methods & Tools -->
         <h2>Methods & Tools</h2>
         <ol>
@@ -597,7 +583,7 @@ select {
             <li>Educational tool for understanding epidemiological data</li>
             <li>Research support in real-time COVID surveillance and modeling</li>
         </ul>
-    </section>
+</section>
 </main>
   
 <!-- Footer -->
@@ -611,259 +597,350 @@ select {
     </div>
     <p style="margin-top:0.5rem;">&copy; 2025 Esiah Kapinga - COVID-19 Live Data Project</p>
 </footer>
-<script>  
-// ========================
-// GLOBAL MAP
-// ========================
-const globalMap = L.map('global-map', {
-    worldCopyJump: true,
-    maxBounds: [[-90, -180], [90, 180]]
-}).setView([20, 0], 2);
+<script>
+/* ==============================
+   UTIL & CONSTANTS
+============================== */
+const regionColors = {
+  "Africa": "#7b4bc2",
+  "Americas": "#ff7f0e",
+  "Eastern Mediterranean": "#d62728",
+  "Europe": "#1f77b4",
+  "South-East Asia": "#2ca02c",
+  "Western Pacific": "#bcbd22",
+  "Other": "#999"
+};
+// Best-effort mapping from disease.sh "continent" to WHO-like buckets
+function mapContinentToWHO(continent, countryName){
+  if(countryName === "India") return "South-East Asia";
+  if(countryName === "China" || countryName === "Japan" || countryName === "Australia" || countryName === "New Zealand" || continent === "Australia/Oceania") return "Western Pacific";
+  if(continent === "North America" || continent === "South America") return "Americas";
+  if(continent === "Europe") return "Europe";
+  if(continent === "Asia") return "South-East Asia"; // broad bucket for visibility
+  if(continent === "Africa") return "Africa";
+  return "Other";
+}
+const fmt = n => (n===null||n===undefined) ? "—" : Number(n).toLocaleString();
 
-globalMap.setMaxBounds([[-90, -180], [90, 180]]);
+/* ==============================
+   MAPS
+============================== */
+const globalMap = L.map('global-map', {
+  worldCopyJump: true,
+  maxBounds: [[-90,-180],[90,180]],
+  zoomSnap: .25,
+  zoomDelta: .25
+}).setView([20,0], 2);
+
 globalMap.setMinZoom(2);
 globalMap.setMaxZoom(6);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-    subdomains: 'abcd',
-    maxZoom: 19
+  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+  subdomains: 'abcd',
+  maxZoom: 19
 }).addTo(globalMap);
 
-// ========================
-// INDIA MAP
-// ========================
-const indiaMap = L.map('india-map', {
-    worldCopyJump: false
-}).setView([20.5937, 78.9629], 4);
-
+const indiaMap = L.map('india-map', { worldCopyJump: false }).setView([22.9734, 78.6569], 4);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-    subdomains: 'abcd',
-    maxZoom: 19
+  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+  subdomains: 'abcd',
+  maxZoom: 19
 }).addTo(indiaMap);
 
-// ========================
-// REGION COLORS
-// ========================
-const regionColors = {
-    "Africa": "#7b4bc2",
-    "Americas": "#ff7f0e",
-    "Eastern Mediterranean": "#d62728",
-    "Europe": "#1f77b4",
-    "South-East Asia": "#2ca02c",
-    "Western Pacific": "#bcbd22",
-    "Other": "#999"
-};
-
-const countryRegionMap = {
-    "India": "South-East Asia",
-    // ...rest of your regions if needed
-};
-
 let globalMarkers = [];
+let globalCache = null;     // cache disease.sh countries
+let historyCache = new Map();// cache per-country historical
+
+/* ==============================
+   LOAD GLOBAL (disease.sh)
+============================== */
+async function loadGlobalData(days){
+  document.getElementById("global-map-loader").style.display = "flex";
+  // clear old markers
+  globalMarkers.forEach(m => globalMap.removeLayer(m));
+  globalMarkers = [];
+
+  try{
+    if(!globalCache){
+      const res = await fetch("https://disease.sh/v3/covid-19/countries?allowNull=false");
+      globalCache = await res.json();
+    }
+    const countries = globalCache;
+
+    // size by cases matching chosen period:
+    // For speed, use current cumulative “cases”; if range != all, derive approx using today - lastdays
+    // (exact per-country lastdays would require many requests; we keep it fast)
+    const maxCases = Math.max(...countries.map(c => c.cases || 0));
+    const maxRadius = 36;
+
+    for(const c of countries){
+      const region = mapContinentToWHO(c.continent, c.country);
+      const color = regionColors[region] || regionColors["Other"];
+      const radius = Math.sqrt((c.cases||0) / (maxCases||1)) * maxRadius;
+
+      const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
+        radius: Math.max(2, radius),
+        fillColor: color,
+        color: "#555",
+        weight: 0.6,
+        opacity: 1,
+        fillOpacity: 0.75
+      }).bindPopup(
+        `<b>${c.country}</b><br>
+         Cases: ${fmt(c.cases)}<br>
+         Deaths: ${fmt(c.deaths)}<br>
+         Region: ${region}`
+      );
+
+      globalMarkers.push(circle);
+      circle.addTo(globalMap);
+    }
+  }catch(err){
+    console.error("Error loading global:", err);
+  }finally{
+    document.getElementById("global-map-loader").style.display = "none";
+  }
+}
+
+/* ==============================
+   LOAD INDIA (WHO CSV)
+============================== */
 let indiaMarker = null;
+async function loadIndiaData(){
+  document.getElementById("india-map-loader").style.display = "flex";
+  if(indiaMarker) indiaMap.removeLayer(indiaMarker);
 
-// ========================
-// LOAD GLOBAL MAP DATA
-// ========================
-async function loadGlobalData(days) {
-    document.getElementById("global-map-loader").style.display = "block";
-    globalMarkers.forEach(m => globalMap.removeLayer(m));
-    globalMarkers = [];
+  try{
+    // WHO global table CSV is small and updated weekly
+    const res = await fetch("https://covid19.who.int/WHO-COVID-19-global-table-data.csv");
+    const csv = await res.text();
 
-    try {
-        const countriesRes = await fetch("https://disease.sh/v3/covid-19/countries");
-        const countries = await countriesRes.json();
+    // Parse the "India" row
+    // Columns include: Name, WHO Region, Cases - cumulative total, Cases - newly reported in last 7 days, Deaths - cumulative total, Deaths - newly reported in last 7 days, …
+    const lines = csv.split(/\r?\n/);
+    const header = lines[0].split(',');
+    const idx = {
+      name: header.indexOf("Name"),
+      totalCases: header.indexOf("Cases - cumulative total"),
+      new7: header.indexOf("Cases - newly reported in last 7 days"),
+      totalDeaths: header.indexOf("Deaths - cumulative total"),
+      newDeaths7: header.indexOf("Deaths - newly reported in last 7 days"),
+      region: header.indexOf("WHO Region")
+    };
 
-        const maxCases = Math.max(...countries.map(c => c.cases));
-        const maxRadius = 40;
-
-        countries.forEach(c => {
-            const region = countryRegionMap[c.country] || "Other";
-            const color = regionColors[region];
-            const radius = Math.sqrt(c.cases / maxCases) * maxRadius;
-
-            const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
-                radius: radius,
-                fillColor: color,
-                color: "#555",
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.7
-            }).bindPopup(
-                `<b>${c.country}</b><br>Cases: ${c.cases.toLocaleString()}<br>Region: ${region}`
-            );
-
-            globalMarkers.push(circle);
-            circle.addTo(globalMap);
-        });
-    } catch (err) {
-        console.error("Error loading global data:", err);
-    } finally {
-        document.getElementById("global-map-loader").style.display = "none";
+    let indiaRow = null;
+    for(let i=1;i<lines.length;i++){
+      const row = lines[i];
+      if(!row.trim()) continue;
+      // Handle quoted CSV with commas
+      const cols = parseCSVRow(row);
+      if((cols[idx.name]||"").toLowerCase() === "india"){
+        indiaRow = cols; break;
+      }
     }
+
+    if(indiaRow){
+      const total = toNumberSafe(indiaRow[idx.totalCases]);
+      const new7 = toNumberSafe(indiaRow[idx.new7]);
+      const deaths = toNumberSafe(indiaRow[idx.totalDeaths]);
+      const newDeaths7 = toNumberSafe(indiaRow[idx.newDeaths7]);
+      const region = "South-East Asia";
+      const color = regionColors[region];
+
+      // Marker
+      indiaMarker = L.circleMarker([22.9734, 78.6569], {
+        radius: 16,
+        fillColor: color,
+        color: "#555",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      }).bindPopup(
+        `<b>India (WHO)</b><br>
+         Total Cases: ${fmt(total)}<br>
+         New (7d): ${fmt(new7)}<br>
+         Total Deaths: ${fmt(deaths)}<br>
+         New Deaths (7d): ${fmt(newDeaths7)}`
+      );
+      indiaMarker.addTo(indiaMap);
+
+      // Panel
+      document.getElementById("india-total").textContent = fmt(total);
+      document.getElementById("india-new7").textContent = fmt(new7);
+      document.getElementById("india-deaths").textContent = fmt(deaths);
+      document.getElementById("india-newDeaths7").textContent = fmt(newDeaths7);
+    }
+  }catch(err){
+    console.error("Error loading India WHO data:", err);
+  }finally{
+    document.getElementById("india-map-loader").style.display = "none";
+  }
+}
+function toNumberSafe(s){
+  if(s==null) return null;
+  return Number(String(s).replace(/[^0-9.-]/g,'')) || 0;
+}
+function parseCSVRow(line){
+  // simple CSV parser for quoted values
+  const out=[]; let cur="", inQ=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch === '"'){
+      if(inQ && line[i+1] === '"'){ cur+='"'; i++; }
+      else inQ = !inQ;
+    }else if(ch === ',' && !inQ){
+      out.push(cur); cur="";
+    }else cur+=ch;
+  }
+  out.push(cur);
+  return out;
 }
 
-// ========================
-// LOAD INDIA MAP DATA (WHO)
-// ========================
-async function loadIndiaData() {
-    document.getElementById("india-map-loader").style.display = "block";
-    if (indiaMarker) indiaMap.removeLayer(indiaMarker);
-
-    try {
-        const res = await fetch("https://covid19.who.int/page-data/country/ind/page-data.json");
-        const data = await res.json();
-
-        // Extract WHO stats (this depends on WHO’s JSON structure)
-        const indiaCases = data.result.data.country.cases; // adjust according to actual WHO JSON
-        const region = countryRegionMap["India"];
-        const color = regionColors[region];
-
-        indiaMarker = L.circleMarker([20.5937, 78.9629], {
-            radius: 15,
-            fillColor: color,
-            color: "#555",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.7
-        }).bindPopup(
-            `<b>India</b><br>Cases: ${indiaCases.toLocaleString()}<br>Region: ${region}`
-        );
-
-        indiaMarker.addTo(indiaMap);
-
-        // Update India stats panel
-        document.getElementById("india-cases").textContent = indiaCases.toLocaleString();
-    } catch (err) {
-        console.error("Error loading India WHO data:", err);
-    } finally {
-        document.getElementById("india-map-loader").style.display = "none";
-    }
-}
-
-// ========================
-// INITIAL LOAD
-// ========================
-loadGlobalData(7);
-loadIndiaData();
-
-document.getElementById("range").addEventListener("change", (e) => {
-    loadGlobalData(e.target.value);
-    loadIndiaData();
-});
-
-
-// ========================
-// COUNTRY SELECT OPTIONS
-// ========================
+/* ==============================
+   COUNTRY DROPDOWN
+============================== */
 const countrySelect = document.getElementById('countrySelect');
-
-async function loadCountryOptions() {
-    const res = await fetch('https://disease.sh/v3/covid-19/countries');
-    const countries = await res.json();
-    countries.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.country;
-        opt.textContent = c.country;
-        countrySelect.appendChild(opt);
-    });
-}
-loadCountryOptions();
-
-// ========================
-// COUNTRY DATA DISPLAY
-// ========================
-async function loadCountryData(country, days) {
-    if (!country) return;
-    const res = await fetch(`https://disease.sh/v3/covid-19/historical/${country}?lastdays=${days === 'all' ? 1000 : days}`);
-    const data = await res.json();
-    if (!data.timeline) return;
-
-    const casesTimeline = Object.values(data.timeline.cases);
-    const deathsTimeline = Object.values(data.timeline.deaths);
-    const recoveredTimeline = Object.values(data.timeline.recovered);
-
-    const casesCount = days === 'all' ? casesTimeline[casesTimeline.length - 1] : casesTimeline[casesTimeline.length - 1] - casesTimeline[0];
-    const deathsCount = days === 'all' ? deathsTimeline[deathsTimeline.length - 1] : deathsTimeline[deathsTimeline.length - 1] - deathsTimeline[0];
-    const recoveredCount = days === 'all' ? recoveredTimeline[recoveredTimeline.length - 1] : recoveredTimeline[recoveredTimeline.length - 1] - recoveredTimeline[0];
-
-    document.getElementById('casesCount').textContent = casesCount.toLocaleString();
-    document.getElementById('deathsCount').textContent = deathsCount.toLocaleString();
-    document.getElementById('recoveredCount').textContent = recoveredCount.toLocaleString();
-}
-
-countrySelect.addEventListener('change', () => {
-    const country = countrySelect.value;
-    const days = document.getElementById('countryRange').value;
-    loadCountryData(country, days);
-    updateTrendCharts(country, days);
-});
-
-document.getElementById('countryRange').addEventListener('change', () => {
-    const country = countrySelect.value;
-    const days = document.getElementById('countryRange').value;
-    loadCountryData(country, days);
-    updateTrendCharts(country, days);
-});
-
-// ========================
-// TREND CHARTS
-// ========================
-let casesChartInstance;
-let deathsChartInstance;
-
-function createOrUpdateChart(chartInstance, ctx, label, labels, data, borderColor) {
-    if (chartInstance) {
-        chartInstance.data.labels = labels;
-        chartInstance.data.datasets[0].data = data;
-        chartInstance.update();
-        return chartInstance;
+async function loadCountryOptions(){
+  try{
+    if(!globalCache){
+      const res = await fetch('https://disease.sh/v3/covid-19/countries?allowNull=false');
+      globalCache = await res.json();
     }
-    return new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: label,
-                data: data,
-                borderColor: borderColor,
-                backgroundColor: borderColor + '33',
-                fill: true,
-                tension: 0.3,
-                pointRadius: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: true }
-            },
-            scales: {
-                x: { display: true },
-                y: { display: true }
-            }
-        }
-    });
+    const list = [...globalCache].sort((a,b)=>a.country.localeCompare(b.country));
+    const frag = document.createDocumentFragment();
+    for(const c of list){
+      const opt = document.createElement('option');
+      opt.value = c.country;
+      opt.textContent = c.country;
+      frag.appendChild(opt);
+    }
+    countrySelect.appendChild(frag);
+  }catch(e){ console.error(e); }
 }
 
-async function updateTrendCharts(country, days) {
-    if (!country) return;
-    const res = await fetch(`https://disease.sh/v3/covid-19/historical/${country}?lastdays=${days === 'all' ? 1000 : days}`);
-    const data = await res.json();
-    if (!data.timeline) return;
+/* ==============================
+   COUNTRY STATS (disease.sh)
+============================== */
+async function loadCountryData(country, days){
+  if(!country) return;
+  // use historical endpoint (cached)
+  const key = country + "::" + (days==='all'?'all':String(days));
+  let data = historyCache.get(key);
+  if(!data){
+    const res = await fetch(`https://disease.sh/v3/covid-19/historical/${encodeURIComponent(country)}?lastdays=${days==='all'? 1000 : days}`);
+    data = await res.json();
+    historyCache.set(key, data);
+  }
+  if(!data.timeline) return;
 
-    const labels = Object.keys(data.timeline.cases);
-    const casesData = Object.values(data.timeline.cases);
-    const deathsData = Object.values(data.timeline.deaths);
+  const casesTL = Object.values(data.timeline.cases);
+  const deathsTL = Object.values(data.timeline.deaths);
+  const recTL    = Object.values(data.timeline.recovered);
 
-    const ctxCases = document.getElementById('casesChart').getContext('2d');
-    const ctxDeaths = document.getElementById('deathsChart').getContext('2d');
+  const last = (arr)=>arr[arr.length-1] ?? 0;
+  const delta = (arr)=> (arr.length>1 ? (arr[arr.length-1] - arr[0]) : last(arr));
 
-    casesChartInstance = createOrUpdateChart(casesChartInstance, ctxCases, 'Cases', labels, casesData, '#007bff');
-    deathsChartInstance = createOrUpdateChart(deathsChartInstance, ctxDeaths, 'Deaths', labels, deathsData, '#ff0000');
+  const casesCount    = (days==='all') ? last(casesTL) : delta(casesTL);
+  const deathsCount   = (days==='all') ? last(deathsTL) : delta(deathsTL);
+  const recoveredCount= (days==='all') ? last(recTL)    : delta(recTL);
+
+  document.getElementById('casesCount').textContent = fmt(casesCount);
+  document.getElementById('deathsCount').textContent = fmt(deathsCount);
+  document.getElementById('recoveredCount').textContent = fmt(recoveredCount);
 }
+
+/* ==============================
+   TREND CHARTS
+============================== */
+let casesChartInstance, deathsChartInstance;
+
+function ensureChart(ctx, label){
+  return new Chart(ctx, {
+    type:'line',
+    data:{ labels:[], datasets:[{
+      label, data:[], borderWidth:2, fill:true, tension:.3, pointRadius:0,
+      borderColor: label==='Cases' ? '#007bff' : '#ff0000',
+      backgroundColor: (label==='Cases' ? '#007bff' : '#ff0000') + '33'
+    }]},
+    options:{
+      responsive:true,
+      plugins:{ legend:{display:true}},
+      scales:{ x:{display:true}, y:{display:true}}
+    }
+  });
+}
+function setFlatPlaceholder(chart){
+  const labels = Array.from({length:30}, (_,i)=> String(i+1));
+  const data = Array.from({length:30}, ()=> 0);
+  chart.data.labels = labels;
+  chart.data.datasets[0].data = data;
+  chart.update();
+}
+async function updateTrendCharts(country, days){
+  if(!country){ setFlatPlaceholder(casesChartInstance); setFlatPlaceholder(deathsChartInstance); return; }
+  const res = await fetch(`https://disease.sh/v3/covid-19/historical/${encodeURIComponent(country)}?lastdays=${days==='all'? 1000 : days}`);
+  const data = await res.json();
+  if(!data.timeline) return;
+  const labels = Object.keys(data.timeline.cases);
+  const casesData = Object.values(data.timeline.cases);
+  const deathsData = Object.values(data.timeline.deaths);
+
+  casesChartInstance.data.labels = labels;
+  casesChartInstance.data.datasets[0].data = casesData;
+  casesChartInstance.update();
+
+  deathsChartInstance.data.labels = labels;
+  deathsChartInstance.data.datasets[0].data = deathsData;
+  deathsChartInstance.update();
+}
+
+/* ==============================
+   INIT
+============================== */
+(async function init(){
+  // Create charts first with flat trend
+  casesChartInstance  = ensureChart(document.getElementById('casesChart').getContext('2d'), 'Cases');
+  deathsChartInstance = ensureChart(document.getElementById('deathsChart').getContext('2d'), 'Deaths');
+  setFlatPlaceholder(casesChartInstance);
+  setFlatPlaceholder(deathsChartInstance);
+
+  await Promise.all([loadGlobalData('7'), loadIndiaData(), loadCountryOptions()]);
+})();
+
+/* ==============================
+   UI EVENTS (debounced)
+============================== */
+const debounce = (fn, ms=200)=>{ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); }; };
+
+document.getElementById("range").addEventListener("change", e=>{
+  // We keep bubble sizes based on total for speed; still reload to re-render if desired
+  debounce(()=>loadGlobalData(e.target.value), 50)();
+});
+
+countrySelect.addEventListener('change', debounce(()=>{
+  const country = countrySelect.value;
+  const days = document.getElementById('countryRange').value;
+  if(country){
+    loadCountryData(country, days);
+    updateTrendCharts(country, days);
+  }else{
+    document.getElementById('casesCount').textContent = '—';
+    document.getElementById('deathsCount').textContent = '—';
+    document.getElementById('recoveredCount').textContent = '—';
+    setFlatPlaceholder(casesChartInstance);
+    setFlatPlaceholder(deathsChartInstance);
+  }
+}, 100));
+
+document.getElementById('countryRange').addEventListener('change', debounce(()=>{
+  const country = countrySelect.value;
+  const days = document.getElementById('countryRange').value;
+  if(country){
+    loadCountryData(country, days);
+    updateTrendCharts(country, days);
+  }
+}, 100));
 </script>
 </body>
 </html>
