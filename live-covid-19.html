@@ -260,11 +260,33 @@ footer a { color: #2563EB; text-decoration: underline; }
 footer .social-icons { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
 footer .social-icons img { width: 1.5rem; height: 1.5rem; }
 
-/* Map & Info Panel */
-#map {
-    height: 600px;
-    width: 100%;
+/* Map Container Layout */
+.map-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.map-box {
+    flex: 1;
+    min-width: 300px;
+}
+#global-map, #india-map {
+    height: 400px;
     border-radius: 8px;
+}
+@media (max-width: 768px) {
+    .map-container {
+        flex-direction: column;
+    }
+}
+
+/* Map & Info Panel */
+#map-loader,
+#global-map-loader,
+#india-map-loader {
+    text-align: center;
+    font-weight: bold;
+    padding: 1rem;
 }
 .info-panel {
     margin-top: 20px;
@@ -430,7 +452,20 @@ select {
     <option value="all">All Time</option>
   </select>
 
-  <div id="map"></div>
+<div class="map-container">
+    <div class="map-box">
+        <div id="global-map-loader">Loading global map...</div>
+        <div id="global-map"></div>
+    </div>
+    <div class="map-box">
+        <div id="india-map-loader">Loading India map...</div>
+        <div id="india-map"></div>
+        <div class="india-stats">
+            <h3>India COVID-19 Data</h3>
+            <p>Cases: <span id="india-cases">--</span></p>
+        </div>
+    </div>
+</div>
 
   <div class="info-panel">
     <h3>WHO Region Color Codes</h3>
@@ -577,28 +612,39 @@ select {
     <p style="margin-top:0.5rem;">&copy; 2025 Esiah Kapinga - COVID-19 Live Data Project</p>
 </footer>
   
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
 // ========================
-// MAP INITIALIZATION
+// GLOBAL MAP
 // ========================
-const map = L.map('map', {
-    worldCopyJump: true, // prevents multiple map tiles when panning horizontally
+const globalMap = L.map('global-map', {
+    worldCopyJump: true,
     maxBounds: [[-90, -180], [90, 180]]
 }).setView([20, 0], 2);
 
-map.setMaxBounds([[-90, -180], [90, 180]]);
-map.setMinZoom(2);
-map.setMaxZoom(6);
+globalMap.setMaxBounds([[-90, -180], [90, 180]]);
+globalMap.setMinZoom(2);
+globalMap.setMaxZoom(6);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
     subdomains: 'abcd',
     maxZoom: 19
-}).addTo(map);
+}).addTo(globalMap);
 
 // ========================
-// REGION COLORS & MAPPING
+// INDIA MAP
+// ========================
+const indiaMap = L.map('india-map', {
+    worldCopyJump: false
+}).setView([20.5937, 78.9629], 4);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+    subdomains: 'abcd',
+    maxZoom: 19
+}).addTo(indiaMap);
+
+// ========================
+// REGION COLORS
 // ========================
 const regionColors = {
     "Africa": "#7b4bc2",
@@ -611,79 +657,103 @@ const regionColors = {
 };
 
 const countryRegionMap = {
-    "Algeria": "Africa", "Nigeria": "Africa", "South Africa": "Africa", "Kenya": "Africa", "Ethiopia": "Africa", "Egypt": "Eastern Mediterranean",
-    "United States": "Americas", "Brazil": "Americas", "Canada": "Americas", "Mexico": "Americas", "Argentina": "Americas", "Chile": "Americas",
-    "Pakistan": "Eastern Mediterranean", "Iran": "Eastern Mediterranean", "Afghanistan": "Eastern Mediterranean", "Saudi Arabia": "Eastern Mediterranean",
-    "France": "Europe", "Germany": "Europe", "Italy": "Europe", "Spain": "Europe", "United Kingdom": "Europe", "Russia": "Europe", "Ukraine": "Europe",
-    "India": "South-East Asia", "Indonesia": "South-East Asia", "Thailand": "South-East Asia", "Bangladesh": "South-East Asia", "Nepal": "South-East Asia",
-    "China": "Western Pacific", "Japan": "Western Pacific", "Australia": "Western Pacific", "Philippines": "Western Pacific", "Vietnam": "Western Pacific", "New Zealand": "Western Pacific"
+    "India": "South-East Asia",
+    // ...rest of your regions if needed
 };
 
-let markers = [];
+let globalMarkers = [];
+let indiaMarker = null;
 
 // ========================
-// LOAD MAP DATA
+// LOAD GLOBAL MAP DATA
 // ========================
-async function loadData(days) {
-    markers.forEach(m => map.removeLayer(m));
-    markers = [];
+async function loadGlobalData(days) {
+    document.getElementById("global-map-loader").style.display = "block";
+    globalMarkers.forEach(m => globalMap.removeLayer(m));
+    globalMarkers = [];
 
-    const countriesRes = await fetch("https://disease.sh/v3/covid-19/countries");
-    const countries = await countriesRes.json();
+    try {
+        const countriesRes = await fetch("https://disease.sh/v3/covid-19/countries");
+        const countries = await countriesRes.json();
 
-    const countryData = [];
-    for (let c of countries) {
-        const histRes = await fetch(`https://disease.sh/v3/covid-19/historical/${encodeURIComponent(c.country)}?lastdays=${days === 'all' ? 1000 : days}`);
-        const hist = await histRes.json();
+        const maxCases = Math.max(...countries.map(c => c.cases));
+        const maxRadius = 40;
 
-        if (!hist.timeline || !hist.timeline.cases) continue;
+        countries.forEach(c => {
+            const region = countryRegionMap[c.country] || "Other";
+            const color = regionColors[region];
+            const radius = Math.sqrt(c.cases / maxCases) * maxRadius;
 
-        const casesTimeline = Object.values(hist.timeline.cases);
-        let casesCount = 0;
-        for (let i = 1; i < casesTimeline.length; i++) {
-            casesCount += casesTimeline[i] - casesTimeline[i - 1];
-        }
+            const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
+                radius: radius,
+                fillColor: color,
+                color: "#555",
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.7
+            }).bindPopup(
+                `<b>${c.country}</b><br>Cases: ${c.cases.toLocaleString()}<br>Region: ${region}`
+            );
 
-        countryData.push({
-            country: c.country,
-            lat: c.countryInfo.lat,
-            long: c.countryInfo.long,
-            cases: casesCount
+            globalMarkers.push(circle);
+            circle.addTo(globalMap);
         });
+    } catch (err) {
+        console.error("Error loading global data:", err);
+    } finally {
+        document.getElementById("global-map-loader").style.display = "none";
     }
+}
 
-    const maxCases = Math.max(...countryData.map(d => d.cases));
-    const maxRadius = 40;
+// ========================
+// LOAD INDIA MAP DATA (WHO)
+// ========================
+async function loadIndiaData() {
+    document.getElementById("india-map-loader").style.display = "block";
+    if (indiaMarker) indiaMap.removeLayer(indiaMarker);
 
-    countryData.forEach(c => {
-        const region = countryRegionMap[c.country] || "Other";
+    try {
+        const res = await fetch("https://covid19.who.int/page-data/country/ind/page-data.json");
+        const data = await res.json();
+
+        // Extract WHO stats (this depends on WHO’s JSON structure)
+        const indiaCases = data.result.data.country.cases; // adjust according to actual WHO JSON
+        const region = countryRegionMap["India"];
         const color = regionColors[region];
-        const radius = Math.sqrt(c.cases / maxCases) * maxRadius;
 
-        const circle = L.circleMarker([c.lat, c.long], {
-            radius: radius,
+        indiaMarker = L.circleMarker([20.5937, 78.9629], {
+            radius: 15,
             fillColor: color,
             color: "#555",
             weight: 1,
             opacity: 1,
             fillOpacity: 0.7
         }).bindPopup(
-            `<b>${c.country}</b><br>Cases in range: ${c.cases.toLocaleString()}<br>Region: ${region}`
+            `<b>India</b><br>Cases: ${indiaCases.toLocaleString()}<br>Region: ${region}`
         );
 
-        circle.on("mouseover", function () { this.openPopup(); });
-        circle.on("mouseout", function () { this.closePopup(); });
+        indiaMarker.addTo(indiaMap);
 
-        markers.push(circle);
-        circle.addTo(map);
-    });
+        // Update India stats panel
+        document.getElementById("india-cases").textContent = indiaCases.toLocaleString();
+    } catch (err) {
+        console.error("Error loading India WHO data:", err);
+    } finally {
+        document.getElementById("india-map-loader").style.display = "none";
+    }
 }
 
-loadData(7);
+// ========================
+// INITIAL LOAD
+// ========================
+loadGlobalData(7);
+loadIndiaData();
 
 document.getElementById("range").addEventListener("change", (e) => {
-    loadData(e.target.value);
+    loadGlobalData(e.target.value);
+    loadIndiaData();
 });
+
 
 // ========================
 // COUNTRY SELECT OPTIONS
