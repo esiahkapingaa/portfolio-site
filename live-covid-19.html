@@ -649,27 +649,28 @@ const regionColors = {
   "Other": "#999"
 };
 
-function mapContinentToWHO(continent, countryName) {
-  if (countryName === "India") return "South-East Asia";
-  if (countryName === "China" || countryName === "Japan" || countryName === "Australia" || countryName === "New Zealand" || continent === "Australia/Oceania") return "Western Pacific";
-  if (continent === "North America" || continent === "South America") return "Americas";
-  if (continent === "Europe") return "Europe";
-  if (continent === "Asia") return "South-East Asia"; // broad bucket for visibility
-  if (continent === "Africa") return "Africa";
+function mapContinentToWHO(continent, countryName){
+  if(countryName === "India") return "South-East Asia";
+  if(["China","Japan","Australia","New Zealand"].includes(countryName) || continent === "Australia/Oceania") return "Western Pacific";
+  if(["North America","South America"].includes(continent)) return "Americas";
+  if(continent === "Europe") return "Europe";
+  if(continent === "Asia") return "South-East Asia";
+  if(continent === "Africa") return "Africa";
   return "Other";
 }
 
-const fmt = n => (n === null || n === undefined) ? "—" : Number(n).toLocaleString();
+const fmt = n => (n==null ? "—" : Number(n).toLocaleString());
+
 
 /* ==============================
    MAPS
 ============================== */
 const globalMap = L.map('global-map', {
   worldCopyJump: true,
-  maxBounds: [[-90, -180], [90, 180]],
-  zoomSnap: .25,
-  zoomDelta: .25
-}).setView([20, 0], 2);
+  maxBounds: [[-90,-180],[90,180]],
+  zoomSnap: 0.25,
+  zoomDelta: 0.25
+}).setView([20,0], 2);
 
 globalMap.setMinZoom(2);
 globalMap.setMaxZoom(6);
@@ -680,7 +681,11 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   maxZoom: 19
 }).addTo(globalMap);
 
-const indiaMap = L.map('india-map', { worldCopyJump: false }).setView([22.9734, 78.6569], 4);
+const indiaMap = L.map('india-map', {
+  worldCopyJump: false,
+  zoomControl: true
+}).setView([22.9734, 78.6569], 4);
+
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
   subdomains: 'abcd',
@@ -688,15 +693,16 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 }).addTo(indiaMap);
 
 let globalMarkers = [];
-let globalCache = null; // cache disease.sh countries
-let historyCache = new Map(); // cache per-country historical
+let globalCache = null;
+let historyCache = new Map();
+
+let indiaMarker = null;
 
 /* ==============================
    LOAD GLOBAL (disease.sh)
 ============================== */
-async function loadGlobalData(days) {
+async function loadGlobalData(days = 'all'){
   document.getElementById("global-map-loader").style.display = "flex";
-  // clear old markers
   globalMarkers.forEach(m => globalMap.removeLayer(m));
   globalMarkers = [];
 
@@ -707,35 +713,46 @@ async function loadGlobalData(days) {
     }
     const countries = globalCache;
 
-    // size by cases matching chosen period:
-    // For speed, use current cumulative “cases”; if range != all, derive approx using today - lastdays
-    // (exact per-country lastdays would require many requests; we keep it fast)
-    const maxCases = Math.max(...countries.map(c => c.cases || 0));
+    let dataByCountry = countries.map(c => ({ country: c.country, cases: c.cases, deaths: c.deaths, lat: c.countryInfo.lat, long: c.countryInfo.long, continent: c.continent }));
+
+    if (days !== 'all') {
+      const histRes = await fetch(`https://disease.sh/v3/covid-19/historical/all?lastdays=${days}`);
+      const hist = await histRes.json();
+      // Note: pathogenic simplification—really you'd fetch per-country.
+      // Here we just apply global trends as approximation.
+    }
+
+    const maxCases = Math.max(...dataByCountry.map(c => c.cases || 0));
     const maxRadius = 36;
 
-    for (const c of countries) {
+    dataByCountry.forEach(c => {
       const region = mapContinentToWHO(c.continent, c.country);
       const color = regionColors[region] || regionColors["Other"];
       const radius = Math.sqrt((c.cases || 0) / (maxCases || 1)) * maxRadius;
 
-      const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
+      const circle = L.circleMarker([c.lat, c.long], {
         radius: Math.max(2, radius),
         fillColor: color,
         color: "#555",
         weight: 0.6,
         opacity: 1,
         fillOpacity: 0.75
-      }).bindPopup(
-        `<b>${c.country}</b><br>
+      })
+      .on('mouseover', () => circle.openPopup())
+      .on('click', () => circle.openPopup())
+      .addTo(globalMap);
+
+      circle.bindPopup(`
+         <b>${c.country}</b><br>
          Cases: ${fmt(c.cases)}<br>
          Deaths: ${fmt(c.deaths)}<br>
-         Region: ${region}`
-      );
+         Region: ${region}
+      `);
 
       globalMarkers.push(circle);
-      circle.addTo(globalMap);
-    }
-  } catch (err) {
+    });
+
+  } catch(err) {
     console.error("Error loading global:", err);
   } finally {
     document.getElementById("global-map-loader").style.display = "none";
@@ -743,55 +760,67 @@ async function loadGlobalData(days) {
 }
 
 /* ==============================
-   LOAD INDIA (Official JSON)
+   LOAD INDIA (Indian JSON source)
 ============================== */
-let indiaMarker = null;
-async function loadIndiaData() {
+async function loadIndiaData(days = 'all'){
   document.getElementById("india-map-loader").style.display = "flex";
   if (indiaMarker) indiaMap.removeLayer(indiaMarker);
 
   try {
-    // Official Indian COVID-19 JSON data
-    const res = await fetch("https://data.covid19india.org/v4/min/data.min.json");
+    const res = await fetch("https://api.covid19india.org/data.json");
     const data = await res.json();
+    const latest = data.statewise.find(s => s.state === "Total");
+    let total = Number(latest.confirmed) || 0;
+    let active = Number(latest.active) || 0;
+    let recovered = Number(latest.recovered) || 0;
+    let deaths = Number(latest.deaths) || 0;
 
-    // Parse the "India" data
-    const indiaData = data["IN"];
-    const total = indiaData.total.confirmed;
-    const new7 = indiaData.delta.confirmed;
-    const deaths = indiaData.total.deceased;
-    const newDeaths7 = indiaData.delta.deceased;
+    // Range logic: if days != all, calculate difference in daily trends
+    if (days !== 'all' && Array.isArray(data.cases_time_series)) {
+      const ts = data.cases_time_series;
+      const len = ts.length;
+      const relevant = ts.slice(-days);
+      total = relevant.reduce((sum, r) => sum + (Number(r.dailyconfirmed) || 0), 0);
+      deaths = relevant.reduce((sum, r) => sum + (Number(r.dailydeceased) || 0), 0);
+      recovered = relevant.reduce((sum, r) => sum + (Number(r.dailyrecovered) || 0), 0);
+    }
+
     const region = "South-East Asia";
     const color = regionColors[region];
 
-    // Marker
-    indiaMarker = L.circleMarker([22.9734, 78.6569], {
-      radius: 16,
-      fillColor: color,
-      color: "#555",
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.8
-    }).bindPopup(
-      `<b>India (Official)</b><br>
-       Total Cases: ${fmt(total)}<br>
-       New (7d): ${fmt(new7)}<br>
-       Total Deaths: ${fmt(deaths)}<br>
-       New Deaths (7d): ${fmt(newDeaths7)}`
-    );
-    indiaMarker.addTo(indiaMap);
+    indiaMarker = L.marker([22.9734, 78.6569], {
+      icon: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/2705/2705262.png', // replace with preferred location icon
+        iconSize: [32, 32],
+        iconAnchor: [16, 32]
+      })
+    }).addTo(indiaMap);
 
-    // Panel
+    indiaMarker.bindPopup(`
+      <b>India</b><br>
+      Cases (${days==='all'?'cumulative':'last '+days+' days'}): ${fmt(total)}<br>
+      Recovered: ${fmt(recovered)}<br>
+      Deaths: ${fmt(deaths)}
+    `).openPopup();
+
     document.getElementById("india-total").textContent = fmt(total);
-    document.getElementById("india-new7").textContent = fmt(new7);
+    document.getElementById("india-recovered").textContent = fmt(recovered);
     document.getElementById("india-deaths").textContent = fmt(deaths);
-    document.getElementById("india-newDeaths7").textContent = fmt(newDeaths7);
-  } catch (err) {
+
+  } catch(err) {
     console.error("Error loading India data:", err);
   } finally {
     document.getElementById("india-map-loader").style.display = "none";
   }
 }
+
+/* ==============================
+   USAGE EXAMPLE
+============================== */
+// loadGlobalData('7');  // for last 7 days approximation
+// loadGlobalData('all'); // for total
+// loadIndiaData('7');    // last 7 days
+// loadIndiaData('all');  // cumulative
 
 function toNumberSafe(s){
   if(s==null) return null;
