@@ -657,7 +657,7 @@ select{
 <script>
 /* ==============================
    UTIL & CONSTANTS
-============================= */
+============================== */
 const regionColors = {
   "Africa": "#7b4bc2",
   "Americas": "#ff7f0e",
@@ -683,7 +683,7 @@ const fmt = n => (n == null ? "—" : Number(n).toLocaleString());
 
 /* ==============================
    MAPS SETUP
-============================= */
+============================== */
 // Global map
 const globalMap = L.map('global-map', {
   worldCopyJump: true, zoomSnap: 0.25, zoomDelta: 0.25
@@ -708,18 +708,24 @@ let indiaMarker = null;
 
 /* ==============================
    GLOBAL DATA + RANGE LOGIC
-============================= */
+============================== */
 async function fetchCountryRange(country, days) {
   try {
     const res = await fetch(`https://disease.sh/v3/covid-19/historical/${encodeURIComponent(country)}?lastdays=${days}`);
     const dt = await res.json();
     const cases = dt.timeline?.cases;
-    if (!cases) return null;
+    if (!cases) return { cases: 0, deaths: 0 };
+
+    const deaths = dt.timeline?.deaths || {};
     const dates = Object.keys(cases);
-    if (dates.length < 2) return null;
-    return (cases[dates[dates.length - 1]] - cases[dates[0]]) || 0;
+    if (dates.length < 2) return { cases: 0, deaths: 0 };
+
+    return {
+      cases: (cases[dates[dates.length - 1]] - cases[dates[0]]) || 0,
+      deaths: (deaths[dates[dates.length - 1]] - deaths[dates[0]]) || 0
+    };
   } catch {
-    return null;
+    return { cases: 0, deaths: 0 };
   }
 }
 
@@ -734,27 +740,34 @@ async function loadGlobalData(days = 'all') {
       globalCache = await res.json();
     }
     const countries = globalCache;
-    const maxCases = Math.max(...countries.map(c => c.cases || 0), 1);
-    const maxRadius = 36;
 
     for (const c of countries) {
-      const casesDisplay = (days === 'all')
-        ? c.cases
-        : await fetchCountryRange(c.country, days);
+      let casesDisplay, deathsDisplay;
+      if (days === 'all') {
+        casesDisplay = c.cases;
+        deathsDisplay = c.deaths;
+      } else {
+        const { cases, deaths } = await fetchCountryRange(c.country, days);
+        casesDisplay = cases;
+        deathsDisplay = deaths;
+      }
 
       const region = mapContinentToWHO(c.continent, c.country);
       const color = regionColors[region] || regionColors["Other"];
-      const radius = Math.sqrt((casesDisplay || 0) / maxCases) * maxRadius;
+
+      // Fair bubble sizes
+      const scaleFactor = 5000; // adjust for fairness
+      const radius = Math.max(3, Math.sqrt((casesDisplay || 0) / scaleFactor));
 
       const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
-        radius: Math.max(2, radius),
+        radius,
         fillColor: color, color: "#555", weight: 0.6, fillOpacity: 0.75
       }).addTo(globalMap);
 
       circle.bindPopup(`
         <b>${c.country}</b><br>
         Cases (${days==='all'?'total':'last '+days+'d'}): ${fmt(casesDisplay)}<br>
-        Deaths: ${fmt(c.deaths)}<br>
+        Deaths (${days==='all'?'total':'last '+days+'d'}): ${fmt(deathsDisplay)}<br>
         Region: ${region}
       `);
 
@@ -771,57 +784,50 @@ async function loadGlobalData(days = 'all') {
 }
 
 
-// INDIA: Fetch WHO weekly data
+/* ==============================
+   INDIA DATA (fixed)
+============================== */
 async function loadIndiaData(days = 7) {
   document.getElementById("india-map-loader").style.display = "flex";
   if (indiaMarker) indiaMap.removeLayer(indiaMarker);
 
   try {
-    const res = await fetch("https://data.who.int/data/gho/indicator/WHO-COVID-19-WEEKLY-CASES/json"); // example endpoint
-    const j = await res.json();
-    const entry = j.find(d => d.Code === "IND" && d.Period === `${days} days`);
-    const total = entry ? Number(entry.Value) : null;
+    const res = await fetch(`https://disease.sh/v3/covid-19/historical/India?lastdays=${days==='all'?1000:days}`);
+    const data = await res.json();
+    if (!data.timeline) return;
 
-    const region = "South-East Asia", color = regionColors[region];
+    const casesTL = Object.values(data.timeline.cases);
+    const deathsTL = Object.values(data.timeline.deaths);
+    const recTL    = Object.values(data.timeline.recovered);
 
-    indiaMarker = L.marker([22.9734, 78.6569], {
-      icon: L.icon({ iconUrl: 'location-icon.png', iconSize: [32,32], iconAnchor: [16,32] })
+    const last = arr => arr[arr.length-1] ?? 0;
+    const delta = arr => (arr.length>1 ? (arr[arr.length-1] - arr[0]) : last(arr));
+
+    const casesCount    = (days==='all') ? last(casesTL) : delta(casesTL);
+    const deathsCount   = (days==='all') ? last(deathsTL) : delta(deathsTL);
+    const recoveredCount= (days==='all') ? last(recTL)    : delta(recTL);
+
+    const region = "South-East Asia";
+    const color = regionColors[region];
+
+    indiaMarker = L.circleMarker([22.9734, 78.6569], {
+      radius: 16, fillColor: color, color: "#555", weight: 0.6, fillOpacity: 0.75
     }).addTo(indiaMap);
 
     indiaMarker.bindPopup(`
       <b>India</b><br>
-      Cases (last ${days} days): ${fmt(total)}
+      Cases (${days==='all'?'total':'last '+days+'d'}): ${fmt(casesCount)}<br>
+      Deaths (${days==='all'?'total':'last '+days+'d'}): ${fmt(deathsCount)}<br>
+      Recovered (${days==='all'?'total':'last '+days+'d'}): ${fmt(recoveredCount)}
     `).openPopup();
 
-    document.getElementById("india-total").textContent = fmt(total);
+    document.getElementById("india-total").textContent = fmt(casesCount);
   } catch(err) {
-    console.error("Error loading India WHO data:", err);
+    console.error("Error loading India data:", err);
   } finally {
     document.getElementById("india-map-loader").style.display = "none";
   }
 }
-
-function parseCSVRow(line) {
-  const out = []; let cur = "", inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (ch === '"') {
-      if (inQ && line[i+1] === '"') { cur += '"'; i++; }
-      else inQ = !inQ;
-    } else if (ch === ',' && !inQ) {
-      out.push(cur); cur = "";
-    } else cur += ch;
-  }
-  out.push(cur);
-  return out;
-}
-
-/* ==============================
-   USAGE
-============================= */
-loadGlobalData(7);   // loads global map with last 7 days data
-loadIndiaData();     // loads India marker with WHO weekly cases
-
 
 
 /* ==============================
@@ -846,12 +852,13 @@ async function loadCountryOptions(){
   }catch(e){ console.error(e); }
 }
 
+
 /* ==============================
-   COUNTRY STATS (disease.sh)
+   COUNTRY STATS
 ============================== */
+const historyCache = new Map();
 async function loadCountryData(country, days){
   if(!country) return;
-  // use historical endpoint (cached)
   const key = country + "::" + (days==='all'?'all':String(days));
   let data = historyCache.get(key);
   if(!data){
@@ -865,8 +872,8 @@ async function loadCountryData(country, days){
   const deathsTL = Object.values(data.timeline.deaths);
   const recTL    = Object.values(data.timeline.recovered);
 
-  const last = (arr)=>arr[arr.length-1] ?? 0;
-  const delta = (arr)=> (arr.length>1 ? (arr[arr.length-1] - arr[0]) : last(arr));
+  const last = arr => arr[arr.length-1] ?? 0;
+  const delta = arr => (arr.length>1 ? (arr[arr.length-1] - arr[0]) : last(arr));
 
   const casesCount    = (days==='all') ? last(casesTL) : delta(casesTL);
   const deathsCount   = (days==='all') ? last(deathsTL) : delta(deathsTL);
@@ -876,6 +883,7 @@ async function loadCountryData(country, days){
   document.getElementById('deathsCount').textContent = fmt(deathsCount);
   document.getElementById('recoveredCount').textContent = fmt(recoveredCount);
 }
+
 
 /* ==============================
    TREND CHARTS
@@ -922,11 +930,11 @@ async function updateTrendCharts(country, days){
   deathsChartInstance.update();
 }
 
+
 /* ==============================
    INIT
 ============================== */
 (async function init(){
-  // Create charts first with flat trend
   casesChartInstance  = ensureChart(document.getElementById('casesChart').getContext('2d'), 'Cases');
   deathsChartInstance = ensureChart(document.getElementById('deathsChart').getContext('2d'), 'Deaths');
   setFlatPlaceholder(casesChartInstance);
@@ -935,13 +943,13 @@ async function updateTrendCharts(country, days){
   await Promise.all([loadGlobalData('7'), loadIndiaData(), loadCountryOptions()]);
 })();
 
+
 /* ==============================
-   UI EVENTS (debounced)
+   UI EVENTS
 ============================== */
 const debounce = (fn, ms=200)=>{ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); }; };
 
 document.getElementById("range").addEventListener("change", e=>{
-  // We keep bubble sizes based on total for speed; still reload to re-render if desired
   debounce(()=>loadGlobalData(e.target.value), 50)();
 });
 
@@ -967,7 +975,9 @@ document.getElementById('countryRange').addEventListener('change', debounce(()=>
     loadCountryData(country, days);
     updateTrendCharts(country, days);
   }
+  loadIndiaData(days);
 }, 100));
 </script>
+
 </body>
 </html>
