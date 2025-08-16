@@ -705,22 +705,54 @@ let globalMarkers = [];
 let globalCache = null;
 let indiaMarker = null;
 
+async function fetchCountryData(country, startDate, endDate) {
+    const url = `https://disease.sh/v3/covid-19/historical/${country}?lastdays=all`;
+    const res = await fetch(url);
+    const data = await res.json();
 
-/* ==============================
-   GLOBAL DATA + RANGE LOGIC
-============================= */
-async function fetchCountryRange(country, days) {
-  try {
-    const res = await fetch(`https://disease.sh/v3/covid-19/historical/${encodeURIComponent(country)}?lastdays=${days}`);
-    const dt = await res.json();
-    const cases = dt.timeline?.cases;
-    if (!cases) return null;
-    const dates = Object.keys(cases);
-    if (dates.length < 2) return null;
-    return (cases[dates[dates.length - 1]] - cases[dates[0]]) || 0;
-  } catch {
-    return null;
-  }
+    if (!data.timeline) {
+        console.warn(`No timeline data for ${country}`);
+        return { cases: 0, deaths: 0 };
+    }
+
+    const timeline = Object.keys(data.timeline.cases).map(date => ({
+        date,
+        cases: data.timeline.cases[date],
+        deaths: data.timeline.deaths[date]
+    }));
+
+    return calculateStats(timeline, startDate, endDate);
+}
+
+function calculateStats(timeline, startDate, endDate) {
+    const startIdx = timeline.findIndex(d => d.date === startDate);
+    const endIdx = timeline.findIndex(d => d.date === endDate);
+
+    if (startIdx === -1 || endIdx === -1) {
+        return { cases: 0, deaths: 0 };
+    }
+
+    //  Correct calculations (differences, not sums)
+    const cases = timeline[endIdx].cases - timeline[startIdx].cases;
+    const deaths = timeline[endIdx].deaths - timeline[startIdx].deaths;
+
+    return { cases, deaths };
+}
+
+// Loop through countries one at a time
+async function updateStats(countries, startDate, endDate) {
+    let totalCases = 0;
+    let totalDeaths = 0;
+
+    for (const country of countries) {
+        const { cases, deaths } = await fetchCountryData(country, startDate, endDate);
+        totalCases += cases;
+        totalDeaths += deaths;
+    }
+
+    console.log(`From ${startDate} to ${endDate}:`);
+    console.log(`Total Cases: ${totalCases}`);
+    console.log(`Total Deaths: ${totalDeaths}`);
 }
 
 async function loadGlobalData(days = 'all') {
@@ -778,13 +810,10 @@ async function loadIndiaData() {
   document.getElementById("india-map-loader").style.display = "flex";
   if (indiaMarker) indiaMap.removeLayer(indiaMarker);
 
-  try {
-    const res = await fetch("https://covid19.who.int/WHO-COVID-19-global-table-data.csv");
-    const csv = await res.text();
-    const rows = csv.split(/\r?\n/);
-    const hdr = rows[0].split(',');
-    const idxName = hdr.indexOf("Name");
-    const idxNew7 = hdr.indexOf("Cases - newly reported in last 7 days");
+async function fetchCountryData(country, startDate, endDate) {
+    const url = `https://disease.sh/v3/covid-19/historical/${country}?lastdays=all`;
+    const res = await fetch(url);
+    const data = await res.json();
 
     let indiaRow = null;
     for (const row of rows.slice(1)) {
