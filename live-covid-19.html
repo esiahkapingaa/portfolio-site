@@ -705,54 +705,22 @@ let globalMarkers = [];
 let globalCache = null;
 let indiaMarker = null;
 
-async function fetchCountryData(country, startDate, endDate) {
-    const url = `https://disease.sh/v3/covid-19/historical/${country}?lastdays=all`;
-    const res = await fetch(url);
-    const data = await res.json();
 
-    if (!data.timeline) {
-        console.warn(`No timeline data for ${country}`);
-        return { cases: 0, deaths: 0 };
-    }
-
-    const timeline = Object.keys(data.timeline.cases).map(date => ({
-        date,
-        cases: data.timeline.cases[date],
-        deaths: data.timeline.deaths[date]
-    }));
-
-    return calculateStats(timeline, startDate, endDate);
-}
-
-function calculateStats(timeline, startDate, endDate) {
-    const startIdx = timeline.findIndex(d => d.date === startDate);
-    const endIdx = timeline.findIndex(d => d.date === endDate);
-
-    if (startIdx === -1 || endIdx === -1) {
-        return { cases: 0, deaths: 0 };
-    }
-
-    //  Correct calculations (differences, not sums)
-    const cases = timeline[endIdx].cases - timeline[startIdx].cases;
-    const deaths = timeline[endIdx].deaths - timeline[startIdx].deaths;
-
-    return { cases, deaths };
-}
-
-// Loop through countries one at a time
-async function updateStats(countries, startDate, endDate) {
-    let totalCases = 0;
-    let totalDeaths = 0;
-
-    for (const country of countries) {
-        const { cases, deaths } = await fetchCountryData(country, startDate, endDate);
-        totalCases += cases;
-        totalDeaths += deaths;
-    }
-
-    console.log(`From ${startDate} to ${endDate}:`);
-    console.log(`Total Cases: ${totalCases}`);
-    console.log(`Total Deaths: ${totalDeaths}`);
+/* ==============================
+   GLOBAL DATA + RANGE LOGIC
+============================= */
+async function fetchCountryRange(country, days) {
+  try {
+    const res = await fetch(`https://disease.sh/v3/covid-19/historical/${encodeURIComponent(country)}?lastdays=${days}`);
+    const dt = await res.json();
+    const cases = dt.timeline?.cases;
+    if (!cases) return null;
+    const dates = Object.keys(cases);
+    if (dates.length < 2) return null;
+    return (cases[dates[dates.length - 1]] - cases[dates[0]]) || 0;
+  } catch {
+    return null;
+  }
 }
 
 async function loadGlobalData(days = 'all') {
@@ -803,45 +771,29 @@ async function loadGlobalData(days = 'all') {
 }
 
 
-/* ==============================
-   INDIA DATA VIA WHO CSV
-============================= */
-async function loadIndiaData() {
+// INDIA: Fetch WHO weekly data
+async function loadIndiaData(days = 7) {
   document.getElementById("india-map-loader").style.display = "flex";
   if (indiaMarker) indiaMap.removeLayer(indiaMarker);
 
-async function fetchCountryData(country, startDate, endDate) {
-    const url = `https://disease.sh/v3/covid-19/historical/${country}?lastdays=all`;
-    const res = await fetch(url);
-    const data = await res.json();
+  try {
+    const res = await fetch("https://data.who.int/data/gho/indicator/WHO-COVID-19-WEEKLY-CASES/json"); // example endpoint
+    const j = await res.json();
+    const entry = j.find(d => d.Code === "IND" && d.Period === `${days} days`);
+    const total = entry ? Number(entry.Value) : null;
 
-    let indiaRow = null;
-    for (const row of rows.slice(1)) {
-      if (!row) continue;
-      const cols = parseCSVRow(row);
-      if ((cols[idxName]||"").toLowerCase() === "india") {
-        indiaRow = cols;
-        break;
-      }
-    }
-
-    const new7 = indiaRow ? Number((indiaRow[idxNew7]||"").replace(/[^0-9]/g,'')) : null;
-    const region = "South-East Asia";
-    const color = regionColors[region];
+    const region = "South-East Asia", color = regionColors[region];
 
     indiaMarker = L.marker([22.9734, 78.6569], {
-      icon: L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/2705/2705262.png',
-        iconSize: [32,32], iconAnchor: [16,32]
-      })
+      icon: L.icon({ iconUrl: 'location-icon.png', iconSize: [32,32], iconAnchor: [16,32] })
     }).addTo(indiaMap);
 
     indiaMarker.bindPopup(`
       <b>India</b><br>
-      Cases (last 7 days): ${fmt(new7)}
+      Cases (last ${days} days): ${fmt(total)}
     `).openPopup();
 
-    document.getElementById("india-new7").textContent = fmt(new7);
+    document.getElementById("india-total").textContent = fmt(total);
   } catch(err) {
     console.error("Error loading India WHO data:", err);
   } finally {
