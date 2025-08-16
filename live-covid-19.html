@@ -38,10 +38,12 @@
 <style>
 /* Root & Fonts */
 body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: #ffffff;
-    color: #111;
+  font-family: 'Inter', Arial, sans-serif;
+  background: #fff;
+  color: #1f2937; /* similar to Tailwind gray-800 */
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
 }
 
 /* Reset for header area */
@@ -226,25 +228,42 @@ main {
 }
 
 
-/* Make sections full width on mobile but keep rounded cards */
-@media (max-width: 768px) {
-    section {
-        width: 100%;
-        max-width: none;
-        margin-left: 0;
-        margin-right: 0;
-        border-radius: 0; /* section goes full width */
-        padding: 0; /* remove outer padding */
-        box-shadow: none;
-    }
-    section .section-card {
-        background: white;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        margin: 1rem;
-    }
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background: #fff;
+  color: #1f2937; /* similar to Tailwind gray-800 */
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
 }
+
+.section {
+  margin-bottom: 2rem; /* similar to mb-8 */
+}
+
+.section-title {
+  font-size: 1.5rem; /* ~text-2xl */
+  font-weight: 600;  /* font-semibold */
+  margin-bottom: 1rem; /* ~mb-4 */
+}
+
+.section-text {
+  font-size: 1.125rem; /* ~text-lg */
+  color: #1f2937; 
+  line-height: 1.75; /* leading-relaxed */
+}
+
+.section-list {
+  list-style-type: disc;
+  padding-left: 1.5rem; /* like list-inside */
+  font-size: 1.125rem;
+  color: #1f2937;
+}
+
+.section-list li {
+  margin-bottom: 0.5rem; /* similar to space-y-2 */
+}
+
 
 /* Tables */
 table { border-collapse: collapse; width: 100%; }
@@ -638,7 +657,7 @@ select{
 <script>
 /* ==============================
    UTIL & CONSTANTS
-============================== */
+============================= */
 const regionColors = {
   "Africa": "#7b4bc2",
   "Americas": "#ff7f0e",
@@ -649,59 +668,62 @@ const regionColors = {
   "Other": "#999"
 };
 
-function mapContinentToWHO(continent, countryName){
-  if(countryName === "India") return "South-East Asia";
-  if(["China","Japan","Australia","New Zealand"].includes(countryName) || continent === "Australia/Oceania") return "Western Pacific";
-  if(["North America","South America"].includes(continent)) return "Americas";
-  if(continent === "Europe") return "Europe";
-  if(continent === "Asia") return "South-East Asia";
-  if(continent === "Africa") return "Africa";
+function mapContinentToWHO(continent, countryName) {
+  if (countryName === "India") return "South-East Asia";
+  if (["China","Japan","Australia","New Zealand"].includes(countryName) || continent === "Australia/Oceania") return "Western Pacific";
+  if (["North America","South America"].includes(continent)) return "Americas";
+  if (continent === "Europe") return "Europe";
+  if (continent === "Asia") return "South-East Asia";
+  if (continent === "Africa") return "Africa";
   return "Other";
 }
 
-const fmt = n => (n==null ? "—" : Number(n).toLocaleString());
+const fmt = n => (n == null ? "—" : Number(n).toLocaleString());
 
 
 /* ==============================
-   MAPS
-============================== */
+   MAPS SETUP
+============================= */
+// Global map
 const globalMap = L.map('global-map', {
-  worldCopyJump: true,
-  maxBounds: [[-90,-180],[90,180]],
-  zoomSnap: 0.25,
-  zoomDelta: 0.25
-}).setView([20,0], 2);
-
-globalMap.setMinZoom(2);
-globalMap.setMaxZoom(6);
-
+  worldCopyJump: true, zoomSnap: 0.25, zoomDelta: 0.25
+}).setView([20, 0], 2);
+globalMap.setMinZoom(2); globalMap.setMaxZoom(6);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-  subdomains: 'abcd',
-  maxZoom: 19
+  subdomains: 'abcd', maxZoom: 19
 }).addTo(globalMap);
 
-const indiaMap = L.map('india-map', {
-  worldCopyJump: false,
-  zoomControl: true
-}).setView([22.9734, 78.6569], 4);
-
+// India map
+const indiaMap = L.map('india-map', { worldCopyJump: false }).setView([22.9734, 78.6569], 4);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-  subdomains: 'abcd',
-  maxZoom: 19
+  subdomains: 'abcd', maxZoom: 19
 }).addTo(indiaMap);
 
 let globalMarkers = [];
 let globalCache = null;
-let historyCache = new Map();
-
 let indiaMarker = null;
 
+
 /* ==============================
-   LOAD GLOBAL (disease.sh)
-============================== */
-async function loadGlobalData(days = 'all'){
+   GLOBAL DATA + RANGE LOGIC
+============================= */
+async function fetchCountryRange(country, days) {
+  try {
+    const res = await fetch(`https://disease.sh/v3/covid-19/historical/${encodeURIComponent(country)}?lastdays=${days}`);
+    const dt = await res.json();
+    const cases = dt.timeline?.cases;
+    if (!cases) return null;
+    const dates = Object.keys(cases);
+    if (dates.length < 2) return null;
+    return (cases[dates[dates.length - 1]] - cases[dates[0]]) || 0;
+  } catch {
+    return null;
+  }
+}
+
+async function loadGlobalData(days = 'all') {
   document.getElementById("global-map-loader").style.display = "flex";
   globalMarkers.forEach(m => globalMap.removeLayer(m));
   globalMarkers = [];
@@ -712,46 +734,35 @@ async function loadGlobalData(days = 'all'){
       globalCache = await res.json();
     }
     const countries = globalCache;
-
-    let dataByCountry = countries.map(c => ({ country: c.country, cases: c.cases, deaths: c.deaths, lat: c.countryInfo.lat, long: c.countryInfo.long, continent: c.continent }));
-
-    if (days !== 'all') {
-      const histRes = await fetch(`https://disease.sh/v3/covid-19/historical/all?lastdays=${days}`);
-      const hist = await histRes.json();
-      // Note: pathogenic simplification—really you'd fetch per-country.
-      // Here we just apply global trends as approximation.
-    }
-
-    const maxCases = Math.max(...dataByCountry.map(c => c.cases || 0));
+    const maxCases = Math.max(...countries.map(c => c.cases || 0), 1);
     const maxRadius = 36;
 
-    dataByCountry.forEach(c => {
+    for (const c of countries) {
+      const casesDisplay = (days === 'all')
+        ? c.cases
+        : await fetchCountryRange(c.country, days);
+
       const region = mapContinentToWHO(c.continent, c.country);
       const color = regionColors[region] || regionColors["Other"];
-      const radius = Math.sqrt((c.cases || 0) / (maxCases || 1)) * maxRadius;
+      const radius = Math.sqrt((casesDisplay || 0) / maxCases) * maxRadius;
 
-      const circle = L.circleMarker([c.lat, c.long], {
+      const circle = L.circleMarker([c.countryInfo.lat, c.countryInfo.long], {
         radius: Math.max(2, radius),
-        fillColor: color,
-        color: "#555",
-        weight: 0.6,
-        opacity: 1,
-        fillOpacity: 0.75
-      })
-      .on('mouseover', () => circle.openPopup())
-      .on('click', () => circle.openPopup())
-      .addTo(globalMap);
+        fillColor: color, color: "#555", weight: 0.6, fillOpacity: 0.75
+      }).addTo(globalMap);
 
       circle.bindPopup(`
-         <b>${c.country}</b><br>
-         Cases: ${fmt(c.cases)}<br>
-         Deaths: ${fmt(c.deaths)}<br>
-         Region: ${region}
+        <b>${c.country}</b><br>
+        Cases (${days==='all'?'total':'last '+days+'d'}): ${fmt(casesDisplay)}<br>
+        Deaths: ${fmt(c.deaths)}<br>
+        Region: ${region}
       `);
 
-      globalMarkers.push(circle);
-    });
+      circle.on('mouseover', () => circle.openPopup());
+      circle.on('click', () => circle.openPopup());
 
+      globalMarkers.push(circle);
+    }
   } catch(err) {
     console.error("Error loading global:", err);
   } finally {
@@ -759,88 +770,77 @@ async function loadGlobalData(days = 'all'){
   }
 }
 
+
 /* ==============================
-   LOAD INDIA (Indian JSON source)
-============================== */
-async function loadIndiaData(days = 'all'){
+   INDIA DATA VIA WHO CSV
+============================= */
+async function loadIndiaData() {
   document.getElementById("india-map-loader").style.display = "flex";
   if (indiaMarker) indiaMap.removeLayer(indiaMarker);
 
   try {
-    const res = await fetch("https://api.covid19india.org/data.json");
-    const data = await res.json();
-    const latest = data.statewise.find(s => s.state === "Total");
-    let total = Number(latest.confirmed) || 0;
-    let active = Number(latest.active) || 0;
-    let recovered = Number(latest.recovered) || 0;
-    let deaths = Number(latest.deaths) || 0;
+    const res = await fetch("https://covid19.who.int/WHO-COVID-19-global-table-data.csv");
+    const csv = await res.text();
+    const rows = csv.split(/\r?\n/);
+    const hdr = rows[0].split(',');
+    const idxName = hdr.indexOf("Name");
+    const idxNew7 = hdr.indexOf("Cases - newly reported in last 7 days");
 
-    // Range logic: if days != all, calculate difference in daily trends
-    if (days !== 'all' && Array.isArray(data.cases_time_series)) {
-      const ts = data.cases_time_series;
-      const len = ts.length;
-      const relevant = ts.slice(-days);
-      total = relevant.reduce((sum, r) => sum + (Number(r.dailyconfirmed) || 0), 0);
-      deaths = relevant.reduce((sum, r) => sum + (Number(r.dailydeceased) || 0), 0);
-      recovered = relevant.reduce((sum, r) => sum + (Number(r.dailyrecovered) || 0), 0);
+    let indiaRow = null;
+    for (const row of rows.slice(1)) {
+      if (!row) continue;
+      const cols = parseCSVRow(row);
+      if ((cols[idxName]||"").toLowerCase() === "india") {
+        indiaRow = cols;
+        break;
+      }
     }
 
+    const new7 = indiaRow ? Number((indiaRow[idxNew7]||"").replace(/[^0-9]/g,'')) : null;
     const region = "South-East Asia";
     const color = regionColors[region];
 
     indiaMarker = L.marker([22.9734, 78.6569], {
       icon: L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/2705/2705262.png', // replace with preferred location icon
-        iconSize: [32, 32],
-        iconAnchor: [16, 32]
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/2705/2705262.png',
+        iconSize: [32,32], iconAnchor: [16,32]
       })
     }).addTo(indiaMap);
 
     indiaMarker.bindPopup(`
       <b>India</b><br>
-      Cases (${days==='all'?'cumulative':'last '+days+' days'}): ${fmt(total)}<br>
-      Recovered: ${fmt(recovered)}<br>
-      Deaths: ${fmt(deaths)}
+      Cases (last 7 days): ${fmt(new7)}
     `).openPopup();
 
-    document.getElementById("india-total").textContent = fmt(total);
-    document.getElementById("india-recovered").textContent = fmt(recovered);
-    document.getElementById("india-deaths").textContent = fmt(deaths);
-
+    document.getElementById("india-new7").textContent = fmt(new7);
   } catch(err) {
-    console.error("Error loading India data:", err);
+    console.error("Error loading India WHO data:", err);
   } finally {
     document.getElementById("india-map-loader").style.display = "none";
   }
 }
 
-/* ==============================
-   USAGE EXAMPLE
-============================== */
-// loadGlobalData('7');  // for last 7 days approximation
-// loadGlobalData('all'); // for total
-// loadIndiaData('7');    // last 7 days
-// loadIndiaData('all');  // cumulative
-
-function toNumberSafe(s){
-  if(s==null) return null;
-  return Number(String(s).replace(/[^0-9.-]/g,'')) || 0;
-}
-function parseCSVRow(line){
-  // simple CSV parser for quoted values
-  const out=[]; let cur="", inQ=false;
-  for(let i=0;i<line.length;i++){
-    const ch=line[i];
-    if(ch === '"'){
-      if(inQ && line[i+1] === '"'){ cur+='"'; i++; }
+function parseCSVRow(line) {
+  const out = []; let cur = "", inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQ && line[i+1] === '"') { cur += '"'; i++; }
       else inQ = !inQ;
-    }else if(ch === ',' && !inQ){
-      out.push(cur); cur="";
-    }else cur+=ch;
+    } else if (ch === ',' && !inQ) {
+      out.push(cur); cur = "";
+    } else cur += ch;
   }
   out.push(cur);
   return out;
 }
+
+/* ==============================
+   USAGE
+============================= */
+loadGlobalData(7);   // loads global map with last 7 days data
+loadIndiaData();     // loads India marker with WHO weekly cases
+
 
 
 /* ==============================
