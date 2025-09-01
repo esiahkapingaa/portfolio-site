@@ -412,13 +412,35 @@
       <p class="mb-6">
         Email: <a href="mailto:esiahkapinga3@gmail.com" class="text-brand-accent underline">esiahkapinga3@gmail.com</a>
       </p>
-      <form class="max-w-md mx-auto bg-white p-6 rounded shadow-lg shadow-blue-500/30 space-y-5">
-        <input type="text" placeholder="Your Name" class="w-full border p-3 rounded" required />
-        <input type="email" placeholder="Your Email" class="w-full border p-3 rounded" required />
-        <textarea placeholder="Your Message" class="w-full border p-3 rounded" rows="4" required></textarea>
+      <form id="contactForm" class="max-w-md mx-auto bg-white p-6 rounded shadow-lg shadow-blue-500/30 space-y-5">
+        <input type="text" placeholder="Your Name" id="name" class="w-full border p-3 rounded" required />
+        <input type="email" placeholder="Your Email" id="email" class="w-full border p-3 rounded" required />
+        <textarea placeholder="Your Message" id="message" class="w-full border p-3 rounded" rows="4" required></textarea>
         <button class="bg-brand-dark text-white px-4 py-3 rounded hover:bg-brand-accent" type="submit">Send Message</button>
       </form>
     </section>
+
+    <script>
+      const form = document.getElementById('contactForm');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        const response = await fetch('https://portfolio-backend-pqfo.onrender.com/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message })
+        });
+
+        const data = await response.json();
+        alert(data.message);
+        form.reset();
+      });
+    </script>
 
     <!-- Real Time / Compass Icon Section -->
     <section class="py-16 bg-gray-100 text-center" data-aos="fade-in">
