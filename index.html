@@ -497,6 +497,23 @@
           </a>
         </div>
       </div>
+
+      <!-- Hidden Admin Access -->
+      <script>
+        const myEmail = "esiahkapinga3@gmail.com"; // Your portfolio email
+        document.addEventListener("keydown", (e) => {
+          // Alt + A triggers the admin prompt
+          if (e.altKey && e.key.toLowerCase() === "a") {
+            const email = prompt("Enter your email to access admin:");
+            if (email === myEmail) {
+              // Open backend admin page in a new tab
+              window.open("https://portfolio-backend-production-db1e.up.railway.app/admin", "_blank");
+            } else {
+              alert("❌ Access denied");
+            }
+          }
+        });
+      </script>
     </footer>
     <script>
       // Time updater
