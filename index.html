@@ -496,21 +496,22 @@
             <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" class="w-6 h-6" />
           </a>
         </div>
+
+        <!-- Admin Link for Mobile/Desktop -->
+        <a href="#" id="adminLink" class="text-sm underline mt-2">Admin</a>
       </div>
 
-      <!-- Hidden Admin Access -->
       <script>
         const myEmail = "esiahkapinga3@gmail.com"; // Your portfolio email
-        document.addEventListener("keydown", (e) => {
-          // Alt + A triggers the admin prompt
-          if (e.altKey && e.key.toLowerCase() === "a") {
-            const email = prompt("Enter your email to access admin:");
-            if (email === myEmail) {
-              // Open backend admin page in a new tab
-              window.open("https://portfolio-backend-production-db1e.up.railway.app/admin", "_blank");
-            } else {
-              alert("❌ Access denied");
-            }
+        const adminLink = document.getElementById("adminLink");
+
+        adminLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          const email = prompt("Enter your email to access admin:");
+          if (email === myEmail) {
+            window.open("https://portfolio-backend-production-db1e.up.railway.app/admin", "_blank");
+          } else {
+            alert("❌ Access denied");
           }
         });
       </script>
@@ -579,6 +580,47 @@
 
       carousel.parentElement.addEventListener('mouseenter', stopSliding);
       carousel.parentElement.addEventListener('mouseleave', startSliding);
+
+      // -------------------------------
+      // Admin message notification
+      // -------------------------------
+      const adminEmail = "esiahkapinga3@gmail.com"; // your email
+      let notifiedMessageIds = new Set();
+
+      async function checkNewMessages() {
+        try {
+          const response = await fetch('https://portfolio-backend-production-db1e.up.railway.app/messages');
+          if (!response.ok) return;
+
+          const messages = await response.json();
+
+          messages.forEach(msg => {
+            // Only notify for unseen messages and not already notified
+            if (!msg.seen && !notifiedMessageIds.has(msg.timestamp)) {
+              notifiedMessageIds.add(msg.timestamp);
+
+              // Request permission if not granted
+              if (Notification.permission === "granted") {
+                new Notification("New Portfolio Message", {
+                  body: `From: ${msg.name} (${msg.email})\n${msg.message}`,
+                  icon: "images/signature.png"
+                }).onclick = () => {
+                  window.open("https://portfolio-backend-production-db1e.up.railway.app/admin", "_blank");
+                };
+              } else if (Notification.permission !== "denied") {
+                Notification.requestPermission();
+              }
+            }
+          });
+        } catch (err) {
+          console.error("Error checking messages:", err);
+        }
+      }
+
+      // Check every 15 seconds
+      setInterval(checkNewMessages, 15000);
+      // Optional: check immediately on page load
+      checkNewMessages();
     </script>
   </body>
 </html>
